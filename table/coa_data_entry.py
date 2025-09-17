@@ -470,10 +470,14 @@ def populate_coa_fields(self, dr_no):
 
     # === Populate inputs ===
     lot_no = fields[5] if fields and len(fields) > 5 else ""
-    if lot_no and lot_no.startswith("LOT #"):
-        lot_no = lot_no.replace("LOT #", "").strip()
-    else:
-        lot_no = ""
+    if lot_no:
+        if lot_no.startswith("MB-"):
+            lot_no = lot_no.strip()
+        elif lot_no.startswith("LOT #"):
+            # remove "LOT #" and clean it
+            lot_no = lot_no.replace("LOT #", "").strip()
+        else:
+            lot_no = ""
     self.coa_customer_input.setText(str(fields[2]))
     self.color_code_input.setText(str(fields[1]))
     self.po_number_input.setText(str(fields[4]))
