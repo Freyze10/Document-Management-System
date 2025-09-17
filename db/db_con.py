@@ -559,7 +559,8 @@ def get_summary_from_msds(code, dr_no):
                     ON i.dr_no = p.dr_no
                 WHERE a.product_code = %s
                   AND i.dr_no = %s
-                ORDER BY a.id DESC;
+                ORDER BY a.id DESC 
+                LIMIT 1;
             """,
         (code, dr_no,)
     )
