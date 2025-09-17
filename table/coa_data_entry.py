@@ -469,7 +469,7 @@ def populate_coa_fields(self, dr_no):
         return
 
     # === Populate inputs ===
-    lot_no = fields[5] if fields and len(fields) > 5 else ""
+    lot_no = fields[5] if fields and len(fields) > 3 else ""
     if lot_no:
         if lot_no.startswith("MB-"):
             lot_no = lot_no.strip()
