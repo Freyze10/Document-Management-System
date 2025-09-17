@@ -6,11 +6,11 @@ from db import db_dr
 
 def get_connection():
     return psycopg2.connect(
-        host="192.168.1.13",
-        dbname="db_msds",
+        host="localhost",
+        dbname="postgres",
         user="postgres",
-        password="mbpi",
-        port="5432"
+        password="password",
+        port="5433"
     )
 
 

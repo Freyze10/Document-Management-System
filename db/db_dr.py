@@ -7,11 +7,11 @@ from PyQt6.QtCore import QObject, pyqtSignal, QCoreApplication
 
 # --- CONFIGURATION ---
 DB_CONFIG = {
-    "host": "192.168.1.13",
-    "port": 5432,
-    "dbname": "db_msds",
+    "host": "localhost",
+    "port": 5433,
+    "dbname": "postgres",
     "user": "postgres",
-    "password": "mbpi"
+    "password": "password"
 }
 DBF_BASE_PATH = r'\\system-server\SYSTEM-NEW-OLD'
 DELIVERY_DBF_PATH = os.path.join(DBF_BASE_PATH, 'tbl_del01.dbf')
@@ -41,19 +41,7 @@ def create_delivery_legacy_tables():
                         dr_no TEXT NOT NULL UNIQUE,
                         delivery_date DATE,
                         customer_name TEXT,
-                        deliver_to TEXT,
-                        address TEXT,
-                        po_no TEXT,
-                        order_form_no TEXT,
-                        fg_out_id TEXT,
-                        terms TEXT,
-                        prepared_by TEXT,
-                        encoded_by TEXT,
-                        encoded_on TIMESTAMP,
-                        edited_by TEXT,
-                        edited_on TIMESTAMP,
-                        is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
-                        is_printed BOOLEAN NOT NULL DEFAULT FALSE
+                        po_no TEXT
                     );
                 """))
 
@@ -62,21 +50,10 @@ def create_delivery_legacy_tables():
                     CREATE TABLE IF NOT EXISTS product_delivery_items (
                         id SERIAL PRIMARY KEY,
                         dr_no TEXT NOT NULL,
-                        quantity NUMERIC(15, 6),
-                        unit TEXT,
                         product_code TEXT,
                         product_color TEXT,
-                        no_of_packing NUMERIC(15, 2),
-                        weight_per_pack NUMERIC(15, 6),
                         lot_numbers TEXT,
                         attachments TEXT,
-                        unit_price NUMERIC(15, 6),
-                        lot_no_1 TEXT,
-                        lot_no_2 TEXT,
-                        lot_no_3 TEXT,
-                        mfg_date TEXT,
-                        alias_code TEXT,
-                        alias_desc TEXT,
                         FOREIGN KEY (dr_no) REFERENCES product_delivery_primary (dr_no) ON DELETE CASCADE
                     );
                 """))
@@ -162,14 +139,7 @@ class SyncDeliveryWorker(QObject):
                         "dr_no": dr_num,
                         "delivery_date": r.get('T_DRDATE'),
                         "customer_name": str(r.get('T_CUSTOMER', '')).strip(),
-                        "deliver_to": str(r.get('T_DELTO', '')).strip(),
-                        "address": address,
-                        "po_no": str(r.get('T_CPONUM', '')).strip(),
-                        "order_form_no": str(r.get('T_ORDERNUM', '')).strip(),
-                        "terms": str(r.get('T_REMARKS', '')).strip(),
-                        "prepared_by": str(r.get('T_USERID', '')).strip(),
-                        "encoded_on": r.get('T_DENCODED'),
-                        "is_deleted": bool(r.get('T_DELETED', False))
+                        "po_no": str(r.get('T_CPONUM', '')).strip()
                     })
 
             print(f"-> Found {len(primary_recs)} new primary records to sync.")
@@ -196,12 +166,8 @@ class SyncDeliveryWorker(QObject):
                             items_by_dr[dr_num] = []
                         items_by_dr[dr_num].append({
                             "dr_no": dr_num,
-                            "quantity": self._to_float(item_rec.get('T_TOTALWT')),
-                            "unit": str(item_rec.get('T_TOTALWTU', '')).strip(),
                             "product_code": str(item_rec.get('T_PRODCODE', '')).strip(),
                             "product_color": str(item_rec.get('T_PRODCOLO', '')).strip(),
-                            "no_of_packing": self._to_float(item_rec.get('T_NUMPACKI')),
-                            "weight_per_pack": self._to_float(item_rec.get('T_WTPERPAC')),
                             "lot_numbers": "",
                             "attachments": attachments
                         })
@@ -217,26 +183,13 @@ class SyncDeliveryWorker(QObject):
                     # it handles any edge cases or non-sequential DR_NOs
                     conn.execute(text("""
                         INSERT INTO product_delivery_primary (
-                            dr_no, delivery_date, customer_name, deliver_to, address, po_no,
-                            order_form_no, terms, prepared_by, encoded_on, is_deleted,
-                            edited_by, edited_on, encoded_by
+                            dr_no, delivery_date, customer_name, po_no
                         ) VALUES (
-                            :dr_no, :delivery_date, :customer_name, :deliver_to, :address, :po_no,
-                            :order_form_no, :terms, :prepared_by, :encoded_on, :is_deleted,
-                            'DBF_SYNC', NOW(), :prepared_by
+                            :dr_no, :delivery_date, :customer_name, :po_no
                         ) ON CONFLICT (dr_no) DO UPDATE SET
                             delivery_date = EXCLUDED.delivery_date,
                             customer_name = EXCLUDED.customer_name,
-                            deliver_to = EXCLUDED.deliver_to,
-                            address = EXCLUDED.address,
-                            po_no = EXCLUDED.po_no,
-                            order_form_no = EXCLUDED.order_form_no,
-                            terms = EXCLUDED.terms,
-                            prepared_by = EXCLUDED.prepared_by,
-                            encoded_on = EXCLUDED.encoded_on,
-                            is_deleted = EXCLUDED.is_deleted,
-                            edited_by = 'DBF_SYNC',
-                            edited_on = NOW()
+                            po_no = EXCLUDED.po_no
                     """), primary_recs)
 
                     # Insert items
@@ -246,11 +199,11 @@ class SyncDeliveryWorker(QObject):
                     if all_items_to_insert:
                         conn.execute(text("""
                             INSERT INTO product_delivery_items (
-                                dr_no, quantity, unit, product_code, product_color,
-                                no_of_packing, weight_per_pack, lot_numbers, attachments
+                                dr_no, product_code, product_color,
+                                lot_numbers, attachments
                             ) VALUES (
-                                :dr_no, :quantity, :unit, :product_code, :product_color,
-                                :no_of_packing, :weight_per_pack, :lot_numbers, :attachments
+                                :dr_no, :product_code, :product_color,
+                                :lot_numbers, :attachments
                             )
                         """), all_items_to_insert)
 

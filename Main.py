@@ -1,8 +1,8 @@
-
 from PyQt6.QtCore import Qt, QDate, QRegularExpression, QTimer, QEvent, QObject, pyqtSignal, QThread
 from PyQt6.QtGui import QIcon, QIntValidator, QRegularExpressionValidator, QFont, QAction
 from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, \
-    QTableWidget, QLineEdit, QHeaderView, QTableWidgetItem, QScrollArea, QTextEdit, QPushButton, QDateEdit, QMessageBox, QAbstractItemView, QCompleter, QDialog, QLabel, QProgressBar
+    QTableWidget, QLineEdit, QHeaderView, QTableWidgetItem, QScrollArea, QTextEdit, QPushButton, QDateEdit, QMessageBox, \
+    QAbstractItemView, QCompleter, QDialog, QLabel, QProgressBar
 from db import db_con, db_dr
 from alert import window_alert
 from table import msds_data_entry, coa_data_entry, table
@@ -27,7 +27,7 @@ class MainWindow(QMainWindow):
         self.coa_form_layout = QVBoxLayout()
 
         # MSDS FORM init
-            #Section 1
+        #Section 1
         self.customer_name_input = QLineEdit()
         self.trade_label_input = QLineEdit()
         self.manufactured_label_input = QTextEdit()
@@ -53,37 +53,37 @@ class MainWindow(QMainWindow):
             self.email_label_input, self.check_email, delay=3000
         )
 
-            #Section2
+        #Section2
         self.composition_input = QTextEdit()
         self.composition_input.setTabChangesFocus(True)
-            #Section3
+        #Section3
         self.hazard_preliminaries_input = QLineEdit()
         self.hazard_entry_route_input = QLineEdit()
         self.hazard_symptoms_input = QLineEdit()
         self.hazard_restrictive_condition_input = QLineEdit()
         self.hazard_eyes_input = QLineEdit()
         self.hazard_general_note_input = QLineEdit()
-            #Section4
+        #Section4
         self.first_aid_inhalation_input = QLineEdit()
         self.first_aid_eyes = QLineEdit()
         self.first_aid_skin_input = QLineEdit()
         self.first_aid_ingestion_input = QLineEdit()
-            #Section5
+        #Section5
         self.fire_fighting_media_input = QTextEdit()
         self.fire_fighting_media_input.setTabChangesFocus(True)
-            #Section6
+        #Section6
         self.accidental_release_input = QTextEdit()
         self.accidental_release_input.setTabChangesFocus(True)
-            #Section7
+        #Section7
         self.handling_input = QLineEdit()
         self.msds_storage_input = QLineEdit()
-            #Section8
+        #Section8
         self.exposure_control_input = QLineEdit()
         self.respiratory_protection_input = QLineEdit()
         self.hand_protection_input = QLineEdit()
         self.eye_protection_input = QLineEdit()
         self.skin_protection_input = QLineEdit()
-            #Section9
+        #Section9
         self.appearance_input = QLineEdit()
         self.odor_input = QLineEdit()
         self.packaging_input = QLineEdit()
@@ -102,39 +102,39 @@ class MainWindow(QMainWindow):
         self.auto_ignition_input = QLineEdit()
         self.explosion_property_input = QLineEdit()
         self.solubility_input = QLineEdit()
-            #Section10
+        #Section10
         self.stability_reactivity_input = QTextEdit()
         self.stability_reactivity_input.setTabChangesFocus(True)
-            #Section11
+        #Section11
         self.toxicological_input = QTextEdit()
         self.toxicological_input.setTabChangesFocus(True)
-            #Section12
+        #Section12
         self.ecological_input = QTextEdit()
         self.ecological_input.setTabChangesFocus(True)
-            #Section13
+        #Section13
         self.disposal_input = QTextEdit()
         self.disposal_input.setTabChangesFocus(True)
-            #Section14
+        #Section14
         self.transport_input = QTextEdit()
         self.transport_input.setTabChangesFocus(True)
-            #Section15
+        #Section15
         self.regulatory_input = QTextEdit()
         self.regulatory_input.setTabChangesFocus(True)
-            #Section16
+        #Section16
         self.msds_shelf_life_input = QTextEdit()
         self.msds_shelf_life_input.setTabChangesFocus(True)
-            #Section17
+        #Section17
         self.other_input = QTextEdit()
         self.other_input.setTabChangesFocus(True)
-            #Submit Button
+        #Submit Button
         self.btn_msds_submit = QPushButton("Submit")
         self.btn_msds_submit.setProperty("class", "msds_submit_btn")
         self.btn_msds_submit.clicked.connect(self.msds_btn_submit_clicked)
 
         # COA form init
-            #summary of analysis table
+        #summary of analysis table
         self.summary_analysis_table = QTableWidget()
-            #inputs variable
+        #inputs variable
         self.coa_customer_input = QLineEdit()
         self.color_code_input = QLineEdit()
         self.color_code_timer = self.setup_finished_typing(
@@ -197,7 +197,7 @@ class MainWindow(QMainWindow):
         self.po_number_input.setValidator((QIntValidator(0, 2147483647)))
         self.quantity_delivered_input.setValidator((QIntValidator(0, 2147483647)))
 
-        self.msds_tab = QWidget()           #MSDS Main Tab
+        self.msds_tab = QWidget()  #MSDS Main Tab
         self.msds_layout = QVBoxLayout(self.msds_tab)
 
         self.msds_sub_tabs = QTabWidget()
@@ -637,7 +637,8 @@ class MainWindow(QMainWindow):
 
         # Check summary of analysis if no empty row
         if not any(any(cell for cell in row) for row in summary_of_analysis.values()):
-            window_alert.show_message(self, "Missing Input", "Please fill in the Summary of Analysis table.", icon_type="warning")
+            window_alert.show_message(self, "Missing Input", "Please fill in the Summary of Analysis table.",
+                                      icon_type="warning")
             return
 
         # Build coa_data for saving
@@ -661,12 +662,14 @@ class MainWindow(QMainWindow):
         try:
             if coa_data_entry.current_coa_id is not None:  # Update existing COA
                 db_con.update_certificate_of_analysis(coa_data_entry.current_coa_id, coa_data, summary_of_analysis)
-                window_alert.show_message(self, "Success", f"Certificate of Analysis updated successfully!", icon_type="info")
+                window_alert.show_message(self, "Success", f"Certificate of Analysis updated successfully!",
+                                          icon_type="info")
                 coa_data_entry.current_coa_id = None
 
             else:  # Save new COA
                 db_con.save_certificate_of_analysis(coa_data, summary_of_analysis)
-                window_alert.show_message(self,"Success", f"Certificate of Analysis saved successfully!", icon_type="info")
+                window_alert.show_message(self, "Success", f"Certificate of Analysis saved successfully!",
+                                          icon_type="info")
         except Exception as e:
             window_alert.show_message(self, "Database Error", str(e), icon_type="critical")
         finally:
@@ -818,6 +821,7 @@ class MainWindow(QMainWindow):
             elif column == 3:
                 item.setIcon(QIcon(abs_path.resource("img/hover_delete_icon.png")))
                 self.last_hovered = (row, column)
+
     def msds_cell_clicked(self, row, column):
         msds_id = self.msds_records_table.item(row, 0).data(Qt.ItemDataRole.UserRole)
         if column == 1:  # view column
@@ -830,8 +834,8 @@ class MainWindow(QMainWindow):
             self.msds_sub_tabs.setCurrentWidget(self.msds_data_entry_tab)
         if column == 3:  # delete column
             confirm = window_alert.show_message(self, "Confirm Deletion",
-                                        "Are you sure you want to delete this MSDS record?",
-                                        icon_type="question", is_confirmation=True)
+                                                "Are you sure you want to delete this MSDS record?",
+                                                icon_type="question", is_confirmation=True)
             if confirm:
                 try:
                     db_con.delete_msds_sheet(msds_id)
@@ -853,12 +857,13 @@ class MainWindow(QMainWindow):
             self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
         if column == 3:  # delete column
             confirm = window_alert.show_message(self, "Confirm Deletion",
-                                        "Are you sure you want to delete this Certificate of Analysis record?",
-                                        icon_type="question", is_confirmation=True)
+                                                "Are you sure you want to delete this Certificate of Analysis record?",
+                                                icon_type="question", is_confirmation=True)
             if confirm:
                 try:
                     db_con.delete_certificate_of_analysis(coa_id)
-                    window_alert.show_message(self, "Deleted", "Certificate of Analysis record deleted successfully.", icon_type="info")
+                    window_alert.show_message(self, "Deleted", "Certificate of Analysis record deleted successfully.",
+                                              icon_type="info")
                 except Exception as e:
                     window_alert.show_message(self, "Error", str(e), icon_type="critical")
                 finally:
@@ -976,7 +981,7 @@ class UserWidget(QWidget):
 
     def init_ui(self):
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(0, 0, 0, 0) # Remove margins to fit snugly
+        layout.setContentsMargins(0, 0, 0, 0)  # Remove margins to fit snugly
 
         # Username Label
         self.username_label = QLabel(f"Hello, {self.username}!") if self.username is not None else QLabel("Hello!")
