@@ -2,7 +2,7 @@ import re
 from PyQt6.QtCore import QDate, Qt
 from PyQt6.QtWidgets import (
     QLabel, QHBoxLayout, QHeaderView, QPushButton, QTableWidgetItem,
-    QAbstractItemView, QWidget, QVBoxLayout, QGroupBox, QGridLayout, QTableWidget
+    QAbstractItemView, QWidget, QVBoxLayout, QGroupBox, QGridLayout, QTableWidget, QLineEdit
 )
 from db import db_con
 from utils import abs_path, lot_format
@@ -555,11 +555,15 @@ def terumo_data_entry_form(self):
         delivery_date_label = QLabel("Delivery Date:")
         delivery_date_label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         top_info_layout.addWidget(delivery_date_label, 0, 2)
+        # Assuming self.terumo_delivery_date is a QDateEdit
+        self.terumo_delivery_date.setDate(QDate.fromString("May 24, 2024", "MMMM dd, yyyy"))
         top_info_layout.addWidget(self.terumo_delivery_date, 0, 3)
 
         lot_number_label = QLabel("Lot No.:")
         lot_number_label.setAlignment(Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
         top_info_layout.addWidget(lot_number_label, 1, 2)
+        # Assuming self.terumo_lot_number is a QLineEdit
+        self.terumo_lot_number.setText("240510 (MB-24-5826AK)")
         top_info_layout.addWidget(self.terumo_lot_number, 1, 3)
 
         top_info_layout.setColumnStretch(0, 1)
@@ -578,14 +582,22 @@ def terumo_data_entry_form(self):
         general_info_layout.setContentsMargins(10, 15, 10, 10)
 
         general_info_layout.addWidget(QLabel("Customer Name:"), 0, 0, Qt.AlignmentFlag.AlignRight)
+        # Assuming self.terumo_customer_input is a QLineEdit
+        self.terumo_customer_input.setText("Terumo (Philippines Corporation)")
         general_info_layout.addWidget(self.terumo_customer_input, 0, 1)
 
         general_info_layout.addWidget(QLabel("Item Code:"), 1, 0, Qt.AlignmentFlag.AlignRight)
+        # Assuming self.terumo_item_code is a QLineEdit
+        self.terumo_item_code.setText("PL00X800MB")
         general_info_layout.addWidget(self.terumo_item_code, 1, 1)
         general_info_layout.addWidget(QLabel("Quantity:"), 1, 2, Qt.AlignmentFlag.AlignRight)
+        # Assuming self.terumo_quantity is a QLineEdit
+        self.terumo_quantity.setText("100kg.")
         general_info_layout.addWidget(self.terumo_quantity, 1, 3)
 
         general_info_layout.addWidget(QLabel("Item Description:"), 2, 0, Qt.AlignmentFlag.AlignRight)
+        # Assuming self.terumo_item_desc is a QLineEdit
+        self.terumo_item_desc.setText("Masterbatch White WA14429E")
         general_info_layout.addWidget(self.terumo_item_desc, 2, 1, 1, 3)
 
         main_v_layout.addWidget(general_info_group)
@@ -596,44 +608,59 @@ def terumo_data_entry_form(self):
         molded_group.setLayout(molded_layout)
         molded_layout.setContentsMargins(10, 15, 10, 10)
 
-        # Single table for Molded Chip Inspection
         molded_table = QTableWidget()
-        molded_table.setRowCount(7)  # 1 for Color, 1 for header, 3 for sub-labels, 2 for additional inputs
+        molded_table.setRowCount(4) # Color, Foreign Material Contamination Diameter, Area, Count
         molded_table.setColumnCount(6)
-        molded_table.setHorizontalHeaderLabels(["Items", "Standard (Diameter)", "Standard (Area)", "Standard (Count)", "Actual", "Judgement"])
+        molded_table.setHorizontalHeaderLabels(["Check items", "Standard (Diameter)", "Standard (Area)", "Standard (Count)", "Actual", "Judgement"])
         molded_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         molded_table.verticalHeader().setVisible(False)
+        molded_table.setAlternatingRowColors(True)
 
         # Row 0: Color
         molded_table.setItem(0, 0, QTableWidgetItem("Color"))
-        molded_table.setItem(0, 1, QTableWidgetItem("TPC approved standard"))
-        molded_table.setItem(0, 4, QTableWidgetItem("Same as standard"))
-        molded_table.setItem(0, 5, QTableWidgetItem("Passed"))
+        self.molded_color_standard = QLineEdit("TPC approved standard")
+        molded_table.setCellWidget(0, 1, self.molded_color_standard)
+        molded_table.setSpan(0, 1, 1, 3) # Span across Standard (Diameter, Area, Count)
+        self.molded_color_actual = QLineEdit("Same as standard")
+        molded_table.setCellWidget(0, 4, self.molded_color_actual)
+        self.molded_color_judgement = QLineEdit("Passed")
+        molded_table.setCellWidget(0, 5, self.molded_color_judgement)
 
-        # Row 1: Foreign Material Contamination header
-        molded_table.setItem(1, 0, QTableWidgetItem("Foreign Material Contamination"))
-        molded_table.setSpan(1, 1, 1, 4)  # Span across Standard (Diameter, Area, Count) and Actual
+        # Row 1: Foreign Material Contamination - Diameter
+        molded_table.setItem(1, 0, QTableWidgetItem("Foreign Material Contamination\n  Diameter (mm)"))
 
-        # Row 2: Diameter
-        molded_table.setItem(2, 0, QTableWidgetItem("  Diameter (mm)"))
-        molded_table.setItem(2, 1, QTableWidgetItem("> 0.10\n0.01 - 0.10"))
-        molded_table.setItem(2, 4, QTableWidgetItem("0\n0"))
-        molded_table.setItem(2, 5, QTableWidgetItem("Passed"))
-        molded_table.setSpan(2, 5, 3, 1)  # Judgement spans 3 rows
+        self.molded_fmc_judgement = QLineEdit("Passed")
+        molded_table.setCellWidget(2, 5, self.molded_fmc_judgement)
+        molded_table.setSpan(2, 5, 2, 1) # Judgement spans 3 rows for FMC
 
-        # Row 3: Area
-        molded_table.setItem(3, 0, QTableWidgetItem("  Area (mm²)"))
-        molded_table.setItem(3, 2, QTableWidgetItem("> 0.01\n0.01 - 0.10"))
-        molded_table.setItem(3, 4, QTableWidgetItem("0\n0"))
+        # Row 2: Foreign Material Contamination - Area
+        self.molded_fmc_diameter_standard = QLineEdit("> 0.10 - 0.35")
+        molded_table.setCellWidget(2, 1, self.molded_fmc_diameter_standard)
+        self.molded_fmc_area_standard = QLineEdit("> 0.01 - 0.10")
+        molded_table.setCellWidget(2, 2, self.molded_fmc_area_standard)
+        self.molded_fmc_area_count = QLineEdit("6 pcs")
+        molded_table.setCellWidget(2, 3, self.molded_fmc_area_count)
+        self.molded_fmc_area_actual = QLineEdit("0")
+        molded_table.setCellWidget(2, 4, self.molded_fmc_area_actual)
 
-        # Row 4: Count
-        molded_table.setItem(4, 0, QTableWidgetItem("  Count"))
-        molded_table.setItem(4, 3, QTableWidgetItem("2 pcs\n6 pcs"))
-        molded_table.setItem(4, 4, QTableWidgetItem("0\n0"))
+        # Row 3: Foreign Material Contamination - Count (This combines the < 0.10 for diameter and area
+        # Using a QLineEdit for the Standard Diameter < 0.10 part
+        self.molded_fmc_diameter_standard_less = QLineEdit("< 0.10")
+        molded_table.setCellWidget(3, 1, self.molded_fmc_diameter_standard_less)
+        # Using a QLineEdit for the Standard Area < 0.10 part
+        self.molded_fmc_area_standard_less = QLineEdit("< 0.10")
+        molded_table.setCellWidget(3, 2, self.molded_fmc_area_standard_less)
+        # Using a QLineEdit for the Standard Count for < 0.10
+        self.molded_fmc_count_less = QLineEdit("0 pcs") # Assuming the PDF's '0' is count for <0.10
+        molded_table.setCellWidget(3, 3, self.molded_fmc_count_less)
+        # Using a QLineEdit for the Actual for < 0.10
+        self.molded_fmc_actual_less = QLineEdit("0")
+        molded_table.setCellWidget(3, 4, self.molded_fmc_actual_less)
 
-        # Rows 5-6: Empty for additional inputs
-        molded_table.setItem(5, 0, QTableWidgetItem(""))
-        molded_table.setItem(6, 0, QTableWidgetItem(""))
+
+        # Adjust row heights for multi-line text (e.g., Foreign Material Contamination)
+        molded_table.resizeRowToContents(1)
+
 
         molded_layout.addWidget(molded_table)
         main_v_layout.addWidget(molded_group)
@@ -644,34 +671,46 @@ def terumo_data_entry_form(self):
         pellet_group.setLayout(pellet_layout)
         pellet_layout.setContentsMargins(10, 15, 10, 10)
 
-        # Appearance table
+        # Appearance
+        pellet_layout.addWidget(QLabel("Appearance: Free from foreign material. No stickiness of pellets"))
         appearance_table = QTableWidget()
         appearance_table.setRowCount(1)
         appearance_table.setColumnCount(4)
         appearance_table.setHorizontalHeaderLabels(["Start", "Middle", "End", "Judgement"])
         appearance_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         appearance_table.verticalHeader().setVisible(False)
-        appearance_table.setItem(0, 0, QTableWidgetItem("0"))
-        appearance_table.setItem(0, 1, QTableWidgetItem("0"))
-        appearance_table.setItem(0, 2, QTableWidgetItem("0"))
-        appearance_table.setItem(0, 3, QTableWidgetItem("Passed"))
-        pellet_layout.addWidget(QLabel("Appearance: Free from foreign material. No stickiness of pellets"))
+        appearance_table.setAlternatingRowColors(True)
+
+        self.pellet_appearance_start = QLineEdit("0")
+        appearance_table.setCellWidget(0, 0, self.pellet_appearance_start)
+        self.pellet_appearance_middle = QLineEdit("0")
+        appearance_table.setCellWidget(0, 1, self.pellet_appearance_middle)
+        self.pellet_appearance_end = QLineEdit("0")
+        appearance_table.setCellWidget(0, 2, self.pellet_appearance_end)
+        self.pellet_appearance_judgement = QLineEdit("Passed")
+        appearance_table.setCellWidget(0, 3, self.pellet_appearance_judgement)
         pellet_layout.addWidget(appearance_table)
 
-        # Dimension table
+        # Dimension
+        pellet_layout.addWidget(QLabel("Dimension: 3 x 3 ± 0.5 mm pellet diameter and length"))
+        pellet_layout.addWidget(QLabel(
+            "Single cut, partially cut or double pellet shall be treated as single pellet and must be within the set acceptance criteria"))
         dimension_table = QTableWidget()
         dimension_table.setRowCount(1)
         dimension_table.setColumnCount(4)
         dimension_table.setHorizontalHeaderLabels(["Start", "Middle", "End", "Judgement"])
         dimension_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         dimension_table.verticalHeader().setVisible(False)
-        dimension_table.setItem(0, 0, QTableWidgetItem("2.5x3.5"))
-        dimension_table.setItem(0, 1, QTableWidgetItem("2.6x3.5"))
-        dimension_table.setItem(0, 2, QTableWidgetItem("2.5x3.5"))
-        dimension_table.setItem(0, 3, QTableWidgetItem("Passed"))
-        pellet_layout.addWidget(QLabel("Dimension: 3 x 3 ± 0.5 mm pellet diameter and length"))
-        pellet_layout.addWidget(QLabel(
-            "Single cut, partially cut or double pellet shall be treated as single pellet and must be within the set acceptance criteria"))
+        dimension_table.setAlternatingRowColors(True)
+
+        self.pellet_dimension_start = QLineEdit("2.5x3.5")
+        dimension_table.setCellWidget(0, 0, self.pellet_dimension_start)
+        self.pellet_dimension_middle = QLineEdit("2.6x3.5")
+        dimension_table.setCellWidget(0, 1, self.pellet_dimension_middle)
+        self.pellet_dimension_end = QLineEdit("2.5x3.5")
+        dimension_table.setCellWidget(0, 2, self.pellet_dimension_end)
+        self.pellet_dimension_judgement = QLineEdit("Passed")
+        dimension_table.setCellWidget(0, 3, self.pellet_dimension_judgement)
         pellet_layout.addWidget(dimension_table)
 
         # Adjust table heights
@@ -684,8 +723,9 @@ def terumo_data_entry_form(self):
         remarks_layout = QVBoxLayout()
         remarks_group.setLayout(remarks_layout)
         remarks_layout.setContentsMargins(10, 10, 10, 10)
-        self.terumo_remarks.setPlaceholderText(
-            "Attached are the same sample chips for the following number: MB-24-5826AK")
+        # Assuming self.terumo_remarks is a QTextEdit
+        self.terumo_remarks.setPlaceholderText("Attached are the same sample chips for the following number: MB-24-5826AK")
+        self.terumo_remarks.setText("Attached are the same sample chips for the following number:\nMB-24-5826AK")
         self.terumo_remarks.setMinimumHeight(60)
         remarks_layout.addWidget(self.terumo_remarks)
         main_v_layout.addWidget(remarks_group)
@@ -695,6 +735,10 @@ def terumo_data_entry_form(self):
         approved_layout = QHBoxLayout()
         approved_group.setLayout(approved_layout)
         approved_layout.setContentsMargins(10, 10, 10, 10)
+        # Assuming self.terumo_approved_by is a QLineEdit or QTextEdit
+        self.terumo_approved_by.setText("Linzy Jam Bautista\nLaboratory Chemist")
+        self.terumo_approved_by.setAlignment(Qt.AlignmentFlag.AlignCenter) # Center align as in PDF
+        self.terumo_approved_by.setMinimumHeight(50) # Give some height for two lines
         approved_layout.addWidget(self.terumo_approved_by)
         main_v_layout.addWidget(approved_group)
 
