@@ -2,7 +2,7 @@ from PyQt6.QtCore import Qt, QDate, QRegularExpression, QTimer, QEvent, QObject,
 from PyQt6.QtGui import QIcon, QIntValidator, QRegularExpressionValidator, QFont, QAction
 from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, \
     QTableWidget, QLineEdit, QHeaderView, QTableWidgetItem, QScrollArea, QTextEdit, QPushButton, QDateEdit, \
-    QMessageBox, QAbstractItemView, QGroupBox, QCompleter, QDialog, QLabel, QProgressBar, QStackedLayout
+    QMessageBox, QAbstractItemView, QGroupBox, QCompleter, QDialog, QLabel, QProgressBar, QStackedLayout, QGridLayout
 from db import db_con, db_dr, db_rrf
 from alert import window_alert
 from table import msds_data_entry, coa_data_entry, table
@@ -24,7 +24,9 @@ class MainWindow(QMainWindow):
         self.msds_form_layout = QVBoxLayout()
         self.msds_btn_layout = QHBoxLayout()
         self.coa_btn_layout = QHBoxLayout()
+        self.terumo_btn_layout = QHBoxLayout()  # New for Terumo format
         self.coa_form_layout = QVBoxLayout()
+        self.terumo_form_layout = QVBoxLayout()
 
         # MSDS FORM init
         #Section 1
@@ -217,6 +219,38 @@ class MainWindow(QMainWindow):
         self.btn_coa_submit = QPushButton("Submit")
         self.btn_coa_submit.clicked.connect(self.coa_btn_submit_clicked)
 
+        # TERUMO COA inputs
+        self.terumo_customer_input = QLineEdit()
+        self.terumo_item_code = QLineEdit()
+        self.terumo_item_desc = QLineEdit()
+        self.terumo_lot_number = QLineEdit()
+        self.terumo_quantity = QLineEdit()
+        self.terumo_delivery_date = QDateEdit()
+        self.terumo_delivery_date.setCalendarPopup(True)
+        self.terumo_delivery_date.setDate(QDate.currentDate())
+        self.terumo_delivery_date.calendarWidget().setMinimumSize(370, 230)
+        self.terumo_delivery_date.calendarWidget().setStyleSheet(calendar_design.STYLESHEET)
+        self.terumo_delivery_date.installEventFilter(self.wheel_filter)
+        self.terumo_color_actual = QLineEdit("Same as standard")
+        self.terumo_color_judgement = QLineEdit("Passed")
+        self.terumo_foreign_actual1 = QLineEdit("0")
+        self.terumo_foreign_actual2 = QLineEdit("0")
+        self.terumo_foreign_actual3 = QLineEdit("0")
+        self.terumo_foreign_judgement = QLineEdit("Passed")
+        self.terumo_appearance_start = QLineEdit("0")
+        self.terumo_appearance_middle = QLineEdit("0")
+        self.terumo_appearance_end = QLineEdit("0")
+        self.terumo_appearance_judgement = QLineEdit("Passed")
+        self.terumo_dimension_start = QLineEdit("2.5x3.5")
+        self.terumo_dimension_middle = QLineEdit("2.6x3.5")
+        self.terumo_dimension_end = QLineEdit("2.5x3.5")
+        self.terumo_dimension_judgement = QLineEdit("Passed")
+        self.terumo_remarks = QTextEdit()
+        self.terumo_remarks.setTabChangesFocus(True)
+        self.terumo_approved_by = QLineEdit()
+        self.terumo_submit_btn = QPushButton("Submit")
+        self.terumo_submit_btn.clicked.connect(self.terumo_submit_clicked)
+
         self.coa_widget = None
         self.msds_widget = None
 
@@ -244,6 +278,37 @@ class MainWindow(QMainWindow):
 
         self.coa_sub_tabs.addTab(self.coa_records_tab, "Records")
         self.coa_sub_tabs.addTab(self.coa_data_entry_tab, "Data Entry")
+
+        # COA Data Entry sub-tabs
+        self.coa_data_entry_sub_tabs = QTabWidget()
+        self.coa_default_tab = QWidget()
+        self.coa_terumo_tab = QWidget()
+        self.coa_data_entry_sub_tabs.addTab(self.coa_default_tab, "COA")
+        self.coa_data_entry_sub_tabs.addTab(self.coa_terumo_tab, "Terumo (COA)")
+        self.coa_data_entry_layout = QVBoxLayout(self.coa_data_entry_tab)
+        self.coa_data_entry_layout.addWidget(self.coa_data_entry_sub_tabs)
+
+        # Default COA scroll and layout
+        self.coa_scroll_area = QScrollArea(self.coa_default_tab)
+        self.coa_scroll_area.setWidgetResizable(True)
+        coa_form_container = QWidget()
+        coa_form_layout = QVBoxLayout(coa_form_container)
+        coa_form_layout.addLayout(self.coa_form_layout)
+        coa_form_layout.addLayout(self.coa_btn_layout)
+        self.coa_scroll_area.setWidget(coa_form_container)
+        coa_tab_layout = QVBoxLayout(self.coa_default_tab)
+        coa_tab_layout.addWidget(self.coa_scroll_area)
+
+        # Terumo COA scroll and layout
+        self.terumo_scroll_area = QScrollArea(self.coa_terumo_tab)
+        self.terumo_scroll_area.setWidgetResizable(True)
+        terumo_form_container = QWidget()
+        terumo_form_layout = QVBoxLayout(terumo_form_container)
+        terumo_form_layout.addLayout(self.terumo_form_layout)
+        terumo_form_layout.addLayout(self.terumo_btn_layout)
+        self.terumo_scroll_area.setWidget(terumo_form_container)
+        terumo_tab_layout = QVBoxLayout(self.coa_terumo_tab)
+        terumo_tab_layout.addWidget(self.terumo_scroll_area)
 
         self.main_tabs.addTab(self.msds_tab, "MSDS")
         self.main_tabs.addTab(self.coa_tab, "CoA")
@@ -322,31 +387,12 @@ class MainWindow(QMainWindow):
         self.msds_data_entry_layout = QVBoxLayout(self.msds_data_entry_tab)
         self.msds_data_entry_layout.addWidget(self.msds_scroll_area)
 
-        # === COA Scroll Area ===
-        self.coa_scroll_area = QScrollArea(self.coa_data_entry_tab)
-        self.coa_scroll_area.setWidgetResizable(True)
-
-        # Form container inside the scroll area
-        coa_form_container = QWidget()
-        coa_form_layout = QVBoxLayout(coa_form_container)
-
-        coa_form_layout.addLayout(self.coa_form_layout)
-        coa_form_layout.addLayout(self.coa_btn_layout)
-
-        self.coa_scroll_area.setWidget(coa_form_container)
-
-        self.coa_data_entry_layout = QVBoxLayout(self.coa_data_entry_tab)
-        self.coa_data_entry_layout.addWidget(self.coa_scroll_area)
-
         #Inside COA Records Tab
         self.coa_records_table = QTableWidget()
         self.coa_records_table.setProperty("class", "records_table")
 
         self.coa_records_layout = QVBoxLayout(self.coa_records_tab)  # inside COA sub-tab Records
         self.coa_records_layout.addWidget(self.coa_records_table)
-
-        self.coa_data_entry_layout = QVBoxLayout(self.coa_data_entry_tab)  # inside COA sub-tab Data Entry
-        self.coa_data_entry_layout.addLayout(self.coa_form_layout)
 
         self.main_layout.addWidget(self.main_tabs)
 
@@ -513,7 +559,7 @@ class MainWindow(QMainWindow):
         table.load_msds_table(self)
         table.load_coa_table(self)
         coa_data_entry.coa_data_entry_form(self)
-
+        coa_data_entry.terumo_data_entry_form(self)
         msds_data_entry.create_form(self)
 
     def msds_btn_submit_clicked(self):
@@ -737,6 +783,90 @@ class MainWindow(QMainWindow):
                 table.load_coa_table(self)
             coa_data_entry.adjust_table_height(self)
             self.coa_scroll_area.verticalScrollBar().setValue(0)
+            self.coa_sub_tabs.setCurrentIndex(0)
+
+    def terumo_submit_clicked(self):
+        # Collect data (adapt as needed for DB)
+        customer_name = self.terumo_customer_input.text()
+        item_code = self.terumo_item_code.text()
+        item_desc = self.terumo_item_desc.text()
+        quantity = self.terumo_quantity.text()
+        delivery_date = self.terumo_delivery_date.date().toString("yyyy-MM-dd")
+        lot_number = self.terumo_lot_number.text()
+        color_actual = self.terumo_color_actual.text()
+        color_judgement = self.terumo_color_judgement.text()
+        foreign_actual1 = self.terumo_foreign_actual1.text()
+        foreign_actual2 = self.terumo_foreign_actual2.text()
+        foreign_actual3 = self.terumo_foreign_actual3.text()
+        foreign_judgement = self.terumo_foreign_judgement.text()
+        appearance_start = self.terumo_appearance_start.text()
+        appearance_middle = self.terumo_appearance_middle.text()
+        appearance_end = self.terumo_appearance_end.text()
+        appearance_judgement = self.terumo_appearance_judgement.text()
+        dimension_start = self.terumo_dimension_start.text()
+        dimension_middle = self.terumo_dimension_middle.text()
+        dimension_end = self.terumo_dimension_end.text()
+        dimension_judgement = self.terumo_dimension_judgement.text()
+        remarks = self.terumo_remarks.toPlainText()
+        approved_by = self.terumo_approved_by.text()
+
+        # Required fields check
+        required_fields = {
+            "Customer Name": customer_name,
+            "Item Code": item_code,
+            "Item Description": item_desc,
+            "Lot Number": lot_number,
+            "Quantity": quantity,
+            "Approved By": approved_by,
+        }
+        for field, value in required_fields.items():
+            if not value.strip():
+                window_alert.show_message(self, "Missing Input", f"Please fill in: {field}", icon_type="warning")
+                return
+
+        # Build coa_data and summary
+        coa_data = {
+            "customer_name": customer_name,
+            "color_code": item_code,
+            "lot_number": lot_number,
+            "po_number": "",
+            "delivery_receipt": "",
+            "quantity_delivered": quantity,
+            "delivery_date": delivery_date,
+            "production_date": "",
+            "creation_date": QDate.currentDate().toString("yyyy-MM-dd"),
+            "certified_by": approved_by,
+            "storage": "",
+            "shelf_life": "",
+            "suitability": ""
+        }
+
+        summary_of_analysis = {
+            "Molded Chip - Color": ["TPC approved standard", color_actual, color_judgement],
+            "Foreign Material Contamination - >0.10": ["> 0.10", "> 0.01", "2 pcs", foreign_actual1],
+            "Foreign Material Contamination - 0.01-0.10": ["0.01 - 0.10", "0.01 - 0.10", "6 pcs", foreign_actual2],
+            "Foreign Material Contamination - <0.10": ["< 0.10", "< 0.10", "6 pcs", foreign_actual3],
+            "Foreign Judgement": foreign_judgement,
+            "Pellet Appearance - Start": [appearance_start, appearance_middle, appearance_end, appearance_judgement],
+            "Pellet Dimension - Start": [dimension_start, dimension_middle, dimension_end, dimension_judgement],
+            "Remarks": remarks
+        }
+
+        # Save (use existing DB function or create new)
+        try:
+            if coa_data_entry.current_coa_id is not None:
+                db_con.update_certificate_of_analysis(coa_data_entry.current_coa_id, coa_data, summary_of_analysis)
+                window_alert.show_message(self, "Success", "Terumo COA updated successfully!", icon_type="info")
+                coa_data_entry.current_coa_id = None
+            else:
+                db_con.save_certificate_of_analysis(coa_data, summary_of_analysis)
+                window_alert.show_message(self, "Success", "Terumo COA saved successfully!", icon_type="info")
+        except Exception as e:
+            window_alert.show_message(self, "Database Error", str(e), icon_type="critical")
+        finally:
+            coa_data_entry.clear_terumo_form(self)
+            table.load_coa_table(self)
+            self.terumo_scroll_area.verticalScrollBar().setValue(0)
             self.coa_sub_tabs.setCurrentIndex(0)
 
     def get_coa_summary_analysis_table_data(self):
@@ -1109,6 +1239,7 @@ class MainWindow(QMainWindow):
             self.delivery_receipt_label.setText("RRF No:")
             coa_data_entry.clear_coa_form(self)
             #  change the connected function
+            self.coa_data_entry_sub_tabs.setTabEnabled(1, False)
             try:
                 self.sync_button.clicked.disconnect()
             except TypeError:
@@ -1148,7 +1279,7 @@ class MainWindow(QMainWindow):
             self.dr_completer.model().setStringList(self.dr_no_list)
             self.delivery_receipt_label.setText("Delivery Receipt No:")
             coa_data_entry.clear_coa_form(self)
-
+            self.coa_data_entry_sub_tabs.setTabEnabled(1, True)
             #  change the connected function
             try:
                 self.sync_button.clicked.disconnect()
@@ -1223,15 +1354,3 @@ class LoadingDialog(QDialog):
         self.progress.setRange(0, 0)  # Indeterminate (infinite loading)
         self.progress.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.progress)
-
-# def main():
-#     app = QApplication(sys.argv)
-#     window = MainWindow()
-#     window.setWindowTitle("Document Management System")
-#     window.resize(1000, 800)
-#     window.showMaximized()
-#     sys.exit(app.exec())
-#
-#
-# if __name__ == '__main__':
-#     main()
