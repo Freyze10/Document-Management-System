@@ -88,12 +88,21 @@ def coa_data_entry_form(self, is_rrf=False):
                 text-align: center;
             }}
             QLineEdit, QDateEdit {{
+<<<<<<< HEAD
                 font-size: 14px;
                 padding: 10px 12px;
                 border: 1px solid #ced4da;
                 border-radius: 6px;
                 background-color: #ffffff;
                 min-height: 38px;
+=======
+                font-size: 12px;
+                padding: 6px 8px;
+                border: 1px solid #ced4da; /* Lighter, more neutral border */
+                border-radius: 6px; /* Slightly less rounded for a crisp look */
+                background-color: #ffffff;
+                min-height: 28px; /* Consistent height */
+>>>>>>> main
                 selection-background-color: #aed6f1;
             }}
             QLineEdit:focus, QDateEdit:focus {{
@@ -121,14 +130,18 @@ def coa_data_entry_form(self, is_rrf=False):
                 left: 1px;
             }}
             QGroupBox {{
-                font-size: 16px;
+                font-size: 14px;
                 font-weight: 600;
                 color: #212529;
                 border: 1px solid #e0e0e0;
                 border-radius: 8px;
                 margin-top: 2.0ex;
                 background-color: #ffffff;
+<<<<<<< HEAD
                 padding: 15px;
+=======
+                padding: 10px; /* Inner padding for group box content */
+>>>>>>> main
             }}
             QGroupBox::title {{
                 subcontrol-origin: margin;
@@ -189,12 +202,21 @@ def coa_data_entry_form(self, is_rrf=False):
                 color: white;
                 font-size: 13px;
                 font-weight: 500;
+<<<<<<< HEAD
                 padding: 7px 10px;
                 border: none;
                 border-radius: 6px;
                 min-width: 60px;
                 max-width: 75px;
                 min-height: 36px;
+=======
+                padding: 6px 8px; /* Adjusted padding */
+                border: none;
+                border-radius: 6px;
+                min-width: 50px; /* Adjusted min-width */
+                max-width: 65px; /* Adjusted max-width */
+                min-height: 28px; /* Slightly smaller height */
+>>>>>>> main
             }
             QPushButton:hover { background-color: #218838; }
             QPushButton:pressed { background-color: #1e7e34; }
@@ -314,11 +336,19 @@ def coa_data_entry_form(self, is_rrf=False):
                 color: #ffffff;
                 font-size: 14px;
                 font-weight: 600;
+<<<<<<< HEAD
                 padding: 6px 16px;
                 border: none;
                 border-radius: 6px;
                 min-width: 100px;
                 min-height: 38px;
+=======
+                padding: 6px 12px; /* Adjusted padding */
+                border: none;
+                border-radius: 6px;
+                min-width: 80px; /* Adjusted min-width */
+                min-height: 30px; /* Adjusted min-height */
+>>>>>>> main
                 transition: background-color 0.2s ease, box-shadow 0.2s ease;
             }
             QPushButton:hover {
@@ -358,7 +388,7 @@ def coa_data_entry_form(self, is_rrf=False):
         btn_add_table_row = QHBoxLayout()
         btn_add_table_row.addStretch()
         btn_add_table_row.addWidget(btn_add_row)
-        btn_add_table_row.addSpacing(15)
+        btn_add_table_row.addSpacing(10)
         btn_add_table_row.addWidget(btn_delete_row)
         btn_add_table_row.addStretch()
         summary_analysis_layout.addLayout(btn_add_table_row)

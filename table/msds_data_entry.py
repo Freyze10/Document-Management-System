@@ -112,8 +112,8 @@ def create_form(self):
                 color: #343a40; /* Dark gray for general text */
             }
             QLabel {
-                font-size: 14px; /* Changed from 14px to 12px */
-                font-weight: 500;
+                font-size: 12px; /* Changed from 14px to 12px */
+                font-weight: 600;
                 color: #495057; /* Slightly darker gray for labels */
                 padding-bottom: 2px; /* Small padding below labels */
                 background-color: transparent;
@@ -129,12 +129,12 @@ def create_form(self):
                 text-align: center; /* This will center the text if the label's width allows */
             }
             QLineEdit, QTextEdit {
-                font-size: 14px;
-                padding: 10px 12px;
+                font-size: 12px;
+                padding: 4px 8px;
                 border: 1px solid #ced4da; /* Lighter, more neutral border */
                 border-radius: 6px; /* Slightly less rounded for a crisp look */
                 background-color: #ffffff;
-                min-height: 38px; /* Consistent height for QLineEdit */
+                min-height: 26px; /* Consistent height for QLineEdit */
                 selection-background-color: #aed6f1;
                 color: #343a40;
             }
@@ -153,19 +153,19 @@ def create_form(self):
                 box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25); /* Red focus ring */
             }
             QTextEdit {
-                min-height: 85px; /* Slightly taller */
-                max-height: 120px; /* Allow more vertical space if needed but cap */
+                min-height: 50px; /* Slightly taller */
+                max-height: 80px; /* Allow more vertical space if needed but cap */
                 vertical-align: top;
             }
             QGroupBox {
-                font-size: 18px;
+                font-size: 14px;
                 font-weight: 600;
                 color: #212529;
                 border: 1px solid #e0e0e0; /* Lighter border for group box */
                 border-radius: 8px;
                 margin-top: 2.0ex; /* Space for title */
                 background-color: #ffffff;
-                padding: 15px; /* Inner padding for group box content */
+                padding: 8px; /* Inner padding for group box content */
             }
             QGroupBox::title {
                 subcontrol-origin: margin;
@@ -556,10 +556,13 @@ def _create_property_row(self, name, value):
     value_edit.setProperty("class", "")
     delete_btn = QPushButton("Delete")
     delete_btn.setObjectName("actionButton_delete")
+    delete_btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
     up_btn = QPushButton("↑")
     up_btn.setObjectName("actionButton")
+    up_btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
     down_btn = QPushButton("↓")
     down_btn.setObjectName("actionButton")
+    down_btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
     # Layout: Property: [name] : [value (stretch)] [↑] [↓] [Delete]
     label = QLabel("")
@@ -653,13 +656,13 @@ def form_btn(self):
         QPushButton {
             background-color: #007bff; /* Primary blue for submit (consistent with COA) */
             color: #ffffff;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 600;
-            padding: 10px 20px;
+            padding: 6px 12px;
             border: none;
             border-radius: 6px;
-            min-width: 120px;
-            min-height: 40px;
+            min-width: 80px;
+            min-height: 30px;
             margin-top: 20px;
             letter-spacing: 0.5px;
         }

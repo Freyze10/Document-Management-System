@@ -1,13 +1,13 @@
 STYLESHEET = """
 QGroupBox#section9Group {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 600;
     color: #212529;
     border: 1px solid #e0e0e0;
     border-radius: 8px;
     margin-top: 2.0ex;
     background-color: #ffffff;
-    padding: 15px;
+    padding: 8px 10px;
 }
 
 QGroupBox#section9Group::title {
@@ -20,15 +20,15 @@ QGroupBox#section9Group::title {
 }
 
 QLineEdit#propertyName {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bold;
-    padding: 10px 12px;
+    padding: 4px 8px;
     border: 1px solid #ced4da;
     border-radius: 6px;
     background-color: #ffffff;
     min-width: 150px;
     max-width: 200px; /* Fixed width for property names */
-    min-height: 38px;
+    min-height: 26px;
     selection-background-color: #aed6f1;
     color: #343a40;
 }
@@ -52,26 +52,27 @@ QLineEdit#propertyName.empty_field:focus {
 QPushButton#actionButton {
     background-color: #6c757d; /* Neutral gray for action buttons */
     color: #ffffff;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
     padding: 5px 8px;
     border: none;
     border-radius: 4px;
-    min-width: 30px;
-    max-width: 30px; /* Small buttons for up/down/delete */
-    min-height: 30px;
+    min-width: 26px;
+    max-width: 26px; /* Small buttons for up/down/delete */
+    min-height: 26px;
+    
 }
 QPushButton#actionButton_delete {
     background-color: #dc3545; /* Neutral gray for action buttons */
     color: #ffffff;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
     padding: 5px 8px;
     border: none;
     border-radius: 4px;
     min-width: 40px;
     max-width: 80px; /* Small buttons for up/down/delete */
-    min-height: 30px;
+    min-height: 26px;
 }
 QPushButton#actionButton_delete:hover {
     background-color: #bb2d3b;  
@@ -98,11 +99,11 @@ QPushButton#addPropertyButton {
     color: #ffffff;
     font-size: 14px;
     font-weight: 600;
-    padding: 8px 16px;
+    padding: 4px 14px;
     border: none;
     border-radius: 6px;
-    min-width: 120px;
-    min-height: 38px;
+    min-width: 100px;
+    min-height: 30px;
 }
 
 QPushButton#addPropertyButton:hover {
