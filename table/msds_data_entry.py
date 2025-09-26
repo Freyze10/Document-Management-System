@@ -675,8 +675,6 @@ def form_btn(self):
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
         QPushButton:focus {
-            outline: none;
-            border: 2px solid #5dade2;
         }
     """
     self.btn_msds_submit.setStyleSheet(button_style)
