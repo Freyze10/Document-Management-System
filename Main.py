@@ -321,9 +321,11 @@ class MainWindow(QMainWindow):
         self.korpack_packaging_form = QLineEdit()
         self.korpack_regulatory_info = QTextEdit()
         self.korpack_approved_by = QLineEdit()
+        self.korpack_approved_by.setCompleter(self.certified_completer)
         self.korpack_approver_position = QLineEdit()
         self.korpack_btn_submit = QPushButton("Submit")
         self.korpack_btn_submit.clicked.connect(self.korpack_btn_submit_clicked)
+        self.all_korpack_id = db_con.get_all_korpack_id()
 
         self.coa_widget = None
         self.msds_widget = None
@@ -650,8 +652,8 @@ class MainWindow(QMainWindow):
         coa_data_entry.coa_data_entry_form(self)
         msds_data_entry.create_form(self)
         terumo.coa_entry_form(self)
-        korpack.clear_korpack_form(self)
         korpack.create_korpack_form(self)
+        korpack.clear_korpack_form(self)
 
     def msds_btn_submit_clicked(self):
         try:
@@ -994,101 +996,95 @@ class MainWindow(QMainWindow):
             print(e)
 
     def korpack_btn_submit_clicked(self):
-        def korpack_btn_submit_clicked(self):
-            """Handle submission of the Korpack COA form."""
-            try:
-                # Collect data from form fields
-                customer_name = self.korpack_customer.text()
-                product_name = self.korpack_product_name.text()
-                lot_number = self.korpack_lot_number.text()
-                quantity_delivered = self.korpack_quantity_delivered.text()
-                manufacturing_date = self.korpack_manufacturing_date.date().toString("yyyy-MM-dd")
-                delivery_date = self.korpack_delivery_date.date().toString("yyyy-MM-dd")
-                physical_form = self.korpack_physical_form.text()
-                heat_suitability = self.korpack_heat_suitability.text()
-                light_fastness = self.korpack_light_fastness.text()
-                migration = self.korpack_migration.text()
-                swatch_dosage = self.korpack_swatch_dosage.text()
-                product_application = self.korpack_product_application.text()
-                packaging_form = self.korpack_packaging_form.text()
-                regulatory_info = self.korpack_regulatory_info.toPlainText()
-                approved_by = self.korpack_approved_by.text()
-                approver_position = self.korpack_approver_position.text()
+        """Handle submission of the Korpack COA form."""
+        try:
+            # Collect data from form fields
+            dr_no = self.korpack_dr_no.text()
+            customer_name = self.korpack_customer.text()
+            product_name = self.korpack_product_name.text()
+            lot_number = self.korpack_lot_number.text()
+            quantity_delivered = self.korpack_quantity_delivered.text()
+            manufacturing_date = self.korpack_manufacturing_date.date().toString("yyyy-MM-dd")
+            delivery_date = self.korpack_delivery_date.date().toString("yyyy-MM-dd")
+            physical_form = self.korpack_physical_form.text()
+            heat_suitability = self.korpack_heat_suitability.text()
+            light_fastness = self.korpack_light_fastness.text()
+            migration = self.korpack_migration.text()
+            swatch_dosage = self.korpack_swatch_dosage.text()
+            product_application = self.korpack_product_application.text()
+            packaging_form = self.korpack_packaging_form.text()
+            regulatory_info = self.korpack_regulatory_info.toPlainText()
+            approved_by = self.korpack_approved_by.text()
+            approver_position = self.korpack_approver_position.text()
 
-                # Define required fields
-                required_fields = {
-                    "Customer Name": customer_name,
-                    "Product Name": product_name,
-                    "Lot Number": lot_number,
-                    "Quantity Delivered": quantity_delivered,
-                    "Physical Form": physical_form,
-                    "Heat Suitability": heat_suitability,
-                    "Light Fastness": light_fastness,
-                    "Migration": migration,
-                    "Swatch Dosage": swatch_dosage,
-                    "Product Application": product_application,
-                    "Packaging Form": packaging_form,
-                    "Regulatory Information": regulatory_info,
-                    "Approved By": approved_by,
-                    "Approver Position": approver_position,
-                }
-
-                # Check for empty required fields
-                for field, value in required_fields.items():
-                    if not value.strip():
-                        window_alert.show_message(self, "Missing Input", f"Please fill in: {field}",
-                                                  icon_type="warning")
-                        return
-
-                # Validate approved_by against certified_by_lists
-                if approved_by not in self.certified_by_lists:
-                    window_alert.show_message(self, "Invalid Input",
-                                              f"Approved By: '{approved_by}' is not in the list.",
+            # Validation
+            required_fields = {
+                "Customer Name": customer_name,
+                "Product Name": product_name,
+                "Lot Number": lot_number,
+                "Quantity Delivered": quantity_delivered,
+                "Approved By": approved_by,
+                "Approver Position": approver_position,
+            }
+            for field, value in required_fields.items():
+                if not value.strip():
+                    window_alert.show_message(self, "Missing Input", f"Please fill in: {field}",
                                               icon_type="warning")
                     return
 
-                # Build coa_data for saving
-                coa_data = {
-                    "customer_name": customer_name,
-                    "product_name": product_name,
-                    "lot_number": lot_number,
-                    "quantity_delivered": quantity_delivered,
-                    "manufacturing_date": manufacturing_date,
-                    "delivery_date": delivery_date,
-                    "physical_form": physical_form,
-                    "heat_suitability": heat_suitability,
-                    "light_fastness": light_fastness,
-                    "migration": migration,
-                    "swatch_dosage": swatch_dosage,
-                    "product_application": product_application,
-                    "packaging_form": packaging_form,
-                    "regulatory_info": regulatory_info,
-                    "approved_by": approved_by,
-                    "approver_position": approver_position,
-                    "creation_date": QDate.currentDate().toString("yyyy-MM-dd")
-                }
+            if approved_by not in self.certified_by_lists:
+                window_alert.show_message(self, "Invalid Input",
+                                          f"Approved By: '{approved_by}' is not in the list.",
+                                          icon_type="warning")
+                return
 
-                # Save or update data
-                try:
-                    if hasattr(self, 'korpack') and self.korpack.current_korpack_id is not None:  # Update existing COA
-                        db_con.update_korpack_coa(self.korpack.current_korpack_id, coa_data)
-                        window_alert.show_message(self, "Success", "Korpack COA updated successfully!",
-                                                  icon_type="info")
-                        self.korpack.current_korpack_id = None
-                    else:  # Save new COA
-                        db_con.save_korpack_coa(coa_data)
-                        window_alert.show_message(self, "Success", "Korpack COA saved successfully!", icon_type="info")
-                except Exception as e:
-                    window_alert.show_message(self, "Database Error", str(e), icon_type="critical")
-                finally:
-                    clear_korpack_form(self)
-                    self.table.load_korpack_table(self)
-                    self.adjust_table_height(self)
-                    self.korpack_scroll_area.verticalScrollBar().setValue(0)
-                    self.coa_sub_tabs.setCurrentIndex(0)
+            # Build coa_data (general)
+            coa_data = {
+                "customer_name": customer_name,
+                "lot_number": lot_number,
+                "delivery_receipt_number": dr_no,
+                "quantity_delivered": quantity_delivered,
+                "delivery_date": delivery_date,
+                "certified_by": approved_by
+            }
+
+            # Build korpack_data (specific)
+            korpack_data = {
+                "product_name": product_name,
+                "manufacturing_date": manufacturing_date,
+                "physical_form": physical_form,
+                "heat_suitability": heat_suitability,
+                "light_fastness": light_fastness,
+                "migration": migration,
+                "swatch_dosage": swatch_dosage,
+                "product_application": product_application,
+                "packaging_form": packaging_form,
+                "regulatory_info": regulatory_info,
+                "approved_by": approved_by,
+                "approver_position": approver_position
+            }
+
+            # Save or update
+            try:
+                if korpack.current_korpack_id is not None:
+                    db_con.update_korpack_coa(korpack.current_korpack_id, coa_data, korpack_data)
+                    window_alert.show_message(self, "Success", "Korpack COA updated successfully!", icon_type="info")
+                    korpack.current_korpack_id = None
+                else:
+                    db_con.save_korpack_coa(coa_data, korpack_data)
+                    window_alert.show_message(self, "Success", "Korpack COA saved successfully!", icon_type="info")
             except Exception as e:
-                window_alert.show_message(self, "Unexpected Error", f"An error occurred: {str(e)}",
-                                          icon_type="critical")
+                window_alert.show_message(self, "Database Error", str(e), icon_type="critical")
+            finally:
+                korpack.clear_korpack_form(self)
+                table.load_coa_table(self)
+                self.korpack_scroll_area.verticalScrollBar().setValue(0)
+                self.coa_sub_tabs.setCurrentIndex(0)
+                self.all_korpack_id = db_con.get_all_korpack_id()
+
+        except Exception as e:
+            window_alert.show_message(self, "Unexpected Error", f"An error occurred: {str(e)}",
+                                      icon_type="critical")
 
     def get_coa_summary_analysis_table_data(self):
         data = {}
@@ -1264,6 +1260,8 @@ class MainWindow(QMainWindow):
             display_text = self.coa_records_table.item(row, 0).text()
             if coa_id in self.all_terumo_id:
                 self.open_terumo_preview(coa_id, display_text)
+            elif coa_id in self.all_korpack_id:
+                self.open_korpack_preview(coa_id, display_text)
             else:
                 self.open_coa_preview(coa_id, display_text)
         if column == 2:  # edit column
@@ -1272,6 +1270,14 @@ class MainWindow(QMainWindow):
                 terumo.load_coa_details(self, coa_id)
                 self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
                 self.coa_data_entry_sub_tabs.setCurrentIndex(1)
+            elif coa_id in self.all_korpack_id:
+                try:
+                    korpack.current_coa_id = coa_id  # Store the selected COA ID
+                    korpack.load_coa_details(self, coa_id)
+                    self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
+                    self.coa_data_entry_sub_tabs.setCurrentIndex(2)
+                except Exception as e:
+                    print(e, "korpack")
             else:
                 coa_data_entry.current_coa_id = coa_id
                 coa_data_entry.load_coa_details(self, coa_id, self.is_rrf)
@@ -1401,6 +1407,18 @@ class MainWindow(QMainWindow):
         self.terumo_widget.show()
         self.terumo_widget.activateWindow()
         self.terumo_widget.raise_()
+
+    def open_korpack_preview(self, coa_id, filename):
+        # If the widget already exists, close it first to avoid multiple instances
+        if self.korpack_widget is not None:
+            self.korpack_widget.close()
+            self.korpack_widget.deleteLater()  # Good practice
+        self.korpack_widget = FileTerumo()
+        self.korpack_widget.show_pdf_preview(coa_id, filename, self.is_rrf)
+        self.korpack_widget.resize(900, 800)
+        self.korpack_widget.show()
+        self.korpack_widget.activateWindow()
+        self.korpack_widget.raise_()
 
     def run_sync_script(self):
         # Show loading dialog

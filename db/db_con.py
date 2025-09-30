@@ -165,6 +165,24 @@ def create_tables():
             delivery_value VARCHAR(100)
         );
     """)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS tbl_korpack_coa (
+            id SERIAL PRIMARY KEY,
+            coa_id INT REFERENCES certificates_of_analysis(id) ON DELETE CASCADE,
+            product_name TEXT,
+            manufacturing_date DATE,
+            physical_form TEXT,
+            heat_suitability TEXT,
+            light_fastness TEXT,
+            migration TEXT,
+            swatch_dosage TEXT,
+            product_application TEXT,
+            packaging_form TEXT,
+            regulatory_info TEXT,
+            approved_by TEXT,
+            approver_position TEXT
+        );
+    """)
 
     cur.execute("""
             CREATE TABLE IF NOT EXISTS certificates_of_analysis_rrf(
@@ -452,6 +470,53 @@ def save_terumo_coa(data, terumo):
             cur.close()
         if conn:
             conn.close()
+
+
+def save_korpack_coa(coa_data, korpack_data):
+    conn = get_connection()
+    try:
+        cur = conn.cursor()
+
+        # Insert into certificate_of_analysis
+        cur.execute("""
+            INSERT INTO certificates_of_analysis (
+                customer_name, lot_number, delivery_receipt_number, 
+                quantity_delivered, delivery_date, certified_by
+            )
+            VALUES (%s, %s, %s, %s, %s)
+            RETURNING id;
+        """, (
+            coa_data["customer_name"], coa_data["lot_number"], coa_data["delivery_receipt_number"],
+            coa_data["quantity_delivered"], coa_data["delivery_date"],
+            coa_data["certified_by"]
+        ))
+
+        coa_id = cur.fetchone()[0]
+
+        # Insert into korpack_coa
+        cur.execute("""
+            INSERT INTO tbl_korpack_coa (
+                coa_id, product_name, manufacturing_date, physical_form, heat_suitability,
+                light_fastness, migration, swatch_dosage, product_application,
+                packaging_form, regulatory_info, approved_by, approver_position
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);
+        """, (
+            coa_id, korpack_data["product_name"], korpack_data["manufacturing_date"], korpack_data["physical_form"],
+            korpack_data["heat_suitability"], korpack_data["light_fastness"],
+            korpack_data["migration"], korpack_data["swatch_dosage"],
+            korpack_data["product_application"], korpack_data["packaging_form"],
+            korpack_data["regulatory_info"], korpack_data["approved_by"],
+            korpack_data["approver_position"]
+        ))
+
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        raise e
+    finally:
+        cur.close()
+        conn.close()
 
 
 def save_certificate_of_analysis_rrf(data, summary_of_analysis):
@@ -790,6 +855,62 @@ def update_terumo_coa(coa_id, data, terumo):
             conn.close()
 
 
+def update_korpack_coa(coa_id, coa_data, korpack_data):
+    conn = get_connection()
+    try:
+        cur = conn.cursor()
+
+        # Update certificates_of_analysis
+        cur.execute("""
+            UPDATE certificates_of_analysis
+            SET customer_name = %s,
+                lot_number = %s,
+                delivery_receipt_number = %s,
+                quantity_delivered = %s,
+                delivery_date = %s,
+                certified_by = %s
+            WHERE id = %s;
+        """, (
+            coa_data["customer_name"], coa_data["lot_number"], coa_data["delivery_receipt_number"],
+            coa_data["quantity_delivered"], coa_data["delivery_date"],
+            coa_data["certified_by"], coa_id
+        ))
+
+        # Update tbl_korpack_coa
+        cur.execute("""
+            UPDATE tbl_korpack_coa
+            SET product_name = %s,
+                manufacturing_date = %s,
+                physical_form = %s,
+                heat_suitability = %s,
+                light_fastness = %s,
+                migration = %s,
+                swatch_dosage = %s,
+                product_application = %s,
+                packaging_form = %s,
+                regulatory_info = %s,
+                approved_by = %s,
+                approver_position = %s
+            WHERE coa_id = %s;
+        """, (
+            korpack_data["product_name"], korpack_data["manufacturing_date"],
+            korpack_data["physical_form"], korpack_data["heat_suitability"],
+            korpack_data["light_fastness"], korpack_data["migration"],
+            korpack_data["swatch_dosage"], korpack_data["product_application"],
+            korpack_data["packaging_form"], korpack_data["regulatory_info"],
+            korpack_data["approved_by"], korpack_data["approver_position"],
+            coa_id
+        ))
+
+        conn.commit()
+    except Exception as e:
+        conn.rollback()
+        raise e
+    finally:
+        cur.close()
+        conn.close()
+
+
 #     Read
 def get_all_msds_data():
     conn = get_connection()
@@ -935,6 +1056,21 @@ def get_single_terumo_data(coa_id):
     return record
 
 
+def get_single_korpack_data(coa_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT * FROM tbl_korpack_coa WHERE coa_id = %s;",
+        (coa_id,)
+    )
+    record = cur.fetchone()  # only one row expected
+
+    cur.close()
+    conn.close()
+    return record
+
+
 def get_terumo_item_code(mbpi_code):
     conn = get_connection()
     cur = conn.cursor()
@@ -1023,7 +1159,7 @@ def get_dr_details(dr_no):
 
     cur.execute(
         """SELECT a.dr_no, a.product_code, b.customer_name, b.delivery_date, b.po_no, a.attachments, 
-                    TO_CHAR(a.quantity, 'FM999999990.00') || ' ' || a.unit AS quantity
+                    TO_CHAR(a.quantity, 'FM999999990.00') || ' ' || a.unit AS quantity, a.weight_per_pack
                     FROM product_delivery_items a, product_delivery_primary b
                     WHERE a.dr_no = b.dr_no AND a.dr_no=%s ORDER BY a.id DESC""",
         (dr_no,)
@@ -1151,6 +1287,17 @@ def get_all_terumo_id():
     cur = conn.cursor()
 
     cur.execute("SELECT coa_id FROM tbl_terumo;")
+    records = cur.fetchall()  # only one row expected
+
+    cur.close()
+    conn.close()
+    return [row[0] for row in records]
+
+def get_all_korpack_id():
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT coa_id FROM tbl_korpack_coa;")
     records = cur.fetchall()  # only one row expected
 
     cur.close()

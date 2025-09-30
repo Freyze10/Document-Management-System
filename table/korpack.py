@@ -4,147 +4,180 @@ from PyQt6.QtCore import Qt, QDate
 
 from alert import window_alert
 from db import db_con
+from utils import lot_format, abs_path
+
+current_korpack_id = None
 
 
-def populate_korpack_coa_fields(self, dr_no):
+def load_coa_details(self, coa_id):
     try:
-        fields = db_con.get_dr_details(dr_no)
+        self.korpack_dr_no.blockSignals(True)
 
-        if not fields:  # None or empty tuple
-            # Clear fields or just exit
-            self.terumo_customer_input.clear()
+        # Fetch data
+        field_result = db_con.get_single_coa_data(coa_id)       # from certificates_of_analysis
+        korpack_res = db_con.get_single_korpack_data(coa_id)    # from tbl_korpack_coa
 
-            self.terumo_lot_number.clear()
-            self.terumo_quantity.clear()
-            self.terumo_delivery_date.setDate(QDate.currentDate())
+        # === Populate COA general info ===
 
-            self.terumo_item_code.clear()
-            self.terumo_item_description.clear()
-            return
+        self.korpack_dr_no.setText(str(field_result[5]))   # customer_name
+        self.korpack_customer.setText(str(field_result[1]))   # customer_name
+        self.korpack_lot_number.setText(str(field_result[3])) # lot_number
+        self.korpack_quantity_delivered.setText(str(field_result[6])) # quantity_delivered
 
-        # === Populate inputs ===
-        lot_no = lot_format.normalize(fields[5])
-        item_desc = db_con.get_trade_name_msds(fields[1])
-        if item_desc:
-            desc = item_desc[0]
-        else:
-            desc = ""
-        self.terumo_item_description.setText(str(desc))
+        # Delivery date
+        if field_result[7]:  # delivery_date
+            self.korpack_delivery_date.setDate(
+                QDate(field_result[7].year, field_result[7].month, field_result[7].day)
+            )
 
-        self.terumo_customer_input.setText(str(fields[2]))
-        self.terumo_quantity.setText(str(fields[6]))
-        self.terumo_lot_number.setText(lot_no)
+        # Approved by
+        self.korpack_approved_by.setText(str(field_result[10]))
 
-        if fields[3]:
-            self.terumo_delivery_date.setDate(QDate(fields[3].year, fields[3].month, fields[3].day))
+        # === Populate Korpack-specific info ===
+        self.korpack_product_name.setText(str(korpack_res[2]))  # product_name
+        if korpack_res[3]:  # manufacturing_date
+            self.korpack_manufacturing_date.setDate(
+                QDate(korpack_res[3].year, korpack_res[3].month, korpack_res[3].day)
+            )
+        self.korpack_physical_form.setText(str(korpack_res[4]))
+        self.korpack_heat_suitability.setText(str(korpack_res[5]))
+        self.korpack_light_fastness.setText(str(korpack_res[6]))
+        self.korpack_migration.setText(str(korpack_res[7]))
+        self.korpack_swatch_dosage.setText(str(korpack_res[8]))
+        self.korpack_product_application.setText(str(korpack_res[9]))
+        self.korpack_packaging_form.setText(str(korpack_res[10]))
+
+        self.korpack_regulatory_info.setPlainText(str(korpack_res[11]))
+        self.korpack_approved_by.setText(str(korpack_res[12]))
+        self.korpack_approver_position.setText(str(korpack_res[13]))
+
+        # Set button to Update
+        self.korpack_btn_submit.setText("Update")
+
+        # Re-enable signals
+        self.korpack_dr_no.blockSignals(False)
 
     except Exception as e:
-        print("terumo", e)
+        print("Error in load_korpack_details:", e)
 
 def create_korpack_form(self):
     """Create the Korpack Certificate of Analysis (COA) form."""
     form_widget = QWidget()
     main_v_layout = QVBoxLayout(form_widget)
     main_v_layout.setContentsMargins(30, 20, 30, 30)  # Consistent padding
+    calendar_icon_path = abs_path.resource("img/calendar_icon.png").replace("\\", "/")
 
     # Apply stylesheet similar to MSDS form
-    form_widget.setStyleSheet("""
-        QWidget {
-            background-color: #f8f9fa;
-            font-family: 'Inter', 'Segoe UI', sans-serif;
-            color: #343a40;
-        }
-        QLabel {
-            font-size: 12px;
-            font-weight: 600;
-            color: #495057;
-            padding-bottom: 2px;
-            background-color: transparent;
-        }
-        QLabel#mainHeader {
-            font-size: 32px;
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 30px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #007bff;
-            text-align: center;
-        }
-        QLineEdit, QTextEdit, QDateEdit {
-            font-size: 12px;
-            padding: 4px 8px;
-            border: 1px solid #ced4da;
-            border-radius: 6px;
-            background-color: #ffffff;
-            min-height: 26px;
-            selection-background-color: #aed6f1;
-            color: #343a40;
-        }
-        QLineEdit:focus, QTextEdit:focus, QDateEdit:focus {
-            border: 1px solid #007bff;
-            background-color: #e9f5ff;
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-        }
-        QLineEdit.empty_field, QTextEdit.empty_field {
-            border: 1px solid #dc3545;
-            background-color: #ffebeb;
-        }
-        QLineEdit.empty_field:focus, QTextEdit.empty_field:focus {
-            border: 1px solid #dc3545;
-            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25);
-        }
-        QLineEdit#drNoField {
-            max-width: 150px; /* Shortened width for korpack_dr_no */
-        }
-        QTextEdit {
-            min-height: 80px;
-            max-height: 120px;
-            vertical-align: top;
-        }
-        QGroupBox {
-            font-size: 14px;
-            font-weight: 600;
-            color: #212529;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            margin-top: 2.0ex;
-            background-color: #ffffff;
-            padding: 8px;
-        }
-        QGroupBox::title {
-            subcontrol-origin: margin;
-            subcontrol-position: top left;
-            padding: 0 10px;
-            left: 15px;
-            margin-left: 0px;
-            color: #34495e;
-        }
-        QPushButton {
-            background-color: #007bff;
-            color: #ffffff;
-            font-size: 14px;
-            font-weight: 600;
-            padding: 6px 12px;
-            border: none;
-            border-radius: 6px;
-            min-width: 80px;
-            min-height: 30px;
-            margin-top: 20px;
-            letter-spacing: 0.5px;
-        }
-        QPushButton:hover {
-            background-color: #0056b3;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        QPushButton:pressed {
-            background-color: #004085;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        QPushButton:focus {
-            outline: none;
-            border: 2px solid #5dade2;
-        }
-    """)
+    form_widget.setStyleSheet(f"""
+            QWidget {{
+                background-color: #f8f9fa;
+                font-family: 'Inter', 'Segoe UI', sans-serif;
+                color: #343a40;
+            }}
+            QLabel {{
+                font-size: 12px;
+                font-weight: 600;
+                color: #495057;
+                padding-bottom: 2px;
+                background-color: transparent;
+            }}
+            QLabel#mainHeader {{
+                font-size: 32px;
+                font-weight: 700;
+                color: #2c3e50;
+                margin-bottom: 30px;
+                padding-bottom: 10px;
+                border-bottom: 3px solid #007bff;
+                text-align: center;
+            }}
+            QLineEdit, QTextEdit, QDateEdit {{
+                font-size: 12px;
+                padding: 4px 8px;
+                border: 1px solid #ced4da;
+                border-radius: 6px;
+                background-color: #ffffff;
+                min-height: 26px;
+                selection-background-color: #aed6f1;
+                color: #343a40;
+            }}
+            QLineEdit:focus, QTextEdit:focus, QDateEdit:focus {{
+                border: 1px solid #007bff;
+                background-color: #e9f5ff;
+                box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+            }}
+            QLineEdit.empty_field, QTextEdit.empty_field {{
+                border: 1px solid #dc3545;
+                background-color: #ffebeb;
+            }}
+            QLineEdit.empty_field:focus, QTextEdit.empty_field:focus {{
+                border: 1px solid #dc3545;
+                box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25);
+            }}
+            QLineEdit#drNoField {{
+                max-width: 150px;
+            }}
+            QTextEdit {{
+                min-height: 80px;
+                max-height: 120px;
+                vertical-align: top;
+            }}
+            QGroupBox {{
+                font-size: 14px;
+                font-weight: 600;
+                color: #212529;
+                border: 1px solid #e0e0e0;
+                border-radius: 8px;
+                margin-top: 2.0ex;
+                background-color: #ffffff;
+                padding: 8px;
+            }}
+            QGroupBox::title {{
+                subcontrol-origin: margin;
+                subcontrol-position: top left;
+                padding: 0 10px;
+                left: 15px;
+                margin-left: 0px;
+                color: #34495e;
+            }}
+            QPushButton {{
+                background-color: #007bff;
+                color: #ffffff;
+                font-size: 14px;
+                font-weight: 600;
+                padding: 6px 12px;
+                border: none;
+                border-radius: 6px;
+                min-width: 80px;
+                min-height: 30px;
+                margin-top: 20px;
+                letter-spacing: 0.5px;
+            }}
+            QPushButton:hover {{
+                background-color: #0056b3;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }}
+            QPushButton:pressed {{
+                background-color: #004085;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            }}
+            QPushButton:focus {{
+                outline: none;
+                border: 2px solid #5dade2;
+            }}
+            QDateEdit::drop-down {{
+                border: 0px;
+                width: 40px; /* Slightly wider dropdown button */
+                background-color: #e9ecef; /* Light gray background for dropdown */
+                border-top-right-radius: 6px;
+                border-bottom-right-radius: 6px;
+            }}
+            QDateEdit::down-arrow {{
+                background-image: url("{calendar_icon_path}"); /* Ensure this path is correct */
+                width: 26px;
+                height: 26px;
+            }}
+        """)
+
     sync_style = """
                 QPushButton {
                     background-color: #28a745; /* Green sync button */
@@ -253,6 +286,44 @@ def create_korpack_form(self):
 
     # Perform initial validation
     check_empty_fields(self)
+
+
+def populate_korpack_coa_fields(self, dr_no):
+    try:
+        fields = db_con.get_dr_details(dr_no)
+
+        if not fields:  # None or empty tuple
+            # Clear fields or just exit
+            self.korpack_customer.clear()
+            self.korpack_product_name.clear()
+
+            self.korpack_lot_number.clear()
+            self.korpack_quantity_delivered.clear()
+            self.korpack_packaging_form.clear()
+            self.korpack_delivery_date.setDate(QDate.currentDate())
+
+            return
+
+        # === Populate inputs ===
+        lot_no = lot_format.normalize(fields[5])
+        item_desc = db_con.get_trade_name_msds(fields[1])
+        if item_desc:
+            desc = item_desc[0]
+        else:
+            desc = ""
+        self.korpack_lot_number.setText(lot_no)
+        self.korpack_product_name.setText(str(desc))
+        self.korpack_quantity_delivered.setText(str(fields[6]))
+
+        self.korpack_packaging_form.setText(str(fields[7]))
+        self.korpack_customer.setText(str(fields[2]))
+
+        if fields[3]:
+            self.korpack_delivery_date.setDate(QDate(fields[3].year, fields[3].month, fields[3].day))
+
+    except Exception as e:
+        print("Korpack", e)
+
 
 def validate_field(widget):
     """Validate if a QLineEdit or QTextEdit is empty and apply/remove red border."""
