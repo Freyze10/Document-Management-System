@@ -292,6 +292,12 @@ class MainWindow(QMainWindow):
 
         # korpack COA Inputs
         self.korpack_dr_no = QLineEdit()
+        self.korpack_dr_no.setCompleter(self.dr_completer)
+        self.korpack_delivery_receipt_timer = self.setup_finished_typing(
+            self.korpack_dr_no,
+            lambda: korpack.populate_korpack_coa_fields(self, self.korpack_dr_no.text()),
+            delay=1200
+        )
         self.korpack_customer = QLineEdit()
         self.korpack_product_name = QLineEdit()
         self.korpack_lot_number = QLineEdit()
@@ -988,7 +994,101 @@ class MainWindow(QMainWindow):
             print(e)
 
     def korpack_btn_submit_clicked(self):
-        pass
+        def korpack_btn_submit_clicked(self):
+            """Handle submission of the Korpack COA form."""
+            try:
+                # Collect data from form fields
+                customer_name = self.korpack_customer.text()
+                product_name = self.korpack_product_name.text()
+                lot_number = self.korpack_lot_number.text()
+                quantity_delivered = self.korpack_quantity_delivered.text()
+                manufacturing_date = self.korpack_manufacturing_date.date().toString("yyyy-MM-dd")
+                delivery_date = self.korpack_delivery_date.date().toString("yyyy-MM-dd")
+                physical_form = self.korpack_physical_form.text()
+                heat_suitability = self.korpack_heat_suitability.text()
+                light_fastness = self.korpack_light_fastness.text()
+                migration = self.korpack_migration.text()
+                swatch_dosage = self.korpack_swatch_dosage.text()
+                product_application = self.korpack_product_application.text()
+                packaging_form = self.korpack_packaging_form.text()
+                regulatory_info = self.korpack_regulatory_info.toPlainText()
+                approved_by = self.korpack_approved_by.text()
+                approver_position = self.korpack_approver_position.text()
+
+                # Define required fields
+                required_fields = {
+                    "Customer Name": customer_name,
+                    "Product Name": product_name,
+                    "Lot Number": lot_number,
+                    "Quantity Delivered": quantity_delivered,
+                    "Physical Form": physical_form,
+                    "Heat Suitability": heat_suitability,
+                    "Light Fastness": light_fastness,
+                    "Migration": migration,
+                    "Swatch Dosage": swatch_dosage,
+                    "Product Application": product_application,
+                    "Packaging Form": packaging_form,
+                    "Regulatory Information": regulatory_info,
+                    "Approved By": approved_by,
+                    "Approver Position": approver_position,
+                }
+
+                # Check for empty required fields
+                for field, value in required_fields.items():
+                    if not value.strip():
+                        window_alert.show_message(self, "Missing Input", f"Please fill in: {field}",
+                                                  icon_type="warning")
+                        return
+
+                # Validate approved_by against certified_by_lists
+                if approved_by not in self.certified_by_lists:
+                    window_alert.show_message(self, "Invalid Input",
+                                              f"Approved By: '{approved_by}' is not in the list.",
+                                              icon_type="warning")
+                    return
+
+                # Build coa_data for saving
+                coa_data = {
+                    "customer_name": customer_name,
+                    "product_name": product_name,
+                    "lot_number": lot_number,
+                    "quantity_delivered": quantity_delivered,
+                    "manufacturing_date": manufacturing_date,
+                    "delivery_date": delivery_date,
+                    "physical_form": physical_form,
+                    "heat_suitability": heat_suitability,
+                    "light_fastness": light_fastness,
+                    "migration": migration,
+                    "swatch_dosage": swatch_dosage,
+                    "product_application": product_application,
+                    "packaging_form": packaging_form,
+                    "regulatory_info": regulatory_info,
+                    "approved_by": approved_by,
+                    "approver_position": approver_position,
+                    "creation_date": QDate.currentDate().toString("yyyy-MM-dd")
+                }
+
+                # Save or update data
+                try:
+                    if hasattr(self, 'korpack') and self.korpack.current_korpack_id is not None:  # Update existing COA
+                        db_con.update_korpack_coa(self.korpack.current_korpack_id, coa_data)
+                        window_alert.show_message(self, "Success", "Korpack COA updated successfully!",
+                                                  icon_type="info")
+                        self.korpack.current_korpack_id = None
+                    else:  # Save new COA
+                        db_con.save_korpack_coa(coa_data)
+                        window_alert.show_message(self, "Success", "Korpack COA saved successfully!", icon_type="info")
+                except Exception as e:
+                    window_alert.show_message(self, "Database Error", str(e), icon_type="critical")
+                finally:
+                    clear_korpack_form(self)
+                    self.table.load_korpack_table(self)
+                    self.adjust_table_height(self)
+                    self.korpack_scroll_area.verticalScrollBar().setValue(0)
+                    self.coa_sub_tabs.setCurrentIndex(0)
+            except Exception as e:
+                window_alert.show_message(self, "Unexpected Error", f"An error occurred: {str(e)}",
+                                          icon_type="critical")
 
     def get_coa_summary_analysis_table_data(self):
         data = {}

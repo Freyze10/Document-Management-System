@@ -3,7 +3,43 @@ from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QLabel, QWidget, QGroupBox
 from PyQt6.QtCore import Qt, QDate
 
 from alert import window_alert
+from db import db_con
 
+
+def populate_korpack_coa_fields(self, dr_no):
+    try:
+        fields = db_con.get_dr_details(dr_no)
+
+        if not fields:  # None or empty tuple
+            # Clear fields or just exit
+            self.terumo_customer_input.clear()
+
+            self.terumo_lot_number.clear()
+            self.terumo_quantity.clear()
+            self.terumo_delivery_date.setDate(QDate.currentDate())
+
+            self.terumo_item_code.clear()
+            self.terumo_item_description.clear()
+            return
+
+        # === Populate inputs ===
+        lot_no = lot_format.normalize(fields[5])
+        item_desc = db_con.get_trade_name_msds(fields[1])
+        if item_desc:
+            desc = item_desc[0]
+        else:
+            desc = ""
+        self.terumo_item_description.setText(str(desc))
+
+        self.terumo_customer_input.setText(str(fields[2]))
+        self.terumo_quantity.setText(str(fields[6]))
+        self.terumo_lot_number.setText(lot_no)
+
+        if fields[3]:
+            self.terumo_delivery_date.setDate(QDate(fields[3].year, fields[3].month, fields[3].day))
+
+    except Exception as e:
+        print("terumo", e)
 
 def create_korpack_form(self):
     """Create the Korpack Certificate of Analysis (COA) form."""
@@ -57,6 +93,9 @@ def create_korpack_form(self):
             border: 1px solid #dc3545;
             box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25);
         }
+        QLineEdit#drNoField {
+            max-width: 150px; /* Shortened width for korpack_dr_no */
+        }
         QTextEdit {
             min-height: 80px;
             max-height: 120px;
@@ -106,7 +145,22 @@ def create_korpack_form(self):
             border: 2px solid #5dade2;
         }
     """)
-
+    sync_style = """
+                QPushButton {
+                    background-color: #28a745; /* Green sync button */
+                    color: white;
+                    font-size: 12px; /* Slightly smaller font */
+                    font-weight: 500;
+                    padding: 6px 8px; /* Adjusted padding */
+                    border: none;
+                    border-radius: 6px;
+                    min-width: 50px; /* Adjusted min-width */
+                    max-width: 65px; /* Adjusted max-width */
+                    min-height: 24px; /* Slightly smaller height */
+                }
+                QPushButton:hover { background-color: #218838; }
+                QPushButton:pressed { background-color: #1e7e34; }
+            """
     # Header
     header = QLabel("Certificate of Analysis - Korpack")
     header.setObjectName("mainHeader")
@@ -125,12 +179,26 @@ def create_korpack_form(self):
         layout.setContentsMargins(20, 25, 20, 20)
         row_idx = 0
         for label_text, input_widget in fields:
-            if label_text:
+            if label_text == "Delivery Receipt:":  # Special handling for korpack_dr_no
+                # Create a horizontal layout for the field and sync button
+                dr_layout = QHBoxLayout()
                 label = QLabel(label_text)
+                self.korpack_dr_no.setObjectName("drNoField")  # Apply shortened width
+                dr_layout.addWidget(self.korpack_dr_no, alignment=Qt.AlignmentFlag.AlignBottom)
+                sync_button = QPushButton("Sync")
+                sync_button.setStyleSheet(sync_style)
+                sync_button.clicked.connect(lambda: self.run_sync_script())
+                dr_layout.addWidget(sync_button)
+                dr_layout.addStretch()  # Push button to the right
                 layout.addWidget(label, row_idx, 0, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-                layout.addWidget(input_widget, row_idx, 1)
+                layout.addLayout(dr_layout, row_idx, 1)
             else:
-                layout.addWidget(input_widget, row_idx, 0, 1, 2)
+                if label_text:
+                    label = QLabel(label_text)
+                    layout.addWidget(label, row_idx, 0, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
+                    layout.addWidget(input_widget, row_idx, 1)
+                else:
+                    layout.addWidget(input_widget, row_idx, 0, 1, 2)
             # Connect validation signals
             if isinstance(input_widget, QLineEdit):
                 input_widget.textChanged.connect(lambda text, widget=input_widget: validate_field(widget))
@@ -142,6 +210,7 @@ def create_korpack_form(self):
 
     # Section 1: Product Information
     product_info_fields = [
+        ("Delivery Receipt:", self.korpack_dr_no),
         ("Customer Name:", self.korpack_customer),
         ("Product Name:", self.korpack_product_name),
         ("Lot Number:", self.korpack_lot_number),
