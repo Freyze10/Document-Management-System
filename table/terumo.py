@@ -446,6 +446,7 @@ def clear_coa_form(self):
         self.terumo_delivery_receipt.clear()
         self.terumo_approved_by.clear()
         self.terumo_approver_position.clear()
+        self.terumo_lots.clear()
 
         self.terumo_submit_btn.setText("Submit")
         self.terumo_delivery_receipt.blockSignals(False)

@@ -25,7 +25,7 @@ def split_by_comma(s):
 class FileTerumo(QWidget):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Certificate of Analysis Preview")
+        self.setWindowTitle("COA-TERUMO Preview")
         self.setWindowIcon(QIcon(abs_path.resource("img/icon.ico")))
         main_layout = QVBoxLayout(self)
 

@@ -5,7 +5,7 @@ from PyQt6.QtWidgets import QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QTab
     QMessageBox, QAbstractItemView, QGroupBox, QCompleter, QDialog, QLabel, QProgressBar, QStackedLayout
 from db import db_con, db_dr, db_rrf
 from alert import window_alert
-from table import msds_data_entry, coa_data_entry, table, terumo
+from table import msds_data_entry, coa_data_entry, table, terumo, korpack
 from print.print_msds import FileMSDS
 from print.print_coa import FileCOA
 from print.print_terumo import FileTerumo
@@ -26,8 +26,10 @@ class MainWindow(QMainWindow):
         self.msds_btn_layout = QHBoxLayout()
         self.coa_btn_layout = QHBoxLayout()
         self.terumo_btn_layout = QHBoxLayout()  # New for Terumo format
+        self.korpack_btn_layout = QHBoxLayout()
         self.coa_form_layout = QVBoxLayout()
         self.terumo_form_layout = QVBoxLayout()
+        self.korpack_form_layout = QVBoxLayout()
 
         # MSDS FORM init
         #Section 1
@@ -288,11 +290,39 @@ class MainWindow(QMainWindow):
         self.terumo_submit_btn.clicked.connect(self.terumo_submit_clicked)
         self.all_terumo_id = db_con.get_all_terumo_id()
 
-
+        # korpack COA Inputs
+        self.korpack_dr_no = QLineEdit()
+        self.korpack_customer = QLineEdit()
+        self.korpack_product_name = QLineEdit()
+        self.korpack_lot_number = QLineEdit()
+        self.korpack_quantity_delivered = QLineEdit()
+        self.korpack_manufacturing_date = QDateEdit()
+        self.korpack_manufacturing_date.setCalendarPopup(True)
+        self.korpack_manufacturing_date.setDate(QDate.currentDate())
+        self.korpack_manufacturing_date.calendarWidget().setStyleSheet(calendar_design.STYLESHEET)
+        self.korpack_manufacturing_date.installEventFilter(self.wheel_filter)
+        self.korpack_delivery_date = QDateEdit()
+        self.korpack_delivery_date.setCalendarPopup(True)
+        self.korpack_delivery_date.setDate(QDate.currentDate())
+        self.korpack_delivery_date.calendarWidget().setStyleSheet(calendar_design.STYLESHEET)
+        self.korpack_delivery_date.installEventFilter(self.wheel_filter)
+        self.korpack_physical_form = QLineEdit()
+        self.korpack_heat_suitability = QLineEdit()
+        self.korpack_light_fastness = QLineEdit()
+        self.korpack_migration = QLineEdit()
+        self.korpack_swatch_dosage = QLineEdit()
+        self.korpack_product_application = QLineEdit()
+        self.korpack_packaging_form = QLineEdit()
+        self.korpack_regulatory_info = QTextEdit()
+        self.korpack_approved_by = QLineEdit()
+        self.korpack_approver_position = QLineEdit()
+        self.korpack_btn_submit = QPushButton("Submit")
+        self.korpack_btn_submit.clicked.connect(self.korpack_btn_submit_clicked)
 
         self.coa_widget = None
         self.msds_widget = None
         self.terumo_widget = None
+        self.korpack_widget = None
 
         self.msds_tab = QWidget()  #MSDS Main Tab
         self.msds_layout = QVBoxLayout(self.msds_tab)
@@ -323,8 +353,10 @@ class MainWindow(QMainWindow):
         self.coa_data_entry_sub_tabs = QTabWidget()
         self.coa_default_tab = QWidget()
         self.coa_terumo_tab = QWidget()
+        self.coa_korpack_tab = QWidget()
         self.coa_data_entry_sub_tabs.addTab(self.coa_default_tab, "COA")
         self.coa_data_entry_sub_tabs.addTab(self.coa_terumo_tab, "Terumo (COA)")
+        self.coa_data_entry_sub_tabs.addTab(self.coa_korpack_tab, "korpack (COA)")
         self.coa_data_entry_layout = QVBoxLayout(self.coa_data_entry_tab)
         self.coa_data_entry_layout.addWidget(self.coa_data_entry_sub_tabs)
 
@@ -349,6 +381,17 @@ class MainWindow(QMainWindow):
         self.terumo_scroll_area.setWidget(terumo_form_container)
         terumo_tab_layout = QVBoxLayout(self.coa_terumo_tab)
         terumo_tab_layout.addWidget(self.terumo_scroll_area)
+
+        # korpack COA scroll and layout
+        self.korpack_scroll_area = QScrollArea(self.coa_korpack_tab)
+        self.korpack_scroll_area.setWidgetResizable(True)
+        korpack_form_container = QWidget()
+        korpack_form_layout = QVBoxLayout(korpack_form_container)
+        korpack_form_layout.addLayout(self.korpack_form_layout)
+        korpack_form_layout.addLayout(self.korpack_btn_layout)
+        self.korpack_scroll_area.setWidget(korpack_form_container)
+        korpack_tab_layout = QVBoxLayout(self.coa_korpack_tab)
+        korpack_tab_layout.addWidget(self.korpack_scroll_area)
 
         self.main_tabs.addTab(self.msds_tab, "MSDS")
         self.main_tabs.addTab(self.coa_tab, "CoA")
@@ -601,6 +644,8 @@ class MainWindow(QMainWindow):
         coa_data_entry.coa_data_entry_form(self)
         msds_data_entry.create_form(self)
         terumo.coa_entry_form(self)
+        korpack.clear_korpack_form(self)
+        korpack.create_korpack_form(self)
 
     def msds_btn_submit_clicked(self):
         try:
@@ -941,6 +986,9 @@ class MainWindow(QMainWindow):
                 self.all_terumo_id = db_con.get_all_terumo_id()
         except Exception as e:
             print(e)
+
+    def korpack_btn_submit_clicked(self):
+        pass
 
     def get_coa_summary_analysis_table_data(self):
         data = {}
