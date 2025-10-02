@@ -9,6 +9,7 @@ from table import msds_data_entry, coa_data_entry, table, terumo, korpack
 from print.print_msds import FileMSDS
 from print.print_coa import FileCOA
 from print.print_terumo import FileTerumo
+from print.print_korpack import FileKorpack
 import Login
 from utils import abs_path, scroll_date, calendar_design
 
@@ -1257,13 +1258,16 @@ class MainWindow(QMainWindow):
         coa_id = self.coa_records_table.item(row, 0).data(Qt.ItemDataRole.UserRole)
 
         if column == 1:  # view column
-            display_text = self.coa_records_table.item(row, 0).text()
-            if coa_id in self.all_terumo_id:
-                self.open_terumo_preview(coa_id, display_text)
-            elif coa_id in self.all_korpack_id:
-                self.open_korpack_preview(coa_id, display_text)
-            else:
-                self.open_coa_preview(coa_id, display_text)
+            try:
+                display_text = self.coa_records_table.item(row, 0).text()
+                if coa_id in self.all_terumo_id:
+                    self.open_terumo_preview(coa_id, display_text)
+                elif coa_id in self.all_korpack_id:
+                    self.open_korpack_preview(coa_id, display_text)
+                else:
+                    self.open_coa_preview(coa_id, display_text)
+            except Exception as e:
+                print(e, "column1")
         if column == 2:  # edit column
             if coa_id in self.all_terumo_id:
                 terumo.current_coa_id = coa_id  # Store the selected COA ID
@@ -1398,22 +1402,22 @@ class MainWindow(QMainWindow):
 
     def open_terumo_preview(self, coa_id, filename):
         # If the widget already exists, close it first to avoid multiple instances
-        if self.terumo_widget is not None:
-            self.terumo_widget.close()
-            self.terumo_widget.deleteLater()  # Good practice
-        self.terumo_widget = FileTerumo()
-        self.terumo_widget.show_pdf_preview(coa_id, filename, self.is_rrf)
-        self.terumo_widget.resize(900, 800)
-        self.terumo_widget.show()
-        self.terumo_widget.activateWindow()
-        self.terumo_widget.raise_()
+        if self.korpack_widget is not None:
+            self.korpack_widget.close()
+            self.korpack_widget.deleteLater()  # Good practice
+        self.korpack_widget = FileTerumo()
+        self.korpack_widget.show_pdf_preview(coa_id, filename, self.is_rrf)
+        self.korpack_widget.resize(900, 800)
+        self.korpack_widget.show()
+        self.korpack_widget.activateWindow()
+        self.korpack_widget.raise_()
 
     def open_korpack_preview(self, coa_id, filename):
         # If the widget already exists, close it first to avoid multiple instances
         if self.korpack_widget is not None:
             self.korpack_widget.close()
             self.korpack_widget.deleteLater()  # Good practice
-        self.korpack_widget = FileTerumo()
+        self.korpack_widget = FileKorpack()
         self.korpack_widget.show_pdf_preview(coa_id, filename, self.is_rrf)
         self.korpack_widget.resize(900, 800)
         self.korpack_widget.show()
