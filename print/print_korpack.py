@@ -111,82 +111,86 @@ class FileKorpack(QWidget):
         self.addAction(self.print_action)
 
     def generate_pdf(self, coa_id, is_rrf=False):
-        # Fetch DB data
         field_result = db_con.get_single_coa_data(coa_id)
         korpack_res = db_con.get_single_korpack_data(coa_id)
-
         buffer = io.BytesIO()
         doc = SimpleDocTemplate(
             buffer,
             pagesize=letter,
-            rightMargin=50, leftMargin=50, topMargin=90, bottomMargin=50
+            rightMargin=50, leftMargin=50, topMargin=90, bottomMargin=40
         )
         styles = getSampleStyleSheet()
-        normal_style = styles['Normal']
-        bold_style = ParagraphStyle('Bold', parent=normal_style, fontName='Helvetica-Bold')
-        center_style = ParagraphStyle('Center', parent=normal_style, alignment=TA_CENTER, fontSize=16)
-        label_style = ParagraphStyle('Label', parent=normal_style, fontName='Helvetica-Bold', fontSize=10)
+        normal = styles['Normal']
+        bold_center = ParagraphStyle(
+            'BoldCenter', parent=normal,
+            fontName='Helvetica-Bold', fontSize=16,
+            alignment=TA_CENTER)
+        left_label = ParagraphStyle('Label', parent=normal, fontName='Helvetica-Bold', fontSize=10, alignment=TA_LEFT)
+        field_val = ParagraphStyle('Field', parent=normal, fontSize=10, alignment=TA_LEFT)
+        footer_name = ParagraphStyle('footerName', parent=normal, fontName='Helvetica-Bold', fontSize=11)
+        footer_role = ParagraphStyle('footerRole', parent=normal, fontSize=10)
+        sig_line_style = ParagraphStyle('SigLine', parent=normal, fontSize=10, alignment=TA_LEFT)
+        form_style = ParagraphStyle('Form', parent=normal, fontSize=9, alignment=TA_RIGHT)
 
         content = []
-
         # HEADER
-        content.append(Paragraph("CERTIFICATE OF INSPECTION PVC-FREE COMPOUND FOOD APPROVED", center_style))
-        content.append(Spacer(1, 18))
-
-        # Info Rows Table
-        info_data = [
-            ["Customer:", str(field_result[1])],
-            ["Product Name:", str(korpack_res[2])],
-            ["Code:", str(field_result[5])],
-            ["Lot Number:", str(field_result[3])],
-            ["Quantity:", str(field_result[6])],
-            ["Packing:", str(korpack_res[10])],
-            ["Delivery Date:", field_result[7].strftime('%B %d, %Y') if field_result[7] else ""],
-        ]
-        info_table = Table(info_data, colWidths=[130, 340])
-        info_table.setStyle(TableStyle([
-            ('FONT', (0, 0), (-1, -1), 'Helvetica', 11),
-            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('ALIGN', (0, 0), (0, -1), 'RIGHT'),
-            ('LEFTPADDING', (1, 0), (1, -1), 15),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
-        ]))
-        content.append(info_table)
+        content.append(Paragraph("CERTIFICATE OF ANALYSIS", bold_center))
         content.append(Spacer(1, 12))
 
-        # Physical Properties Table
-        physical_rows = [
-            ["Raw Material Basis", korpack_res[4], korpack_res[5], korpack_res[11]],  # Example mapping
-            ["Color", korpack_res[4], korpack_res[5], korpack_res[11]],
-            ["Specific Gravity", korpack_res[4], korpack_res[5], korpack_res[11]],
-            ["Durometer Hardness", korpack_res[4], korpack_res[5], korpack_res[11]],
-            ["Pellet Size", korpack_res[4], korpack_res[5], korpack_res[11]],
-            ["Length, mm", korpack_res[4], korpack_res[5], korpack_res[11]],
-            ["Diameter, mm", korpack_res[4], korpack_res[5], korpack_res[11]],
-            ["Odor", korpack_res[4], korpack_res[5], korpack_res[11]],
+        # General Description header
+        content.append(Paragraph("General Description", left_label))
+        content.append(Spacer(1, 6))
+
+        # Description Details Table (all fields under General Description)
+        quantity_str = f"{float(field_result[6]):.2f} kg." if field_result[6] else ""
+        manuf_date_str = korpack_res[3].strftime('%B %d, %Y') if korpack_res[3] else ""
+        delivery_date_str = field_result[7].strftime('%B %d, %Y') if field_result[7] else ""
+        description_data = [
+            ["Product Name:", korpack_res[2]],
+            ["Product Lot No.:", field_result[3]],
+            ["Product Quantity:", quantity_str],
+            ["Manufacturing Date:", manuf_date_str],
+            ["Delivery Date:", delivery_date_str],
+            ["Physical Form:", korpack_res[4]],
+            ["Heat Stability:", korpack_res[5]],
+            ["Light fastness:", korpack_res[6]],
+            ["Migration:", korpack_res[7]],
+            ["Swatch dosage:", korpack_res[8]],
+            ["Product Applications:", korpack_res[9]],
+            ["Packaging Form:", korpack_res[10]],
         ]
-        table_headers = ['Property', 'New Delivery', 'Standard', 'Method Used/Comments']
-        physical_table = Table([table_headers] + physical_rows, colWidths=[120, 100, 100, 150])
-        physical_table.setStyle(TableStyle([
-            ('FONT', (0, 0), (-1, 0), 'Helvetica-Bold', 10),
-            ('FONT', (0, 1), (-1, -1), 'Helvetica', 10),
-            ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
-            ('BACKGROUND', (0, 0), (-1, 0), colors.lightblue),
+        description_table = Table(description_data, colWidths=[140, 310])
+        description_table.setStyle(TableStyle([
             ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+            ('FONT', (0, 0), (-1, -1), 'Helvetica', 10),
+            ('FONT', (0, 0), (0, -1), 'Helvetica-Bold', 10),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+            ('LEFTPADDING', (1, 0), (1, -1), 10),
         ]))
-        content.append(physical_table)
-        content.append(Spacer(1, 18))
+        content.append(description_table)
+        content.append(Spacer(1, 12))
 
-        # Footer - Certified by
-        cert_by = str(korpack_res[12]) if korpack_res[12] else str(field_result[10])
-        cert_pos = str(korpack_res[13])
-        cert_date = field_result[7].strftime('%B %d, %Y') if field_result[7] else ""
-        content.append(Paragraph(f"<b>Certified by:</b> {cert_by}", label_style))
-        content.append(Paragraph(f"{cert_pos}", normal_style))
-        content.append(Paragraph(f"Date: {cert_date}", normal_style))
+        # Regulatory Information
+        regulatory_info = korpack_res[11].replace('\n', '<br/>') if korpack_res[11] else ""
+        content.append(Paragraph("Regulatory Information", left_label))
+        content.append(Spacer(1, 6))
+        content.append(Paragraph(regulatory_info, field_val))
+        content.append(Spacer(1, 16))
 
-        doc.build(content)
+        # Footer
+        name_val = korpack_res[12]
+        pos_val = korpack_res[13]
+        content.append(Paragraph("Inspected & Approved by:", left_label))
+        content.append(Spacer(1, 5))
+        content.append(Paragraph("_______________________________________", sig_line_style))
+        content.append(Spacer(1, 12))
+        content.append(Paragraph(f"    {name_val}", normal))
+        if pos_val:
+            content.append(Paragraph(f"        {pos_val}", normal))
+        content.append(Spacer(1, 20))
+        content.append(Paragraph("FM00003A", form_style))
+
+        doc.build(content, onFirstPage=add_first_page_header)
         buffer.seek(0)
         return buffer.getvalue()
 
