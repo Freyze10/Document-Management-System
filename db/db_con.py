@@ -1,17 +1,15 @@
-
 import psycopg2
-
 from db import db_dr
 
-
-def get_connection():
-    return psycopg2.connect(
-        host="192.168.1.13",
-        dbname="db_msds",
-        user="postgres",
-        password="mbpi",
-        port="5432"
-    )
+# server database (system working database)
+# def get_connection():
+#     return psycopg2.connect(
+#         host="192.168.1.13",
+#         dbname="db_msds",
+#         user="postgres",
+#         password="mbpi",
+#         port="5432"
+#     )
 
 # uncomment this if you are running this in your local computer
 
@@ -23,6 +21,16 @@ def get_connection():
 #         password="newpassword",
 #         port="5432"
 #     )
+
+# Debug localhost database
+def get_connection():
+    return psycopg2.connect(
+        host="localhost",
+        dbname="dms_debug",
+        user="postgres",
+        password="password",
+        port="5433"
+    )
 
 
 

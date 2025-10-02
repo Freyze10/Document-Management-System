@@ -6,6 +6,7 @@ from sqlalchemy import create_engine, text
 from PyQt6.QtCore import QObject, pyqtSignal, QCoreApplication
 
 # --- CONFIGURATION ---
+# same as the db.db_con.get_connection()
 DB_CONFIG = {
     "host": "192.168.1.13",
     "port": 5432,
