@@ -123,7 +123,7 @@ class FileCOA(QWidget):
         styles = getSampleStyleSheet()
         styles.add(
             ParagraphStyle(name="SectionHeader", fontName="Times-Roman", fontSize=14, leading=14, spaceAfter=12, spaceBefore=6, bold=True))
-        styles.add(ParagraphStyle(name="SubHeading", fontName="Times-Bold", fontSize=12, leading=14, spaceAfter=4, alignment=TA_CENTER))
+        styles.add(ParagraphStyle(name="SubHeading", fontName="Times-Bold", fontSize=11, leading=14, spaceAfter=4, alignment=TA_CENTER))
         styles.add(ParagraphStyle(name="NormalText", fontName="Times-Roman", fontSize=11, leading=12, spaceAfter=4))
 
         content = []
@@ -220,7 +220,7 @@ class FileCOA(QWidget):
             ('ALIGN', (0, 0), (0, -1), 'LEFT'),  # Left align first column
             ('ALIGN', (1, 0), (-1, -1), 'CENTER'),  # Center other columns
             ('FONTNAME', (0, 1), (-1, -1), 'Times-Roman'),
-            ('FONTSIZE', (0, 0), (-1, -1), 10),  # Smaller font size to match
+            ('FONTSIZE', (0, 0), (-1, -1), 11),  # Smaller font size to match
             ('BOTTOMPADDING', (0, 0), (-1, -1), 4),  # Reduced padding for tighter rows
             ('TOPPADDING', (0, 0), (-1, -1), 4),
             ('LEFTPADDING', (0, 0), (-1, -1), 6),
@@ -234,12 +234,12 @@ class FileCOA(QWidget):
         indent = ParagraphStyle(
             name="indent",
             parent=styles['NormalText'],  # Inherit from NormalText for font, size etc.
-            leftIndent=55
+            leftIndent=62
         )
         content.append(Paragraph(f"Certified by: {lines}", styles["NormalText"]))
         content.append(Paragraph(str(field_result[10]), indent))
         content.append(Paragraph("Date: " + str(field_result[9].strftime(f"%B {date_format}, %Y")), styles["NormalText"]))
-        content.append(Spacer(1, 56))  # Reduced spacer before storage
+        content.append(Spacer(1, 44))  # Reduced spacer before storage
 
         # Storage section
         # Serif font styles (already Times)
