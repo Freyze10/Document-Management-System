@@ -224,6 +224,7 @@ class MainWindow(QMainWindow):
         self.summary_initial_v_header = ["Color", "Light Fastness (1-8)", "Heat Stability (1-5)"]
         self.btn_coa_submit = QPushButton("Submit")
         self.btn_coa_submit.clicked.connect(self.coa_btn_submit_clicked)
+        self.conditional_customer = None  # 1 = everest, 2 = h&e, 3 = global konteiner
 
         # TERUMO COA inputs
         self.terumo_delivery_receipt = QLineEdit()

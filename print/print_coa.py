@@ -292,6 +292,8 @@ class FileCOA(QWidget):
         if field_result[13]:
             content.append(Paragraph("Suitability: " + str(field_result[13]), BoldSerif))
 
+        if self.conditional_customer == 1:
+            pass
         if field_result[15]:
             content.append(Paragraph(str(field_result[15]), BoldSerif))
 
