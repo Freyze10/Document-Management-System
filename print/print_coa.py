@@ -124,47 +124,44 @@ class FileCOA(QWidget):
         styles.add(
             ParagraphStyle(name="SectionHeader", fontName="Times-Roman", fontSize=14, leading=14, spaceAfter=12, spaceBefore=6, bold=True))
         styles.add(ParagraphStyle(name="SubHeading", fontName="Times-Bold", fontSize=12, leading=14, spaceAfter=4, alignment=TA_CENTER))
-        styles.add(ParagraphStyle(name="NormalText", fontName="Times-Roman", fontSize=10, leading=12, spaceAfter=4))
+        styles.add(ParagraphStyle(name="NormalText", fontName="Times-Roman", fontSize=11, leading=12, spaceAfter=4))
 
         content = []
         page_width = letter[0] - 50 - 50
-        content.append(Spacer(1, 56))
-
-        bold_style = ParagraphStyle('BoldText', parent=styles['NormalText'], fontName='Times-Bold')
-
+        content.append(Spacer(1, 78))
         content.append(
-            Paragraph(f"<font name='Times-Bold'>Customer:</font> {field_result[1]}", styles['NormalText']))
+            Paragraph(f"Customer: <font name='Times-Bold'>{field_result[1]}</font> ", styles['NormalText']))
         content.append(Spacer(1, 10))  # Small spacer between lines
 
         content.append(
-            Paragraph(f"<font name='Times-Bold'>Color Code:</font> {field_result[2]}", styles['NormalText']))
+            Paragraph(f"Color Code: {field_result[2]}", styles['NormalText']))
         content.append(Spacer(1, 10))
 
         content.append(
-            Paragraph(f"<font name='Times-Bold'>Quantity Deliver:</font> {field_result[6]}", styles['NormalText']))
+            Paragraph(f"Quantity Deliver: {field_result[6]}", styles['NormalText']))
         content.append(Spacer(1, 10))
 
         date_format = "%-d" if platform.system() != "Windows" else "%#d"
         content.append(Paragraph(
-            f"<font name='Times-Bold'>Delivery Date:</font> {field_result[7].strftime(f'%B {date_format}, %Y')}",
+            f"Delivery Date: {field_result[7].strftime(f'%B {date_format}, %Y')}",
             styles['NormalText']))
         content.append(Spacer(1, 10))
 
         content.append(
-            Paragraph(f"<font name='Times-Bold'>Lot Number:</font> {field_result[3]}", styles['NormalText']))
+            Paragraph(f"Lot Number: {field_result[3]}", styles['NormalText']))
         content.append(Spacer(1, 10))
 
         content.append(Paragraph(
-            f"<font name='Times-Bold'>Production Date:</font> {field_result[8].strftime(f'%B {date_format}, %Y')}",
+            f"Production Date: {field_result[8].strftime(f'%B {date_format}, %Y')}",
             styles['NormalText']))
         content.append(Spacer(1, 10))
 
         if is_rrf:
             delivery_receipt_text = Paragraph(
-                f"<font name='Times-Bold'>RRF Number: </font> {field_result[5]}", styles['NormalText'])
+                f"RRF Number: {field_result[5]}", styles['NormalText'])
         else:
             delivery_receipt_text = Paragraph(
-                f"<font name='Times-Bold'>Delivery Receipt Number: </font> {field_result[5]}", styles['NormalText'])
+                f"Delivery Receipt Number: {field_result[5]}", styles['NormalText'])
         right_aligned_paragraph_style = ParagraphStyle(
             name="RightAlignedCellText",
             parent=styles['NormalText'],  # Inherit from NormalText for font, size etc.
@@ -172,7 +169,7 @@ class FileCOA(QWidget):
         )
         if field_result[4]:  # not None and not ""
             po_number_text = Paragraph(
-                f"<font name='Times-Bold'>P.O Number: </font> {field_result[4]}",
+                f"P.O Number: </font> {field_result[4]}",
                 right_aligned_paragraph_style
             )
         else:
@@ -197,9 +194,9 @@ class FileCOA(QWidget):
         )
         content.append(delivery_po_table)
 
-        content.append(Spacer(1, 16))
+        content.append(Spacer(1, 32))
 
-        content.append(Paragraph("<b>Summary of Analysis</b>", styles["SubHeading"]))
+        content.append(Paragraph("<u><b>Summary of Analysis</b></u>", styles["SubHeading"]))
         content.append(Spacer(1, 12))
         # Summary of Analysis Table
         if is_rrf:
@@ -213,13 +210,15 @@ class FileCOA(QWidget):
             delivery_value = row[2]
             summary_data.append([parameter, standard_value, delivery_value])
 
-        summary_table = Table(summary_data, colWidths=[170, 170, 170], hAlign="LEFT")  # Adjusted colWidths for better match, hAlign LEFT
+        page_width, _ = letter  # or: page_width, _ = doc.pagesize if accessible
+        printable_width = page_width - 50 - 50  # leftMargin, rightMargin
+
+        summary_table = Table(summary_data, colWidths=[printable_width / 3] * 3, hAlign="LEFT")  # Adjusted colWidths for better match, hAlign LEFT
         summary_table.setStyle(TableStyle([
             ('BOX', (0, 0), (-1, -1), 0.75, colors.black),
             ('LINEBELOW', (0, 0), (-1, -1), 0.75, colors.black),
             ('ALIGN', (0, 0), (0, -1), 'LEFT'),  # Left align first column
             ('ALIGN', (1, 0), (-1, -1), 'CENTER'),  # Center other columns
-            ('FONTNAME', (0, 0), (-1, 0), 'Times-Bold'),
             ('FONTNAME', (0, 1), (-1, -1), 'Times-Roman'),
             ('FONTSIZE', (0, 0), (-1, -1), 10),  # Smaller font size to match
             ('BOTTOMPADDING', (0, 0), (-1, -1), 4),  # Reduced padding for tighter rows
@@ -228,7 +227,7 @@ class FileCOA(QWidget):
             ('RIGHTPADDING', (0, 0), (-1, -1), 6),
         ]))
         content.append(summary_table)
-        content.append(Spacer(1, 20))
+        content.append(Spacer(1, 32))
 
         name_len = len(field_result[10])
         lines = "_" * name_len  # Keep simple underline
@@ -240,29 +239,43 @@ class FileCOA(QWidget):
         content.append(Paragraph(f"Certified by: {lines}", styles["NormalText"]))
         content.append(Paragraph(str(field_result[10]), indent))
         content.append(Paragraph("Date: " + str(field_result[9].strftime(f"%B {date_format}, %Y")), styles["NormalText"]))
-        content.append(Spacer(1, 24))  # Reduced spacer before storage
+        content.append(Spacer(1, 56))  # Reduced spacer before storage
 
         # Storage section
         # Serif font styles (already Times)
         NormalSerif = ParagraphStyle(
             "NormalSerif",
             fontName="Times-Roman",
-            fontSize=10,
+            fontSize=9,
             leading=12,
             spaceAfter=10  # Reduced spaceAfter
         )
         BoldSerif = ParagraphStyle(
             "BoldSerif",
-            fontName="Times-Bold",
-            fontSize=10,  # Smaller to match
+            fontName="Times-Roman",
+            fontSize=9,  # Smaller to match
             leading=12,
-            spaceAfter=4  # Reduced
+            spaceAfter=0  # Reduced
         )
         content.append(Paragraph("STORAGE", BoldSerif))
         content.append(Paragraph(str(field_result[11]), NormalSerif))
 
-        content.append(Paragraph("Shelf Life:", BoldSerif))
-        content.append(Paragraph(str(field_result[12]), NormalSerif))
+        shelf_life_data = str(field_result[12]).strip()
+
+        if ":" in shelf_life_data:
+            before_colon, after_colon = shelf_life_data.split(":", 1)  # split only once
+            before_colon = before_colon.strip()
+            after_colon = after_colon.strip()
+
+            # Bold line with Shelf Life and value
+            content.append(Paragraph(f"Shelf Life: {before_colon}", BoldSerif))
+            # Normal line for the description
+            if after_colon:
+                content.append(Paragraph(after_colon, NormalSerif))
+        else:
+            # No colon → display whole thing in NormalSerif
+            content.append(Paragraph("Shelf Life:", BoldSerif))
+            content.append(Paragraph(shelf_life_data, NormalSerif))
 
         if field_result[13]:
             content.append(Paragraph("Suitability: " + str(field_result[13]), BoldSerif))
