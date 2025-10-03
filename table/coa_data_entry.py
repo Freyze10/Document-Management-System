@@ -41,6 +41,8 @@ def load_coa_details(self, coa_id, is_rrf):
     self.coa_storage_input.setText(str(field_result[11]))
     self.coa_shelf_life_input.setText(str(field_result[12]))
     self.suitability_input.setText(str(field_result[13]))
+    if field_result[15]:
+        self.coa_others_input.setText(str(field_result[15]))
     self.btn_coa_submit.setText("Update")
 
     # === Populate table ===
@@ -397,6 +399,8 @@ def coa_data_entry_form(self, is_rrf=False):
         # Suitability
         certification_layout.addWidget(QLabel("Shelf Life:"), 2, 0, Qt.AlignmentFlag.AlignRight)
         certification_layout.addWidget(self.coa_shelf_life_input, 2, 1, 1, 3)  # Span across remaining columns
+        certification_layout.addWidget(QLabel(""), 3, 0, Qt.AlignmentFlag.AlignRight)
+        certification_layout.addWidget(self.coa_others_input, 3, 1, 1, 3)  # Span across remaining columns
 
         main_v_layout.addWidget(certification_group)
 
@@ -444,9 +448,10 @@ def clear_coa_form(self):
         self.delivery_receipt_input.clear()
         self.quantity_delivered_input.clear()
         self.certified_by_input.clear()
-        self.coa_storage_input.setText("Should be stored cool and dry in unbroken pachaging.")
-        self.coa_shelf_life_input.setText("12 Months: Shelf life is stated as a maximum from the date of production when the prodrict is stored in unbroken packaging.")
-        self.suitability_input.setText("highly suitable for automotive oil container.")
+        self.coa_storage_input.setText("Should be stored cool and dry in unbroken packaging.")
+        self.coa_shelf_life_input.setText("12 months: Shelf life is stated as a maximum from the date of production when the product is stored in unbroken packaging.")
+        self.suitability_input.setText("")
+        self.coa_others_input.clear()
 
         self.delivery_date_input.setDate(QDate.currentDate())
         self.production_date_input.setDate(QDate.currentDate())

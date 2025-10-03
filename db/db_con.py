@@ -334,15 +334,16 @@ def save_certificate_of_analysis(data, summary_of_analysis):
                 certified_by, 
                 storage_instructions, 
                 shelf_life_coa, 
-                suitability
+                suitability,
+                others
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id;
         """, (
             data["customer_name"], data["color_code"], data["lot_number"], data["po_number"],
             data["delivery_receipt"], data["quantity_delivered"], data["delivery_date"],
             data["production_date"], data["creation_date"], data["certified_by"],
-            data["storage"], data["shelf_life"], data["suitability"]
+            data["storage"], data["shelf_life"], data["suitability"], data["others"]
         ))
 
         coa_id = cur.fetchone()[0]
@@ -617,13 +618,14 @@ def update_certificate_of_analysis(coa_id, data, summary_of_analysis):
                 certified_by = %s, 
                 storage_instructions = %s, 
                 shelf_life_coa = %s, 
-                suitability = %s
+                suitability = %s,
+                others = %s
             WHERE id = %s;
         """, (
             data["customer_name"], data["color_code"], data["lot_number"], data["po_number"],
             data["delivery_receipt"], data["quantity_delivered"], data["delivery_date"],
             data["production_date"], data["creation_date"], data["certified_by"],
-            data["storage"], data["shelf_life"], data["suitability"],
+            data["storage"], data["shelf_life"], data["suitability"], data["others"],
             coa_id
         ))
         # Delete existing analysis results

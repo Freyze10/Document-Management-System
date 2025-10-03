@@ -1,5 +1,7 @@
 import platform
 import io
+import re
+
 from PyQt6.QtCore import QBuffer, QIODevice, QSize, Qt, QPointF
 from PyQt6.QtGui import QPainter, QPageSize, QPageLayout, QAction, QIcon
 from PyQt6.QtPdf import QPdfDocument, QPdfDocumentRenderOptions
@@ -137,13 +139,22 @@ class FileCOA(QWidget):
             Paragraph(f"Color Code: {field_result[2]}", styles['NormalText']))
         content.append(Spacer(1, 10))
 
+        quantity = str(field_result[6]).strip()
+
+        # First, try to replace kg/KG/kg./KG. if present at the end
+        filtered_quantity = re.sub(r'(\s*kg\.?$|\s*KG\.?$)', ' Kg.', quantity, flags=re.IGNORECASE)
+
+        # If 'kg' is not present at the end, append " Kg."
+        if not re.search(r'(kg\.?$|KG\.?$)', quantity.strip(), re.IGNORECASE):
+            filtered_quantity = quantity.strip() + " Kg."
+
         content.append(
-            Paragraph(f"Quantity Deliver: {field_result[6]}", styles['NormalText']))
+            Paragraph(f"Quantity Delivered: {filtered_quantity}", styles['NormalText'])
+        )
         content.append(Spacer(1, 10))
 
-        date_format = "%-d" if platform.system() != "Windows" else "%#d"
         content.append(Paragraph(
-            f"Delivery Date: {field_result[7].strftime(f'%B {date_format}, %Y')}",
+            f"Delivery Date: {field_result[7].strftime('%B %d, %Y')}",
             styles['NormalText']))
         content.append(Spacer(1, 10))
 
@@ -152,7 +163,7 @@ class FileCOA(QWidget):
         content.append(Spacer(1, 10))
 
         content.append(Paragraph(
-            f"Production Date: {field_result[8].strftime(f'%B {date_format}, %Y')}",
+            f"Production Date: {field_result[8].strftime('%B %d, %Y')}",
             styles['NormalText']))
         content.append(Spacer(1, 10))
 
@@ -169,7 +180,7 @@ class FileCOA(QWidget):
         )
         if field_result[4]:  # not None and not ""
             po_number_text = Paragraph(
-                f"P.O Number: </font> {field_result[4]}",
+                f"P.O Number: {field_result[4]}",
                 right_aligned_paragraph_style
             )
         else:
@@ -219,10 +230,11 @@ class FileCOA(QWidget):
             ('LINEBELOW', (0, 0), (-1, -1), 0.75, colors.black),
             ('ALIGN', (0, 0), (0, -1), 'LEFT'),  # Left align first column
             ('ALIGN', (1, 0), (-1, -1), 'CENTER'),  # Center other columns
+            ('FONTNAME', (0, 0), (-1, 0), 'Times-Roman'),  # Header row
             ('FONTNAME', (0, 1), (-1, -1), 'Times-Roman'),
             ('FONTSIZE', (0, 0), (-1, -1), 11),  # Smaller font size to match
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 4),  # Reduced padding for tighter rows
-            ('TOPPADDING', (0, 0), (-1, -1), 4),
+            ('TOPPADDING', (0, 0), (-1, -1), 2),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 3),  # Reduced padding for tighter rows
             ('LEFTPADDING', (0, 0), (-1, -1), 6),
             ('RIGHTPADDING', (0, 0), (-1, -1), 6),
         ]))
@@ -238,7 +250,7 @@ class FileCOA(QWidget):
         )
         content.append(Paragraph(f"Certified by: {lines}", styles["NormalText"]))
         content.append(Paragraph(str(field_result[10]), indent))
-        content.append(Paragraph("Date: " + str(field_result[9].strftime(f"%B {date_format}, %Y")), styles["NormalText"]))
+        content.append(Paragraph("Date: " + str(field_result[9].strftime('%B %d, %Y')), styles["NormalText"]))
         content.append(Spacer(1, 44))  # Reduced spacer before storage
 
         # Storage section
@@ -279,6 +291,21 @@ class FileCOA(QWidget):
 
         if field_result[13]:
             content.append(Paragraph("Suitability: " + str(field_result[13]), BoldSerif))
+
+        if field_result[15]:
+            content.append(Paragraph(str(field_result[15]), BoldSerif))
+
+        content.append(Spacer(1, 14))  # Space before footer note
+
+        right_align = ParagraphStyle(
+            name='RightAlign',
+            fontName='Times-Roman',
+            fontSize=9,
+            alignment=TA_RIGHT,
+            rightIndent=0  # no extra space, just at margin
+        )
+
+        content.append(Paragraph("FM00003A", right_align))
 
         doc.build(content, onFirstPage=add_coa_header)
         buffer.seek(0)

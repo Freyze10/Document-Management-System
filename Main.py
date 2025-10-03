@@ -219,6 +219,8 @@ class MainWindow(QMainWindow):
         self.creation_date_input.installEventFilter(self.wheel_filter)
         self.coa_storage_input = QLineEdit()
         self.coa_shelf_life_input = QLineEdit()
+        self.coa_others_input = QLineEdit()
+
         self.suitability_input = QLineEdit()
         self.btn_coa_submit = QPushButton("Submit")
         self.btn_coa_submit.clicked.connect(self.coa_btn_submit_clicked)
@@ -742,6 +744,7 @@ class MainWindow(QMainWindow):
         storage = self.coa_storage_input.text()
         shelf_life = self.coa_shelf_life_input.text()
         suitability = self.suitability_input.text()
+        coa_others = self.coa_others_input.text()
 
         required_fields = {
             "Customer Name": customer_name,
@@ -786,7 +789,8 @@ class MainWindow(QMainWindow):
             "certified_by": certified_by,
             "storage": storage,
             "shelf_life": shelf_life,
-            "suitability": suitability
+            "suitability": suitability,
+            "others": coa_others
         }
 
         # Save
