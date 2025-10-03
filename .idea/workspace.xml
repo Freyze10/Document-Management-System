@@ -5,9 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a705e8e2-2466-47d3-8b01-c9883720f215" name="Changes" comment="modified">
+      <change afterPath="$PROJECT_DIR$/utils/check_cx.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/LAB-DMS.exe" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/LAB-DMS.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/base_library.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/table/coa_data_entry.py" beforeDir="false" afterPath="$PROJECT_DIR$/table/coa_data_entry.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -288,7 +289,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/table/coa_data_entry.py</url>
-          <line>42</line>
+          <line>43</line>
           <option name="timeStamp" value="17" />
         </line-breakpoint>
       </breakpoints>

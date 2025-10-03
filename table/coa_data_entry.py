@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (
 )
 from db import db_con
 from utils import abs_path, lot_format
+from utils.check_cx import match_customer
 
 current_coa_id = None
 
@@ -91,7 +92,7 @@ def coa_data_entry_form(self, is_rrf=False):
                 padding-bottom: 5px;
                 text-align: center; 
             }}
-            QLineEdit, QDateEdit {{
+            QLineEdit, QDateEdit, QTextEdit {{
                 font-size: 12px;
                 padding: 6px 8px;
                 border: 1px solid #ced4da; /* Lighter, more neutral border */
@@ -100,7 +101,7 @@ def coa_data_entry_form(self, is_rrf=False):
                 min-height: 28px; /* Consistent height */
                 selection-background-color: #aed6f1;
             }}
-            QLineEdit:focus, QDateEdit:focus {{
+            QLineEdit:focus, QDateEdit:focus, QTextEdit:focus {{
                 border: 1px solid #007bff; /* Primary blue on focus */
                 background-color: #e9f5ff; /* Very light blue background on focus */
                 box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* Subtle focus ring */
@@ -232,9 +233,7 @@ def coa_data_entry_form(self, is_rrf=False):
         self.summary_analysis_table.setColumnCount(2)
         self.summary_analysis_table.setRowCount(3)
         self.summary_analysis_table.setHorizontalHeaderLabels(["Standard", "Delivery"])
-        self.summary_analysis_table.setVerticalHeaderLabels([
-            "Color", "Light Fastness (1-8)", "Heat Stability (1-5)"
-        ])
+        self.summary_analysis_table.setVerticalHeaderLabels(self.summary_initial_v_header)
         self.summary_analysis_table.setMinimumWidth(650)
         self.summary_analysis_table.setMaximumWidth(850)
         self.summary_analysis_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
@@ -383,6 +382,9 @@ def coa_data_entry_form(self, is_rrf=False):
         certification_layout.setHorizontalSpacing(30)
         certification_layout.setVerticalSpacing(15)
         certification_layout.setContentsMargins(20, 25, 20, 20)
+        self.coa_others_input.setStyleSheet("""
+                min-height: 72px;
+            """)
 
         # Certified by and Creation Date
         certification_layout.addWidget(QLabel("Certified by:"), 0, 0, Qt.AlignmentFlag.AlignRight)
@@ -461,9 +463,8 @@ def clear_coa_form(self):
         self.summary_analysis_table.setColumnCount(2)
         self.summary_analysis_table.setRowCount(3)
         self.summary_analysis_table.setHorizontalHeaderLabels(["Standard", "Delivery"])
-        self.summary_analysis_table.setVerticalHeaderLabels([
-            "Color", "Light Fastness (1-8)", "Heat Stability (1-5)"
-        ])
+        self.summary_initial_v_header = ["Color", "Light Fastness (1-8)", "Heat Stability (1-5)"]
+        self.summary_analysis_table.setVerticalHeaderLabels(self.summary_initial_v_header)
         adjust_table_height(self)
         self.btn_coa_submit.setText("Submit")
         self.color_code_input.blockSignals(False)
@@ -496,6 +497,10 @@ def populate_coa_fields(self, dr_no):
 
         if fields[3]:
             self.delivery_date_input.setDate(QDate(fields[3].year, fields[3].month, fields[3].day))
+
+        # for bottom note
+        match_customer(self, fields[2])
+
     except Exception as e:
         print(e)
 
@@ -569,11 +574,10 @@ def populate_coa_summary(self):
         self.summary_analysis_table.setColumnCount(2)
         self.summary_analysis_table.setRowCount(3)
 
+        match_customer(self, self.coa_customer_input.text())
         # Always keep the same headers
         self.summary_analysis_table.setHorizontalHeaderLabels(["Standard", "Delivery"])
-        self.summary_analysis_table.setVerticalHeaderLabels([
-            "Color", "Light Fastness (1-8)", "Heat Stability (1-5)"
-        ])
+        self.summary_analysis_table.setVerticalHeaderLabels(self.summary_initial_v_header)
 
         # If nothing found → just return (empty table with headers)
         if not result_color:
