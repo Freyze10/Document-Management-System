@@ -5,17 +5,122 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a705e8e2-2466-47d3-8b01-c9883720f215" name="Changes" comment="modified">
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.agent.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/copilot.data.migration.edit.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/dev-requirements" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/LAB-DMS.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/LAB-DMS.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_avif.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_imaging.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_imagingcms.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_imagingmath.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_imagingtk.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_webp.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/sip.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/_wmi.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/charset_normalizer/md.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/charset_normalizer/md__mypyc.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/greenlet/_greenlet.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/libcrypto-3.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/libffi-8.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/libssl-3.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/psycopg2/_psycopg.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/python312.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlalchemy/cyextension/collections.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlalchemy/cyextension/immutabledict.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlalchemy/cyextension/processors.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlalchemy/cyextension/resultproxy.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlalchemy/cyextension/util.cp312-win_amd64.pyd" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/environment.yml" beforeDir="false" afterPath="$PROJECT_DIR$/environment.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/LAB-DMS.exe" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/LAB-DMS.exe" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/MSVCP140.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/MSVCP140_2.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_avif.cp311-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_imaging.cp311-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_imagingcms.cp311-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_imagingmath.cp311-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_imagingtk.cp311-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_webp.cp311-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/sip.cp311-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/VCRUNTIME140.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/VCRUNTIME140.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/VCRUNTIME140_1.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/VCRUNTIME140_1.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_asyncio.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/_asyncio.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_bz2.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/_bz2.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_ctypes.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/_ctypes.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_decimal.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/_decimal.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_elementtree.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/_elementtree.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_hashlib.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/_hashlib.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_lzma.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/_lzma.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_multiprocessing.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/_multiprocessing.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_overlapped.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/_overlapped.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_queue.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/_queue.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_socket.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/_socket.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_sqlite3.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/_sqlite3.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_ssl.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/_ssl.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_uuid.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/_uuid.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-console-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-console-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-datetime-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-datetime-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-debug-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-debug-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-errorhandling-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-errorhandling-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-fibers-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-fibers-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-fibers-l1-1-1.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-file-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-file-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-file-l1-2-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-file-l1-2-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-file-l2-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-file-l2-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-handle-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-handle-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-heap-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-heap-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-interlocked-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-interlocked-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-kernel32-legacy-l1-1-1.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-libraryloader-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-libraryloader-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-localization-l1-2-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-localization-l1-2-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-memory-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-memory-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-namedpipe-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-namedpipe-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-processenvironment-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-processenvironment-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-processthreads-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-processthreads-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-processthreads-l1-1-1.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-processthreads-l1-1-1.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-profile-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-profile-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-rtlsupport-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-rtlsupport-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-string-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-string-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-synch-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-synch-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-synch-l1-2-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-synch-l1-2-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-sysinfo-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-sysinfo-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-sysinfo-l1-2-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-timezone-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-timezone-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-util-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-util-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-conio-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-conio-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-convert-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-convert-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-environment-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-environment-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-filesystem-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-filesystem-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-heap-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-heap-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-locale-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-locale-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-math-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-math-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-process-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-process-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-runtime-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-runtime-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-stdio-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-stdio-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-string-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-string-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-time-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-time-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-utility-l1-1-0.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-utility-l1-1-0.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/base_library.zip" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/base_library.zip" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/charset_normalizer/md.cp311-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/charset_normalizer/md__mypyc.cp311-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/ffi-8.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/greenlet/_greenlet.cp311-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/libbz2.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/libcrypto-3-x64.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/libcrypto-3-x64.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/libexpat.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/liblzma.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/libssl-3-x64.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/libssl-3-x64.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/psycopg2/_psycopg.cp311-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/pyexpat.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/pyexpat.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/python3.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/python3.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/python311.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/select.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/select.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/setuptools/_vendor/importlib_metadata-8.0.0.dist-info/INSTALLER" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/setuptools/_vendor/importlib_metadata-8.0.0.dist-info/INSTALLER" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlalchemy/cyextension/collections.cp311-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlalchemy/cyextension/immutabledict.cp311-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlalchemy/cyextension/processors.cp311-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlalchemy/cyextension/resultproxy.cp311-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlalchemy/cyextension/util.cp311-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlite3.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlite3.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/ucrtbase.dll" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/ucrtbase.dll" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/unicodedata.pyd" beforeDir="false" afterPath="$PROJECT_DIR$/output/LAB-DMS/_internal/unicodedata.pyd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/zlib.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/print/print_coa.py" beforeDir="false" afterPath="$PROJECT_DIR$/print/print_coa.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -285,16 +390,6 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>604</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>95</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/table/msds_data_entry.py</url>
           <line>63</line>
           <option name="timeStamp" value="11" />
@@ -303,16 +398,6 @@
           <url>file://$PROJECT_DIR$/table/msds_data_entry.py</url>
           <line>26</line>
           <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>292</line>
-          <option name="timeStamp" value="13" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1120</line>
-          <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

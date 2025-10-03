@@ -164,7 +164,7 @@ class FileCOA(QWidget):
                 f"<font name='Times-Bold'>RRF Number: </font> {field_result[5]}", styles['NormalText'])
         else:
             delivery_receipt_text = Paragraph(
-                f"<font name='Times-Bold'>Delivery receipt Number: </font> {field_result[5]}", styles['NormalText'])
+                f"<font name='Times-Bold'>Delivery Receipt Number: </font> {field_result[5]}", styles['NormalText'])
         right_aligned_paragraph_style = ParagraphStyle(
             name="RightAlignedCellText",
             parent=styles['NormalText'],  # Inherit from NormalText for font, size etc.
