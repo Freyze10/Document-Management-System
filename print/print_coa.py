@@ -120,7 +120,7 @@ class FileCOA(QWidget):
         doc = SimpleDocTemplate(
             buffer,
             pagesize=letter,
-            rightMargin=50, leftMargin=50, topMargin=90, bottomMargin=50
+            rightMargin=50, leftMargin=50, topMargin=90, bottomMargin=30
         )
         styles = getSampleStyleSheet()
         styles.add(
@@ -245,11 +245,18 @@ class FileCOA(QWidget):
         lines = "_" * name_len  # Keep simple underline
         indent = ParagraphStyle(
             name="indent",
+            fontName="Times-Roman", fontSize=11, leading=12,  # Inherit from NormalText for font, size etc.
+            leftIndent=64
+        )
+        pos_indent = ParagraphStyle(
+            name="indent",
             parent=styles['NormalText'],  # Inherit from NormalText for font, size etc.
-            leftIndent=62
+            leftIndent=80
         )
         content.append(Paragraph(f"Certified by: {lines}", styles["NormalText"]))
         content.append(Paragraph(str(field_result[10]), indent))
+        if "h&e" in field_result[1].lower():
+            content.append(Paragraph("QC Analyst", pos_indent))
         content.append(Paragraph("Date: " + str(field_result[9].strftime('%B %d, %Y')), styles["NormalText"]))
         content.append(Spacer(1, 44))  # Reduced spacer before storage
 
@@ -308,19 +315,19 @@ class FileCOA(QWidget):
 
                 content.append(note_param)
             else:
-                content.append(Paragraph(str(field_result[15]), BoldSerif))
+                content.append(Paragraph(str(field_result[15].replace("\n", "<br/>")), BoldSerif))
 
         content.append(Spacer(1, 14))  # Space before footer note
 
-        right_align = ParagraphStyle(
-            name='RightAlign',
-            fontName='Times-Roman',
-            fontSize=9,
-            alignment=TA_RIGHT,
-            rightIndent=0  # no extra space, just at margin
-        )
-
-        content.append(Paragraph("FM00003A", right_align))
+        # right_align = ParagraphStyle(
+        #     name='RightAlign',
+        #     fontName='Times-Roman',
+        #     fontSize=9,
+        #     alignment=TA_RIGHT,
+        #     rightIndent=0  # no extra space, just at margin
+        # )
+        #
+        # content.append(Paragraph("FM00003A", right_align))
 
         doc.build(content, onFirstPage=add_coa_header)
         buffer.seek(0)

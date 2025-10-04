@@ -77,12 +77,12 @@ def add_coa_header(canvas, doc):
     canvas.setFont('Times-Roman', 9)
     canvas.setFillColorRGB(0.1, 0.1, 0.1)
 
-    # form_id_text = "FM00003A"
-    # text_width = canvas.stringWidth(form_id_text, 'Times-Roman', 9)
-    # canvas.drawString(
-    #     page_width - right_margin - text_width,
-    #     doc.bottomMargin,
-    #     form_id_text
-    # )
+    form_id_text = "FM00003A"
+    text_width = canvas.stringWidth(form_id_text, 'Times-Roman', 9)
+    canvas.drawString(
+        page_width - right_margin - text_width,
+        doc.bottomMargin,
+        form_id_text
+    )
 
     canvas.restoreState()

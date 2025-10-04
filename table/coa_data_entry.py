@@ -511,7 +511,7 @@ def populate_coa_fields(self, dr_no):
 
         # for bottom note
         match_customer(self, fields[2])
-
+        adjust_table_height(self)
     except Exception as e:
         print(e)
 
