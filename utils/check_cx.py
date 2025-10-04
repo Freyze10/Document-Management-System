@@ -29,6 +29,8 @@ def match_customer(self, cx_name):
                                            "the product for their own particular purpose.")
     elif "plastimer" in cx_name.lower():
         self.coa_others_input.setPlainText("RoHS Compliant and Food Contact Approved.")
+    elif "zeller" in cx_name.lower():
+        self.coa_others_input.setPlainText("ASTM D 1238")
 
     else:
         self.summary_initial_v_header = [

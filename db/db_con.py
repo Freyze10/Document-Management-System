@@ -155,6 +155,13 @@ def create_tables():
             terumo_code VARCHAR(100)
         );
     """)
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS tbl_zeller_codes (
+            id SERIAL PRIMARY KEY,
+            product_code VARCHAR(100),
+            zeller_code VARCHAR(100)
+        );
+    """)
 
     cur.execute("""
         CREATE TABLE IF NOT EXISTS coa_analysis_results (
