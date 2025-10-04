@@ -10,8 +10,7 @@ from print.print_msds import FileMSDS
 from print.print_coa import FileCOA
 from print.print_terumo import FileTerumo
 import Login
-from utils import abs_path, scroll_date, calendar_design
-
+from utils import abs_path, scroll_date, calendar_design, check_cx
 
 class MainWindow(QMainWindow):
     def __init__(self, username=None):
@@ -137,6 +136,11 @@ class MainWindow(QMainWindow):
         self.summary_analysis_table = QTableWidget()
         #inputs variable
         self.coa_customer_input = QLineEdit()
+        self.coa_customer_timer = self.setup_finished_typing(
+            self.coa_customer_input,
+            lambda: check_cx.match_customer(self, self.coa_customer_input),
+            delay=1200
+        )
         self.color_code_input = QLineEdit()
         self.color_code_timer = self.setup_finished_typing(
             self.color_code_input,
