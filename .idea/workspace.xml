@@ -290,7 +290,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/table/coa_data_entry.py</url>
-          <line>43</line>
+          <line>44</line>
           <option name="timeStamp" value="17" />
         </line-breakpoint>
       </breakpoints>

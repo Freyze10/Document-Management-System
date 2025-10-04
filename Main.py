@@ -138,7 +138,7 @@ class MainWindow(QMainWindow):
         self.coa_customer_input = QLineEdit()
         self.coa_customer_timer = self.setup_finished_typing(
             self.coa_customer_input,
-            lambda: check_cx.match_customer(self, self.coa_customer_input),
+            lambda: check_cx.match_customer(self, self.coa_customer_input.text()),
             delay=1200
         )
         self.color_code_input = QLineEdit()

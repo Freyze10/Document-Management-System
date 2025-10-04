@@ -7,12 +7,13 @@ from PyQt6.QtWidgets import (
 )
 from db import db_con
 from utils import abs_path, lot_format
-from utils.check_cx import match_customer
+from utils.check_cx import match_customer, note_summary_table
 
 current_coa_id = None
 
 
 def load_coa_details(self, coa_id, is_rrf):
+    self.coa_customer_input.blockSignals(True)
     self.color_code_input.blockSignals(True)
     self.delivery_receipt_input.blockSignals(True)
     if is_rrf:
@@ -59,6 +60,7 @@ def load_coa_details(self, coa_id, is_rrf):
 
     adjust_table_height(self)
 
+    self.coa_customer_input.blockSignals(False)
     self.color_code_input.blockSignals(False)
     self.delivery_receipt_input.blockSignals(False)
 
@@ -426,11 +428,18 @@ def adjust_table_height(self):
 
     # Calculate actual row height considering padding and borders from stylesheet
     fixed_row_height = 48
+    vertical_headers = []
     for i in range(self.summary_analysis_table.rowCount()):
         self.summary_analysis_table.setRowHeight(i, fixed_row_height)
+        header_text = self.summary_analysis_table.verticalHeaderItem(i)
+        if header_text:
+            vertical_headers.append(header_text.text())
+        else:
+            vertical_headers.append("")  # in case the header is missing
     row_height_total = self.summary_analysis_table.rowCount() * fixed_row_height
     header_height = self.summary_analysis_table.horizontalHeader().height()
 
+    note_summary_table(self, vertical_headers, self.coa_customer_input.text())
     table_border_thickness = 2
     self.summary_analysis_table.setFixedHeight(
         row_height_total + header_height + table_border_thickness + 4)
@@ -441,6 +450,7 @@ def clear_coa_form(self):
         """Clear all input fields and the summary table."""
         global current_coa_id
         current_coa_id = None
+        self.coa_customer_input.blockSignals(True)
         self.color_code_input.blockSignals(True)
         self.delivery_receipt_input.blockSignals(True)
         self.coa_customer_input.clear()
@@ -467,6 +477,7 @@ def clear_coa_form(self):
         self.summary_analysis_table.setVerticalHeaderLabels(self.summary_initial_v_header)
         adjust_table_height(self)
         self.btn_coa_submit.setText("Submit")
+        self.coa_customer_input.blockSignals(False)
         self.color_code_input.blockSignals(False)
         self.delivery_receipt_input.blockSignals(False)
     except Exception as e:
@@ -562,7 +573,6 @@ def populate_coa_rrf_fields(self, rrf_no):
 def populate_coa_summary(self):
     try:
         global dr_num
-        print(self.coa_others_input.toPlainText(), 'eee')
         color_code = self.color_code_input.text()
         if not self.is_rrf:
             dr_no = self.delivery_receipt_input.text()
@@ -575,9 +585,6 @@ def populate_coa_summary(self):
         self.summary_analysis_table.setColumnCount(2)
         self.summary_analysis_table.setRowCount(3)
 
-        # match_customer(self, self.coa_customer_input.text())
-        print(self.summary_initial_v_header)
-        print(self.coa_others_input.toPlainText())
         # Always keep the same headers
         self.summary_analysis_table.setHorizontalHeaderLabels(["Standard", "Delivery"])
         self.summary_analysis_table.setVerticalHeaderLabels(self.summary_initial_v_header)

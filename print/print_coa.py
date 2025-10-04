@@ -293,19 +293,18 @@ class FileCOA(QWidget):
             content.append(Paragraph("Suitability: " + str(field_result[13]), BoldSerif))
 
         if field_result[15]:
-            if self.conditional_customer == 1:  #everest
+            if "everest plastic" in field_result[1].lower():
                 hanging_indent = ParagraphStyle(
                     "HangingIndentNote",
-                    fontName="Times-Roman",  # Or your preferred font
-                    fontSize=10,  # Your font size here
-                    leftIndent=40,  # Indent all lines by 40pt (adjust as needed)
-                    firstLineIndent=-40,  # Pull first line left by same amount
+                    parent=BoldSerif,  # Inherit from your BoldSerif style
+                    leftIndent=23,  # Indent all lines by 40pt (adjust as needed)
+                    firstLineIndent=-23,  # Pull first line left by same amount
                     spaceAfter=10  # Any extra space after the note
                 )
 
                 note_content = field_result[15]                # Convert \n to <br/> in ReportLab paragraphs for line breaks
                 note_content_html = note_content.replace("\n", "<br/>")
-                note_param = Paragraph(f"<b>Note:</b> {note_content_html}", hanging_indent)
+                note_param = Paragraph(f"Note: {note_content_html}", hanging_indent)
 
                 content.append(note_param)
             else:
