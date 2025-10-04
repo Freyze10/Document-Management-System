@@ -139,13 +139,13 @@ class MainWindow(QMainWindow):
         self.coa_customer_timer = self.setup_finished_typing(
             self.coa_customer_input,
             lambda: check_cx.match_customer(self, self.coa_customer_input.text()),
-            delay=1200
+            delay=700
         )
         self.color_code_input = QLineEdit()
         self.color_code_timer = self.setup_finished_typing(
             self.color_code_input,
             lambda: coa_data_entry.populate_coa_summary(self),
-            delay=1200
+            delay=1000
         )
         self.quantity_delivered_input = QLineEdit()
         self.delivery_date_input = QDateEdit()

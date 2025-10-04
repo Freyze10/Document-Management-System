@@ -69,3 +69,5 @@ def note_summary_table(self, headers, cx_name):
             notes.append(note)
 
         self.coa_others_input.setPlainText("\n".join(notes))
+    elif "global konteiner" in cx_name.lower():
+        pass
