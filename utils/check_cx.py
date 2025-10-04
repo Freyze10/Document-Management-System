@@ -22,6 +22,11 @@ def match_customer(self, cx_name):
             "Light Fastness (1-8)",
             "Heat Stability (1-5)*"
         ]
+        self.coa_others_input.setPlainText("Heat stability testing was done at a "
+                                           "temperature of 200-210°C for two minutes. "
+                                           "We recommend the users to do their own "
+                                           "testing to determine the suitability of "
+                                           "the product for their own particular purpose.")
     elif "plastimer" in cx_name.lower():
         self.coa_others_input.setPlainText("RoHS Compliant and Food Contact Approved.")
 
@@ -69,5 +74,5 @@ def note_summary_table(self, headers, cx_name):
             notes.append(note)
 
         self.coa_others_input.setPlainText("\n".join(notes))
-    elif "global konteiner" in cx_name.lower():
-        pass
+    # elif "global konteiner" in cx_name.lower():
+    #     pass
