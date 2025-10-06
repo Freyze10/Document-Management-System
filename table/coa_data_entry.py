@@ -475,6 +475,8 @@ def clear_coa_form(self):
         self.coa_shelf_life_input.setText("12 months: Shelf life is stated as a maximum from the date of production when the product is stored in unbroken packaging.")
         self.suitability_input.setText("")
         self.coa_others_input.clear()
+        self.zp_code_input.clear()
+        self.date_evaluated_input.clear()
 
         self.delivery_date_input.setDate(QDate.currentDate())
         self.production_date_input.setDate(QDate.currentDate())
@@ -505,6 +507,8 @@ def populate_coa_fields(self, dr_no):
             self.po_number_input.clear()
             self.lot_number_input.clear()
             self.quantity_delivered_input.clear()
+            self.zp_code_input.clear()
+            self.date_evaluated_input.clear()
             self.delivery_date_input.setDate(QDate.currentDate())
             return
 

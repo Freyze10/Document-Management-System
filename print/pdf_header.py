@@ -61,7 +61,7 @@ def add_coa_header(canvas, doc):
     # Center horizontally
     x_second_image = (page_width - second_image_width) / 2
     # Place immediately below logo, with slight overlap or gap as desired
-    y_second_image_top = y_logo_top - second_image_height - (0.4 * cm)  # Adjust overlap/gap here
+    y_second_image_top = y_logo_top - second_image_height - (0.2 * cm)  # Adjust overlap/gap here
 
     try:
         canvas.drawImage(

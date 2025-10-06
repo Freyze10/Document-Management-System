@@ -27,7 +27,7 @@ def match_customer(self, cx_name):
             "Light Fastness (1-8)",
             "Heat Stability (1-5)*"
         ]
-        self.coa_others_input.setPlainText("Heat stability testing was done at a "
+        self.coa_others_input.setPlainText("*Heat stability testing was done at a "
                                            "temperature of 200-210°C for two minutes. "
                                            "We recommend the users to do their own "
                                            "testing to determine the suitability of "
@@ -49,7 +49,7 @@ def match_customer(self, cx_name):
 
 def note_summary_table(self, headers, cx_name):
     if "h&e" in cx_name.lower():
-        notes = []
+        notes = ["Colorant contains no heavy metal."]
         for header in headers:
             header = header.strip()
             stars_match = re.search(r'(\*+)$', header)
@@ -80,7 +80,7 @@ def note_summary_table(self, headers, cx_name):
                 note = (f"{stars}From a scale of {paren_content} where {high_val} denotes highest "
                         f"{header_clean.lower()} and {low_val} the lowest {header_clean.lower()}.")
             notes.append(note)
-
-        self.coa_others_input.setPlainText("\n".join(notes))
+        text = f"{notes[0]}\n\n" + "\n".join(notes[1:])
+        self.coa_others_input.setPlainText(text)
     # elif "global konteiner" in cx_name.lower():
     #     pass

@@ -130,7 +130,7 @@ class FileCOA(QWidget):
 
         content = []
         page_width = letter[0] - 50 - 50
-        content.append(Spacer(1, 78))
+        content.append(Spacer(1, 70))
         content.append(
             Paragraph(f"Customer: <font name='Times-Bold'>{field_result[1]}</font> ", styles['NormalText']))
         content.append(Spacer(1, 10))  # Small spacer between lines
@@ -214,7 +214,7 @@ class FileCOA(QWidget):
         )
         content.append(delivery_po_table)
 
-        content.append(Spacer(1, 32))
+        content.append(Spacer(1, 28))
 
         content.append(Paragraph("<u><b>Summary of Analysis</b></u>", styles["SubHeading"]))
         content.append(Spacer(1, 12))
@@ -248,7 +248,10 @@ class FileCOA(QWidget):
             ('RIGHTPADDING', (0, 0), (-1, -1), 6),
         ]))
         content.append(summary_table)
-        content.append(Spacer(1, 32))
+        if "h&e" in field_result[1].lower():
+            content.append(Spacer(1, 20))
+        else:
+            content.append(Spacer(1, 32))
 
         name_len = len(field_result[10])
         lines = "_" * name_len  # Keep simple underline
@@ -267,7 +270,7 @@ class FileCOA(QWidget):
         if "h&e" in field_result[1].lower():
             content.append(Paragraph("QC Analyst", pos_indent))
         content.append(Paragraph("Date: " + str(field_result[9].strftime('%B %d, %Y')), styles["NormalText"]))
-        content.append(Spacer(1, 44))  # Reduced spacer before storage
+        content.append(Spacer(1, 38))  # Reduced spacer before storage
 
         # Storage section
         # Serif font styles (already Times)
