@@ -139,6 +139,11 @@ class FileCOA(QWidget):
             Paragraph(f"Color Code: {field_result[2]}", styles['NormalText']))
         content.append(Spacer(1, 10))
 
+        if field_result[16]:
+            content.append(
+                Paragraph(f"ZP Code: {field_result[16]}", styles['NormalText']))
+            content.append(Spacer(1, 10))
+
         quantity = str(field_result[6]).strip()
 
         # First, try to replace kg/KG/kg./KG. if present at the end
@@ -167,6 +172,10 @@ class FileCOA(QWidget):
             styles['NormalText']))
         content.append(Spacer(1, 10))
 
+        if field_result[17]:
+            content.append(
+                Paragraph(f"Date Evaluated: {field_result[17].strftime('%B %d, %Y')}", styles['NormalText']))
+            content.append(Spacer(1, 10))
         if is_rrf:
             delivery_receipt_text = Paragraph(
                 f"RRF Number: {field_result[5]}", styles['NormalText'])

@@ -45,6 +45,11 @@ def load_coa_details(self, coa_id, is_rrf):
     self.suitability_input.setText(str(field_result[13]))
     if field_result[15]:
         self.coa_others_input.setText(str(field_result[15]))
+    if field_result[16]:
+        match_customer(self, self.coa_customer_input.text())
+        self.zp_code_input.setText(str(field_result[16]))
+    if field_result[17]:
+        self.date_evaluated_input.setDate(QDate(field_result[17].year, field_result[17].month, field_result[17].day))
     self.btn_coa_submit.setText("Update")
 
     # === Populate table ===
@@ -181,6 +186,10 @@ def coa_data_entry_form(self, is_rrf=False):
         general_info_layout.addWidget(QLabel("Color Code:"), 0, 2, Qt.AlignmentFlag.AlignRight)
         general_info_layout.addWidget(self.color_code_input, 0, 3)
 
+        # Row 0, cols 4 & 5 (after Color Code)
+        general_info_layout.addWidget(self.zp_code_label, 0, 4, Qt.AlignmentFlag.AlignRight)
+        general_info_layout.addWidget(self.zp_code_input, 0, 5)
+
         # Row 1
         general_info_layout.addWidget(QLabel("Lot Number:"), 1, 0, Qt.AlignmentFlag.AlignRight)
         general_info_layout.addWidget(self.lot_number_input, 1, 1)
@@ -220,6 +229,8 @@ def coa_data_entry_form(self, is_rrf=False):
         general_info_layout.addWidget(self.delivery_date_input, 3, 1)
         general_info_layout.addWidget(QLabel("Production Date:"), 3, 2, Qt.AlignmentFlag.AlignRight)
         general_info_layout.addWidget(self.production_date_input, 3, 3)
+        general_info_layout.addWidget(self.date_evaluated_label, 3, 4, Qt.AlignmentFlag.AlignRight)
+        general_info_layout.addWidget(self.date_evaluated_input, 3, 5)
 
         main_v_layout.addWidget(general_info_group)
 
@@ -590,6 +601,16 @@ def populate_coa_summary(self):
         self.summary_analysis_table.setVerticalHeaderLabels(self.summary_initial_v_header)
 
         # If nothing found → just return (empty table with headers)
+        if self.is_zeller:
+            zeller_item_code = db_con.get_zeller_item_code(self.color_code_input.text())
+            if zeller_item_code:
+                # Extract the string from the tuple
+                zeller_text = zeller_item_code[0]
+                zeller_code = zeller_text.split()[-1]  # Get the last part (e.g., ZP4087)
+
+                self.zp_code_input.setText(zeller_code)
+            else:
+                self.zp_code_input.clear()
         if not result_color:
             return
 

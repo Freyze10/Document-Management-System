@@ -226,6 +226,22 @@ class MainWindow(QMainWindow):
         self.suitability_input = QLineEdit()
         self.coa_others_input = QTextEdit()
         self.summary_initial_v_header = ["Color", "Light Fastness (1-8)", "Heat Stability (1-5)"]
+        self.zp_code_input = QLineEdit()
+        self.zp_code_label = QLabel("ZP Code:")
+        self.zp_code_input.setVisible(False)
+        self.zp_code_label.setVisible(False)
+
+        self.date_evaluated_input = QDateEdit()
+        self.date_evaluated_label = QLabel("Date Evaluated:")
+        self.date_evaluated_input.setCalendarPopup(True)
+        self.date_evaluated_input.setDate(QDate.currentDate())
+        self.date_evaluated_input.calendarWidget().setMinimumSize(370, 230)
+        self.date_evaluated_input.calendarWidget().setStyleSheet(calendar_design.STYLESHEET)
+        self.date_evaluated_input.installEventFilter(self.wheel_filter)
+        self.date_evaluated_input.setVisible(False)
+        self.date_evaluated_label.setVisible(False)
+
+        self.is_zeller = False
         self.btn_coa_submit = QPushButton("Submit")
         self.btn_coa_submit.clicked.connect(self.coa_btn_submit_clicked)
         self.conditional_customer = None  # 1 = everest, 2 = h&e, 3 = global konteiner
@@ -750,6 +766,8 @@ class MainWindow(QMainWindow):
         shelf_life = self.coa_shelf_life_input.text()
         suitability = self.suitability_input.text()
         coa_others = self.coa_others_input.toPlainText()
+        zeller_code = self.zp_code_input.text()
+        zeller_eval_date = self.date_evaluated_input.date().toString("yyyy-MM-dd")
 
         required_fields = {
             "Customer Name": customer_name,
@@ -795,7 +813,9 @@ class MainWindow(QMainWindow):
             "storage": storage,
             "shelf_life": shelf_life,
             "suitability": suitability,
-            "others": coa_others
+            "others": coa_others,
+            "zeller_zp_code": zeller_code,
+            "zeller_eval_date": zeller_eval_date,
         }
 
         # Save

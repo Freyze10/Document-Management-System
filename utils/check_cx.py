@@ -3,6 +3,11 @@ import re
 
 def match_customer(self, cx_name):
     from table.coa_data_entry import populate_coa_summary
+    self.is_zeller = "zeller" in cx_name.lower()
+    self.zp_code_input.setVisible(self.is_zeller)
+    self.zp_code_label.setVisible(self.is_zeller)
+    self.date_evaluated_input.setVisible(self.is_zeller)
+    self.date_evaluated_label.setVisible(self.is_zeller)
 
     if "everest plastic" in cx_name.lower():
         self.coa_others_input.setPlainText("Colorant is free from iron oxide.\n"
@@ -31,7 +36,7 @@ def match_customer(self, cx_name):
         self.coa_others_input.setPlainText("RoHS Compliant and Food Contact Approved.")
     elif "zeller" in cx_name.lower():
 
-        self.coa_others_input.setPlainText("ASTM D 1238")
+        self.coa_others_input.setPlainText("*ASTM D 1238")
 
     else:
         self.summary_initial_v_header = [

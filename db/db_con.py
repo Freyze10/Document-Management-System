@@ -116,7 +116,10 @@ def create_tables():
             storage_instructions TEXT,
             shelf_life_coa VARCHAR(255),
             suitability TEXT,
-            creation_date TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+            creation_date TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+            others TEXT,
+            zeller_zp_code VARCHAR(100),
+            zeller_eval_date DATE
         );
     """)
     cur.execute("""
@@ -405,15 +408,18 @@ def save_certificate_of_analysis(data, summary_of_analysis):
                 storage_instructions, 
                 shelf_life_coa, 
                 suitability,
-                others
+                others,
+                zeller_zp_code,
+                zeller_eval_date
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id;
         """, (
             data["customer_name"], data["color_code"], data["lot_number"], data["po_number"],
             data["delivery_receipt"], data["quantity_delivered"], data["delivery_date"],
             data["production_date"], data["creation_date"], data["certified_by"],
-            data["storage"], data["shelf_life"], data["suitability"], data["others"]
+            data["storage"], data["shelf_life"], data["suitability"], data["others"],
+            data["zeller_zp_code"], data["zeller_eval_date"]
         ))
 
         coa_id = cur.fetchone()[0]
@@ -689,13 +695,16 @@ def update_certificate_of_analysis(coa_id, data, summary_of_analysis):
                 storage_instructions = %s, 
                 shelf_life_coa = %s, 
                 suitability = %s,
-                others = %s
+                others = %s,
+                zeller_zp_code = %s,
+                zeller_eval_date = %s
             WHERE id = %s;
         """, (
             data["customer_name"], data["color_code"], data["lot_number"], data["po_number"],
             data["delivery_receipt"], data["quantity_delivered"], data["delivery_date"],
             data["production_date"], data["creation_date"], data["certified_by"],
             data["storage"], data["shelf_life"], data["suitability"], data["others"],
+            data["zeller_zp_code"], data["zeller_eval_date"],
             coa_id
         ))
         # Delete existing analysis results
@@ -1013,6 +1022,23 @@ def get_terumo_item_code(mbpi_code):
 
     cur.execute(
         "SELECT terumo_code FROM tbl_terumo_codes WHERE product_code = %s;",
+        (mbpi_code,)
+    )
+    record = cur.fetchone()
+
+    cur.close()
+    conn.close()
+    if record is None:
+        return ""  # or return None, depending on how you want to handle it
+    return record
+
+
+def get_zeller_item_code(mbpi_code):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT zeller_code FROM tbl_zeller_codes WHERE product_code = %s;",
         (mbpi_code,)
     )
     record = cur.fetchone()
