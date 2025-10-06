@@ -226,6 +226,7 @@ class MainWindow(QMainWindow):
         self.suitability_input = QLineEdit()
         self.coa_others_input = QTextEdit()
         self.summary_initial_v_header = ["Color", "Light Fastness (1-8)", "Heat Stability (1-5)"]
+        # Zeller
         self.zp_code_input = QLineEdit()
         self.zp_code_label = QLabel("ZP Code:")
         self.zp_code_input.setVisible(False)
@@ -234,7 +235,6 @@ class MainWindow(QMainWindow):
         self.date_evaluated_input = QDateEdit()
         self.date_evaluated_label = QLabel("Date Evaluated:")
         self.date_evaluated_input.setCalendarPopup(True)
-        self.date_evaluated_input.setDate(QDate.currentDate())
         self.date_evaluated_input.calendarWidget().setMinimumSize(370, 230)
         self.date_evaluated_input.calendarWidget().setStyleSheet(calendar_design.STYLESHEET)
         self.date_evaluated_input.installEventFilter(self.wheel_filter)
@@ -242,6 +242,18 @@ class MainWindow(QMainWindow):
         self.date_evaluated_label.setVisible(False)
 
         self.is_zeller = False
+        self.is_plastimer = False
+
+        # Plastimer
+        self.plastimer_expiry_input = QDateEdit()
+        self.plastimer_expiry_label = QLabel("Expiration Date:")
+        self.plastimer_expiry_input.setCalendarPopup(True)
+        self.plastimer_expiry_input.calendarWidget().setMinimumSize(370, 230)
+        self.plastimer_expiry_input.calendarWidget().setStyleSheet(calendar_design.STYLESHEET)
+        self.plastimer_expiry_input.installEventFilter(self.wheel_filter)
+        self.plastimer_expiry_input.setVisible(False)
+        self.plastimer_expiry_label.setVisible(False)
+
         self.btn_coa_submit = QPushButton("Submit")
         self.btn_coa_submit.clicked.connect(self.coa_btn_submit_clicked)
         self.conditional_customer = None  # 1 = everest, 2 = h&e, 3 = global konteiner
@@ -768,6 +780,7 @@ class MainWindow(QMainWindow):
         coa_others = self.coa_others_input.toPlainText()
         zeller_code = self.zp_code_input.text()
         zeller_eval_date = self.date_evaluated_input.date().toString("yyyy-MM-dd")
+        plastimer_expiry_date = self.plastimer_expiry_input.date().toString("yyyy-MM-dd") if self.is_plastimer else None
 
         required_fields = {
             "Customer Name": customer_name,
@@ -816,6 +829,7 @@ class MainWindow(QMainWindow):
             "others": coa_others,
             "zeller_zp_code": zeller_code,
             "zeller_eval_date": zeller_eval_date,
+            "plastimer_expiry_date": plastimer_expiry_date
         }
 
         # Save

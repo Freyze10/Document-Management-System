@@ -231,6 +231,8 @@ def coa_data_entry_form(self, is_rrf=False):
         general_info_layout.addWidget(self.production_date_input, 3, 3)
         general_info_layout.addWidget(self.date_evaluated_label, 3, 4, Qt.AlignmentFlag.AlignRight)
         general_info_layout.addWidget(self.date_evaluated_input, 3, 5)
+        general_info_layout.addWidget(self.plastimer_expiry_label, 3, 4, Qt.AlignmentFlag.AlignRight)
+        general_info_layout.addWidget(self.plastimer_expiry_input, 3, 5)
 
         main_v_layout.addWidget(general_info_group)
 

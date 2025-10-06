@@ -119,7 +119,8 @@ def create_tables():
             creation_date TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
             others TEXT,
             zeller_zp_code VARCHAR(100),
-            zeller_eval_date DATE
+            zeller_eval_date DATE,
+            plastimer_expiry_date DATE
         );
     """)
     cur.execute("""
@@ -227,7 +228,7 @@ def create_tables():
         ) AS v(product_code, zeller_code)
         WHERE NOT EXISTS (SELECT 1 FROM tbl_zeller_codes);
 
-    """)
+    """)   # zeller code
 
     cur.execute("""
         CREATE TABLE IF NOT EXISTS coa_analysis_results (
@@ -410,16 +411,17 @@ def save_certificate_of_analysis(data, summary_of_analysis):
                 suitability,
                 others,
                 zeller_zp_code,
-                zeller_eval_date
+                zeller_eval_date,
+                plastimer_expiry_date
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id;
         """, (
             data["customer_name"], data["color_code"], data["lot_number"], data["po_number"],
             data["delivery_receipt"], data["quantity_delivered"], data["delivery_date"],
             data["production_date"], data["creation_date"], data["certified_by"],
             data["storage"], data["shelf_life"], data["suitability"], data["others"],
-            data["zeller_zp_code"], data["zeller_eval_date"]
+            data["zeller_zp_code"], data["zeller_eval_date"], data["plastimer_expiry_date"]
         ))
 
         coa_id = cur.fetchone()[0]
@@ -697,14 +699,15 @@ def update_certificate_of_analysis(coa_id, data, summary_of_analysis):
                 suitability = %s,
                 others = %s,
                 zeller_zp_code = %s,
-                zeller_eval_date = %s
+                zeller_eval_date = %s,
+                plastimer_expiry_date = %s
             WHERE id = %s;
         """, (
             data["customer_name"], data["color_code"], data["lot_number"], data["po_number"],
             data["delivery_receipt"], data["quantity_delivered"], data["delivery_date"],
             data["production_date"], data["creation_date"], data["certified_by"],
             data["storage"], data["shelf_life"], data["suitability"], data["others"],
-            data["zeller_zp_code"], data["zeller_eval_date"],
+            data["zeller_zp_code"], data["zeller_eval_date"], data["plastimer_expiry_date"],
             coa_id
         ))
         # Delete existing analysis results

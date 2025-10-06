@@ -9,6 +9,10 @@ def match_customer(self, cx_name):
     self.date_evaluated_input.setVisible(self.is_zeller)
     self.date_evaluated_label.setVisible(self.is_zeller)
 
+    self.is_plastimer = "plastimer" in cx_name.lower()
+    self.plastimer_expiry_input.setVisible(self.is_plastimer)
+    self.plastimer_expiry_label.setVisible(self.is_plastimer)
+
     if "everest plastic" in cx_name.lower():
         self.coa_others_input.setPlainText("Colorant is free from iron oxide.\n"
                                            "Colorant is suitable from food packaging applications.")
@@ -34,6 +38,9 @@ def match_customer(self, cx_name):
                                            "the product for their own particular purpose.")
     elif "plastimer" in cx_name.lower():
         self.coa_others_input.setPlainText("RoHS Compliant and Food Contact Approved.")
+        expiry_date = self.production_date_input.date().addYears(1)
+        self.plastimer_expiry_input.setDate(expiry_date)
+        self.plastimer_expiry_input.setStyleSheet("min-width: 150px;")
     elif "zeller" in cx_name.lower():
 
         self.coa_others_input.setPlainText("*ASTM D 1238")
