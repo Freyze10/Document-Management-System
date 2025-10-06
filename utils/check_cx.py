@@ -30,6 +30,7 @@ def match_customer(self, cx_name):
     elif "plastimer" in cx_name.lower():
         self.coa_others_input.setPlainText("RoHS Compliant and Food Contact Approved.")
     elif "zeller" in cx_name.lower():
+
         self.coa_others_input.setPlainText("ASTM D 1238")
 
     else:

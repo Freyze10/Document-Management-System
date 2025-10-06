@@ -162,6 +162,69 @@ def create_tables():
             zeller_code VARCHAR(100)
         );
     """)
+    cur.execute("""
+        INSERT INTO tbl_zeller_codes (product_code, zeller_code)
+        SELECT * FROM (
+            VALUES
+            ('BA3431E', 'BLUE ZP4087'),
+            ('BA3435E', 'BLUE ZP4088'),
+            ('BA3909E', 'BLUE ZP4090'),
+            ('BA4520E', 'BLUE ZP4098'),
+            ('BA4521E', 'BLUE ZP4099'),
+            ('BA4365E', 'BLUE ZP4092'),
+            ('BA4549E', 'BLUE ZP4100'),
+            ('BA4701E', 'BLUE ZP4102'),
+            ('BA5565E', 'LIGHT BLUE ZP4107'),
+            ('BA9080E', 'BLUE ZP4119'),
+            ('BA9094E', 'BLUE ZP4116'),
+            ('BA9550E', 'LIGHT BLUE ZP4117'),
+            ('GA2427E', 'GREEN ZP5104'),
+            ('GA3538E', 'YELLOW GREEN ZP5117'),
+            ('GA3693E', 'YELLOW GREEN ZP5118'),
+            ('GA4136E', 'GREEN ZP5120'),
+            ('GA4254E', 'GREEN ZP593'),
+            ('GA4352E', 'GREEN ZP5123'),
+            ('GA4352E-A.', 'GREEN ZP5123'),
+            ('GA4440E', 'GREEN ZP5124'),
+            ('GA4548E', 'GREEN ZP5125'),
+            ('GA5566E', 'GREEN ZP5134'),
+            ('GA5705E', 'YELLOW GREEN ZP5135'),
+            ('GA5999E', 'GREEN ZP500'),
+            ('GA6607E', 'YELLOW GREEN ZP5141'),
+            ('GA8613E', 'LIGHT GREEN ZP5140'),
+            ('KA2771E', 'PINK ZP3130'),
+            ('KA3144E', 'PINK ZP3136'),
+            ('KA3170E', 'ZP6'),
+            ('KA3176E', 'ZP7'),
+            ('KA3541E', 'PINK ZP3144'),
+            ('KA4361E', 'PINK ZP3148'),
+            ('KA5554E', 'PINK ZP3162'),
+            ('KA5554E-A', 'PINK ZP3162'),
+            ('KA5796E', 'PINK ZP3163'),
+            ('KA6414E', 'PINK ZP3169'),
+            ('KA7889E', 'PINK ZP3173'),
+            ('KA8923E', 'PINK ZP18'),
+            ('KA9077E', 'PINK ZP3178'),
+            ('OA2424E', 'ORANGE ZP3123'),
+            ('OA3180E', 'ZP04'),
+            ('OA3552E', 'ORANGE ZP3145'),
+            ('RA9068E', 'RED ZP3177'),
+            ('TA2470E', 'GRAY ZP827'),
+            ('VA2453E', 'VIOLET ZP968'),
+            ('VA4020E', 'VIOLET ZP975'),
+            ('VA4537E', 'VIOLET ZP976'),
+            ('VA13924E', 'VIOLET ZP992'),
+            ('WA4284E', 'WHITE ZP137'),
+            ('WA14068E', 'WHITE ZP150'),
+            ('YA2537E', 'YELLOW GREEN ZP5105'),
+            ('YA3504E', 'YELLOW ZP678'),
+            ('YA3781E', 'LIGHT YELLOW ZP679'),
+            ('YA4547E', 'YELLOW ZP680'),
+            ('ZA3906E', 'MAGENTA ZP3146')
+        ) AS v(product_code, zeller_code)
+        WHERE NOT EXISTS (SELECT 1 FROM tbl_zeller_codes);
+
+    """)
 
     cur.execute("""
         CREATE TABLE IF NOT EXISTS coa_analysis_results (
