@@ -5,9 +5,510 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a705e8e2-2466-47d3-8b01-c9883720f215" name="Changes" comment="modified">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/print/print_coa.py" beforeDir="false" afterPath="$PROJECT_DIR$/print/print_coa.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/LAB-DMS.exe" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PIL/_avif.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PIL/_imaging.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PIL/_imagingcms.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PIL/_imagingmath.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PIL/_imagingtk.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PIL/_webp.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/bin/MSVCP140.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/bin/MSVCP140_1.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/bin/MSVCP140_2.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/bin/Qt6Core.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/bin/Qt6Gui.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/bin/Qt6Network.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/bin/Qt6Pdf.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/bin/Qt6PdfWidgets.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/bin/Qt6PrintSupport.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/bin/Qt6Svg.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/bin/Qt6Widgets.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/bin/VCRUNTIME140.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/bin/VCRUNTIME140_1.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/bin/opengl32sw.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/generic/qtuiotouchplugin.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/iconengines/qsvgicon.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/imageformats/qgif.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/imageformats/qicns.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/imageformats/qico.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/imageformats/qjpeg.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/imageformats/qpdf.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/imageformats/qsvg.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/imageformats/qtga.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/imageformats/qtiff.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/imageformats/qwbmp.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/imageformats/qwebp.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/networkinformation/qnetworklistmanager.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/platforms/qminimal.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/platforms/qoffscreen.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/platforms/qwindows.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/styles/qmodernwindowsstyle.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/tls/qcertonlybackend.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/tls/qopensslbackend.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/plugins/tls/qschannelbackend.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_ar.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_bg.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_ca.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_cs.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_da.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_de.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_en.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_es.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_fa.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_fi.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_fr.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_gd.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_gl.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_he.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_ar.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_bg.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_ca.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_cs.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_da.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_de.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_en.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_es.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_fr.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_gl.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_hr.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_hu.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_it.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_ja.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_ka.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_ko.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_nl.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_nn.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_pl.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_pt_BR.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_ru.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_sk.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_sl.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_sv.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_tr.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_uk.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_zh_CN.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_help_zh_TW.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_hr.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_hu.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_it.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_ja.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_ka.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_ko.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_lg.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_lt.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_lv.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_nl.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_nn.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_pl.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_pt_BR.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_pt_PT.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_ru.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_sk.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_sl.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_sv.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_tr.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_uk.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_zh_CN.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qt_zh_TW.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_ar.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_bg.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_ca.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_cs.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_da.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_de.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_en.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_es.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_fa.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_fi.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_fr.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_gd.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_he.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_hr.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_hu.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_it.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_ja.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_ka.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_ko.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_lg.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_lv.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_nl.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_nn.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_pl.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_pt_BR.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_ru.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_sk.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_sv.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_tr.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_uk.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_zh_CN.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/Qt6/translations/qtbase_zh_TW.qm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/QtCore.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/QtGui.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/QtNetwork.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/QtPdf.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/QtPdfWidgets.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/QtPrintSupport.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/QtWidgets.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/PyQt6/sip.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/VCRUNTIME140.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/VCRUNTIME140_1.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/_asyncio.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/_bz2.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/_ctypes.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/_decimal.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/_elementtree.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/_hashlib.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/_lzma.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/_multiprocessing.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/_overlapped.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/_queue.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/_socket.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/_sqlite3.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/_ssl.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/_uuid.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/_wmi.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-console-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-datetime-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-debug-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-errorhandling-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-fibers-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-file-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-file-l1-2-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-file-l2-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-handle-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-heap-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-interlocked-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-libraryloader-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-localization-l1-2-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-memory-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-namedpipe-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-processenvironment-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-processthreads-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-processthreads-l1-1-1.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-profile-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-rtlsupport-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-string-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-synch-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-synch-l1-2-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-sysinfo-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-timezone-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-core-util-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-crt-conio-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-crt-convert-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-crt-environment-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-crt-filesystem-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-crt-heap-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-crt-locale-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-crt-math-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-crt-process-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-crt-runtime-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-crt-stdio-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-crt-string-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-crt-time-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/api-ms-win-crt-utility-l1-1-0.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/base_library.zip" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/charset_normalizer/md.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/charset_normalizer/md__mypyc.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/greenlet/_greenlet.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/img/MBPI_Logo.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/img/calendar_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/img/coa_title.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/img/delete_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/img/edit_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/img/hover_delete_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/img/hover_edit_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/img/hover_print_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/img/hover_view_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/img/icon.ico" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/img/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/img/logout_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/img/print_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/img/search_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/img/view_icon.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/libcrypto-3-x64.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/libcrypto-3.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/libffi-8.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/libssl-3-x64.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/libssl-3.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/psycopg2/_psycopg.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/pyexpat.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/python3.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/python312.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/select.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/setuptools/_vendor/importlib_metadata-8.0.0.dist-info/INSTALLER" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/setuptools/_vendor/importlib_metadata-8.0.0.dist-info/LICENSE" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/setuptools/_vendor/importlib_metadata-8.0.0.dist-info/METADATA" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/setuptools/_vendor/importlib_metadata-8.0.0.dist-info/RECORD" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/setuptools/_vendor/importlib_metadata-8.0.0.dist-info/REQUESTED" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/setuptools/_vendor/importlib_metadata-8.0.0.dist-info/WHEEL" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/setuptools/_vendor/importlib_metadata-8.0.0.dist-info/top_level.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/setuptools/_vendor/jaraco/text/Lorem ipsum.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/sqlalchemy/cyextension/collections.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/sqlalchemy/cyextension/immutabledict.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/sqlalchemy/cyextension/processors.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/sqlalchemy/cyextension/resultproxy.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/sqlalchemy/cyextension/util.cp312-win_amd64.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/sqlite3.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/ucrtbase.dll" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/unicodedata.pyd" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/utils/abs_path.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/utils/calendar_design.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/utils/check_cx.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/utils/lot_format.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/utils/scroll_date.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output/LAB-DMS v1/_internal/utils/section9_design.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/LAB-DMS.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_avif.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_imaging.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_imagingcms.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_imagingmath.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_imagingtk.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PIL/_webp.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/bin/MSVCP140.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/bin/MSVCP140_1.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/bin/MSVCP140_2.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/bin/Qt6Core.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/bin/Qt6Gui.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/bin/Qt6Network.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/bin/Qt6Pdf.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/bin/Qt6PdfWidgets.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/bin/Qt6PrintSupport.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/bin/Qt6Svg.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/bin/Qt6Widgets.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/bin/VCRUNTIME140.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/bin/VCRUNTIME140_1.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/bin/opengl32sw.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/generic/qtuiotouchplugin.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/iconengines/qsvgicon.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/imageformats/qgif.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/imageformats/qicns.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/imageformats/qico.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/imageformats/qjpeg.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/imageformats/qpdf.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/imageformats/qsvg.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/imageformats/qtga.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/imageformats/qtiff.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/imageformats/qwbmp.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/imageformats/qwebp.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/networkinformation/qnetworklistmanager.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/platforms/qminimal.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/platforms/qoffscreen.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/platforms/qwindows.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/styles/qmodernwindowsstyle.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/tls/qcertonlybackend.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/tls/qopensslbackend.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/plugins/tls/qschannelbackend.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_ar.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_bg.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_ca.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_cs.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_da.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_de.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_en.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_es.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_fa.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_fi.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_fr.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_gd.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_gl.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_he.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_ar.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_bg.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_ca.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_cs.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_da.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_de.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_en.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_es.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_fr.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_gl.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_hr.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_hu.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_it.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_ja.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_ka.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_ko.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_nl.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_nn.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_pl.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_pt_BR.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_ru.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_sk.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_sl.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_sv.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_tr.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_uk.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_zh_CN.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_help_zh_TW.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_hr.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_hu.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_it.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_ja.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_ka.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_ko.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_lg.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_lt.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_lv.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_nl.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_nn.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_pl.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_pt_BR.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_pt_PT.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_ru.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_sk.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_sl.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_sv.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_tr.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_uk.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_zh_CN.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qt_zh_TW.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_ar.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_bg.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_ca.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_cs.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_da.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_de.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_en.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_es.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_fa.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_fi.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_fr.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_gd.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_he.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_hr.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_hu.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_it.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_ja.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_ka.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_ko.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_lg.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_lv.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_nl.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_nn.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_pl.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_pt_BR.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_ru.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_sk.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_sv.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_tr.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_uk.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_zh_CN.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/Qt6/translations/qtbase_zh_TW.qm" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/QtCore.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/QtGui.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/QtNetwork.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/QtPdf.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/QtPdfWidgets.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/QtPrintSupport.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/QtWidgets.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/PyQt6/sip.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/VCRUNTIME140.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/VCRUNTIME140_1.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_asyncio.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_bz2.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_ctypes.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_decimal.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_elementtree.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_hashlib.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_lzma.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_multiprocessing.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_overlapped.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_queue.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_socket.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_sqlite3.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_ssl.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_uuid.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/_wmi.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-console-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-datetime-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-debug-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-errorhandling-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-fibers-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-file-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-file-l1-2-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-file-l2-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-handle-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-heap-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-interlocked-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-libraryloader-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-localization-l1-2-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-memory-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-namedpipe-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-processenvironment-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-processthreads-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-processthreads-l1-1-1.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-profile-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-rtlsupport-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-string-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-synch-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-synch-l1-2-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-sysinfo-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-timezone-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-core-util-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-conio-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-convert-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-environment-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-filesystem-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-heap-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-locale-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-math-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-process-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-runtime-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-stdio-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-string-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-time-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/api-ms-win-crt-utility-l1-1-0.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/base_library.zip" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/charset_normalizer/md.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/charset_normalizer/md__mypyc.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/greenlet/_greenlet.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/img/MBPI_Logo.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/img/calendar_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/img/coa_title.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/img/delete_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/img/edit_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/img/hover_delete_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/img/hover_edit_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/img/hover_print_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/img/hover_view_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/img/icon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/img/logo.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/img/logout_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/img/print_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/img/search_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/img/view_icon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/libcrypto-3-x64.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/libcrypto-3.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/libffi-8.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/libssl-3-x64.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/libssl-3.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/psycopg2/_psycopg.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/pyexpat.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/python3.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/python312.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/select.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/setuptools/_vendor/importlib_metadata-8.0.0.dist-info/INSTALLER" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/setuptools/_vendor/importlib_metadata-8.0.0.dist-info/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/setuptools/_vendor/importlib_metadata-8.0.0.dist-info/METADATA" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/setuptools/_vendor/importlib_metadata-8.0.0.dist-info/RECORD" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/setuptools/_vendor/importlib_metadata-8.0.0.dist-info/REQUESTED" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/setuptools/_vendor/importlib_metadata-8.0.0.dist-info/WHEEL" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/setuptools/_vendor/importlib_metadata-8.0.0.dist-info/top_level.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/setuptools/_vendor/jaraco/text/Lorem ipsum.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlalchemy/cyextension/collections.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlalchemy/cyextension/immutabledict.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlalchemy/cyextension/processors.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlalchemy/cyextension/resultproxy.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlalchemy/cyextension/util.cp312-win_amd64.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/sqlite3.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/ucrtbase.dll" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/unicodedata.pyd" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/utils/abs_path.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/utils/calendar_design.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/utils/check_cx.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/utils/lot_format.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/utils/scroll_date.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output/LAB-DMS/_internal/utils/section9_design.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
