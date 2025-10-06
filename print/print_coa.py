@@ -172,6 +172,11 @@ class FileCOA(QWidget):
             styles['NormalText']))
         content.append(Spacer(1, 10))
 
+        if field_result[18]:
+            content.append(Paragraph(
+                f"Expiration Date: {field_result[18].strftime('%B %d, %Y')}",
+                styles['NormalText']))
+            content.append(Spacer(1, 10))
         if field_result[17]:
             content.append(
                 Paragraph(f"Date Evaluated: {field_result[17].strftime('%B %d, %Y')}", styles['NormalText']))

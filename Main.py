@@ -235,6 +235,7 @@ class MainWindow(QMainWindow):
         self.date_evaluated_input = QDateEdit()
         self.date_evaluated_label = QLabel("Date Evaluated:")
         self.date_evaluated_input.setCalendarPopup(True)
+        self.creation_date_input.setDate(QDate.currentDate())
         self.date_evaluated_input.calendarWidget().setMinimumSize(370, 230)
         self.date_evaluated_input.calendarWidget().setStyleSheet(calendar_design.STYLESHEET)
         self.date_evaluated_input.installEventFilter(self.wheel_filter)
@@ -778,8 +779,8 @@ class MainWindow(QMainWindow):
         shelf_life = self.coa_shelf_life_input.text()
         suitability = self.suitability_input.text()
         coa_others = self.coa_others_input.toPlainText()
-        zeller_code = self.zp_code_input.text()
-        zeller_eval_date = self.date_evaluated_input.date().toString("yyyy-MM-dd")
+        zeller_code = self.zp_code_input.text() if self.is_zeller else None
+        zeller_eval_date = self.date_evaluated_input.date().toString("yyyy-MM-dd") if self.is_zeller else None
         plastimer_expiry_date = self.plastimer_expiry_input.date().toString("yyyy-MM-dd") if self.is_plastimer else None
 
         required_fields = {
