@@ -51,6 +51,7 @@ def load_coa_details(self, coa_id, is_rrf):
     if field_result[17]:
         self.date_evaluated_input.setDate(QDate(field_result[17].year, field_result[17].month, field_result[17].day))
     self.btn_coa_submit.setText("Update")
+    self.btn_save_as_new.setVisible(True)
 
     # === Populate table ===
     self.summary_analysis_table.clearContents()
@@ -128,7 +129,7 @@ def coa_data_entry_form(self, is_rrf=False):
             QDateEdit::drop-down:hover {{
                 background-color: #dee2e6; /* Slightly darker on hover */
             }}
-            
+
             QDateEdit::down-arrow:on {{
                 top: 1px;
                 left: 1px;
@@ -372,12 +373,8 @@ def coa_data_entry_form(self, is_rrf=False):
         submit_button_style = button_style.replace("#28a745", "#007bff")  # Blue for submit
         submit_button_style = submit_button_style.replace("#218838", "#0056b3")  # Darker blue hover
         submit_button_style = submit_button_style.replace("#1e7e34", "#004085")  # Even darker blue pressed
-        submit_button_style = submit_button_style.replace("min-width: 100px;",
-                                                          "min-width: 120px;")  # Submit can be a bit wider
-        submit_button_style = submit_button_style.replace("min-height: 38px;",
-                                                          "min-height: 40px;")  # Slightly taller than add/delete
-        submit_button_style = submit_button_style.replace("font-size: 14px;",
-                                                          "font-size: 15px;")  # Slightly larger font for submit
+        submit_button_style = submit_button_style.replace("min-width: 80px;",
+                                                          "min-width: 90px;")
         self.btn_coa_submit.setStyleSheet(submit_button_style)
 
         btn_add_table_row = QHBoxLayout()
@@ -424,7 +421,31 @@ def coa_data_entry_form(self, is_rrf=False):
         # === Submit Button ===
         submit_button_row = QHBoxLayout()
         submit_button_row.addStretch()
+
+        self.btn_save_as_new = QPushButton("Save as New")
+        save_as_new_style = button_style.replace("#28a745", "#17a2b8")  # Info blue for save as new
+        save_as_new_style = save_as_new_style.replace("#218838", "#138496")  # Darker info blue hover
+        save_as_new_style = save_as_new_style.replace("#1e7e34", "#117a8b")  # Even darker info blue pressed
+        save_as_new_style = save_as_new_style.replace("min-width: 80px;", "min-width: 90px;")
+        self.btn_save_as_new.setStyleSheet(save_as_new_style)
+        self.btn_save_as_new.setVisible(False)
+        self.btn_save_as_new.clicked.connect(self.save_as_new_clicked)
+
+        submit_button_row.addWidget(self.btn_save_as_new)
+        submit_button_row.addSpacing(10)
+
         submit_button_row.addWidget(self.btn_coa_submit)
+        submit_button_row.addSpacing(10)
+
+        self.btn_print = QPushButton("Print")
+        print_style = button_style.replace("#28a745", "#6c757d")  # Gray for print
+        print_style = print_style.replace("#218838", "#5a6268")  # Darker gray hover
+        print_style = print_style.replace("#1e7e34", "#545b62")  # Even darker gray pressed
+        print_style = print_style.replace("min-width: 80px;", "min-width: 90px;")
+        self.btn_print.setStyleSheet(print_style)
+        self.btn_print.clicked.connect(lambda: self.coa_btn_submit_clicked(print_after=True))
+        submit_button_row.addWidget(self.btn_print)
+
         submit_button_row.addStretch()
         main_v_layout.addLayout(submit_button_row)
 
@@ -434,6 +455,16 @@ def coa_data_entry_form(self, is_rrf=False):
         clear_coa_form(self)
     except Exception as e:
         print(f"Error loading COA form: {e}")
+
+
+def save_as_new_clicked(self):
+    global current_coa_id
+    current_coa_id = None
+    self.coa_btn_submit_clicked()
+
+
+# def save_and_print_clicked(self):
+#     self.coa_btn_submit_clicked(print_after=True)
 
 
 def adjust_table_height(self):
@@ -474,7 +505,8 @@ def clear_coa_form(self):
         self.quantity_delivered_input.clear()
         self.certified_by_input.clear()
         self.coa_storage_input.setText("Should be stored cool and dry in unbroken packaging.")
-        self.coa_shelf_life_input.setText("12 months: Shelf life is stated as a maximum from the date of production when the product is stored in unbroken packaging.")
+        self.coa_shelf_life_input.setText(
+            "12 months: Shelf life is stated as a maximum from the date of production when the product is stored in unbroken packaging.")
         self.suitability_input.setText("")
         self.coa_others_input.clear()
         self.zp_code_input.clear()
@@ -492,6 +524,7 @@ def clear_coa_form(self):
         self.summary_analysis_table.setVerticalHeaderLabels(self.summary_initial_v_header)
         adjust_table_height(self)
         self.btn_coa_submit.setText("Submit")
+        self.btn_save_as_new.setVisible(False)
         self.coa_customer_input.blockSignals(False)
         self.color_code_input.blockSignals(False)
         self.delivery_receipt_input.blockSignals(False)
@@ -580,7 +613,8 @@ def populate_coa_rrf_fields(self, rrf_no):
         self.lot_number_input.setText(lot_no)
 
         if add_prod_date[0]:
-            self.production_date_input.setDate(QDate(add_prod_date[0].year, add_prod_date[0].month, add_prod_date[0].day))
+            self.production_date_input.setDate(
+                QDate(add_prod_date[0].year, add_prod_date[0].month, add_prod_date[0].day))
     except Exception as e:
         print(e, "rrf fields")
     finally:
@@ -633,5 +667,3 @@ def populate_coa_summary(self):
         adjust_table_height(self)
     except Exception as e:
         print(e)
-
-

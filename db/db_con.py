@@ -440,6 +440,7 @@ def save_certificate_of_analysis(data, summary_of_analysis):
         conn.commit()
         cur.close()
         conn.close()
+        return coa_id
 
     except Exception as e:
         if conn:

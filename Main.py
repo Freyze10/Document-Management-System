@@ -763,7 +763,7 @@ class MainWindow(QMainWindow):
         except Exception as e:
             window_alert.show_message(self, "Unexpected Error", f"An error occurred: {str(e)}", icon_type="critical")
 
-    def coa_btn_submit_clicked(self):
+    def coa_btn_submit_clicked(self, print_after=False):
         customer_name = self.coa_customer_input.text()
         color_code = self.color_code_input.text()
         quantity_delivered = self.quantity_delivered_input.text()
@@ -832,7 +832,12 @@ class MainWindow(QMainWindow):
             "zeller_eval_date": zeller_eval_date,
             "plastimer_expiry_date": plastimer_expiry_date
         }
+        # Print after save and stay in the same entry page
+        if print_after:
+            returning_coa_id = db_con.save_certificate_of_analysis(coa_data, summary_of_analysis)
+            self.open_coa_preview(returning_coa_id, "temp")
 
+            return
         # Save
         try:
             if coa_data_entry.current_coa_id is not None:  # Update existing COA
@@ -857,6 +862,7 @@ class MainWindow(QMainWindow):
                     db_con.save_certificate_of_analysis(coa_data, summary_of_analysis)
                     window_alert.show_message(self, "Success", f"Certificate of Analysis saved successfully!",
                                               icon_type="info")
+                    coa_data_entry.current_coa_id = None
         except Exception as e:
             window_alert.show_message(self, "Database Error", str(e), icon_type="critical")
         finally:
@@ -868,6 +874,11 @@ class MainWindow(QMainWindow):
             coa_data_entry.adjust_table_height(self)
             self.coa_scroll_area.verticalScrollBar().setValue(0)
             self.coa_sub_tabs.setCurrentIndex(0)
+
+    def save_as_new_clicked(self):
+        global current_coa_id
+        current_coa_id = None
+        self.coa_btn_submit_clicked()
 
     def terumo_submit_clicked(self):
         try:
