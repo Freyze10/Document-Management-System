@@ -24,6 +24,7 @@ def match_customer(self, cx_name):
             "Heat Stability (1-5)**"
         ]
         populate_coa_summary(self)
+        note_summary_table(self, self.summary_initial_v_header, cx_name)
 
     elif "global konteiner" in cx_name.lower():
         self.summary_initial_v_header = [
@@ -36,6 +37,7 @@ def match_customer(self, cx_name):
                                            "We recommend the users to do their own "
                                            "testing to determine the suitability of "
                                            "the product for their own particular purpose.")
+        populate_coa_summary(self)
     elif "plastimer" in cx_name.lower():
         self.coa_others_input.setPlainText("RoHS Compliant and Food Contact Approved.")
         expiry_date = self.production_date_input.date().addYears(1)
