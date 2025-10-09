@@ -153,11 +153,11 @@ class FileTerumo(QWidget):
             # Customer + Lot No.
             lot_no = f"{field_result[3]}"
             upper_data = [
-                [Paragraph(f"<b>Customer Name:</b> {field_result[1]}", normal_style),
-                 Paragraph(f"<b>Lot No.:</b> {lot_no}", normal_style)],
-                [Paragraph(f"<b>Item Code:</b> {terumo_res[2]}", normal_style),
-                 Paragraph(f"<b>Quantity:</b> {field_result[6]}", normal_style)],
-                [Paragraph(f"<b>Item Description:</b> {str(terumo_res[3])}", normal_style), ''],
+                [Paragraph(f"Customer Name: {field_result[1]}", normal_style),
+                 Paragraph(f"Lot No.: {lot_no}", normal_style)],
+                [Paragraph(f"Item Code: {terumo_res[2]}", normal_style),
+                 Paragraph(f"Quantity: {field_result[6]}", normal_style)],
+                [Paragraph(f"Item Description: {str(terumo_res[3])}", normal_style), ''],
             ]
             col_widths_upper = [325, 215]  # Adjusted to sum to 540 to match main table width
             upper_table = Table(upper_data, colWidths=col_widths_upper, hAlign='CENTER')
@@ -178,7 +178,6 @@ class FileTerumo(QWidget):
                 ('BOX', (0, 0), (-1, -1), 0.5, colors.black)
             ]))
             content.append(upper_table)
-            content.append(Spacer(1, 8))
 
             # --- Main Check Items Table ---
             diameter_parts = split_by_comma(str(terumo_res[7]))
@@ -199,13 +198,13 @@ class FileTerumo(QWidget):
 
             table_data = [
                 # Header
-                [Paragraph('<b>Check items</b>', left_style),
-                 Paragraph('<b>Standard</b>', center_style), '', '',  # span across 3 cols
-                 Paragraph('<b>Actual</b>', center_style), '', '',  # span across 3 cols
-                 Paragraph('<b>Judgement</b>', center_style)],
+                [Paragraph('Check items', left_style),
+                 Paragraph('Standard', center_style), '', '',  # span across 3 cols
+                 Paragraph('Actual', center_style), '', '',  # span across 3 cols
+                 Paragraph('Judgement', center_style)],
 
                 # Molded Chip Inspection section
-                [Paragraph('<b>Molded Chip Inspection</b>', left_style), '', '', '', '', '', '', ''],
+                [Paragraph('Molded Chip Inspection', left_style), '', '', '', '', '', '', ''],
 
                 [Paragraph('Color', left_style),
                  Paragraph(str(terumo_res[4]), left_style), '', '',  # Standard
@@ -230,7 +229,7 @@ class FileTerumo(QWidget):
                  Paragraph(actual_parts[1], center_style), '', '', ''],
 
                 # Pellet Inspection section
-                [Paragraph('<b>Pellet Inspection</b>', left_style), '', '', '', '', '', '', ''],
+                [Paragraph('Pellet Inspection', left_style), '', '', '', '', '', '', ''],
 
                 [Paragraph('Appearance', left_style),
                  Paragraph(appearance_std, left_style), '', '',  # span like Standard
@@ -266,7 +265,6 @@ class FileTerumo(QWidget):
             main_table = Table(table_data, colWidths=col_widths, hAlign='CENTER')
             main_table.setStyle(TableStyle([
                 ('GRID', (0, 0), (-1, -1), 0.25, colors.black),
-                ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
                 ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
                 ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
 
@@ -286,6 +284,7 @@ class FileTerumo(QWidget):
                 # Actual
                 ('SPAN', (4, 2), (6, 2)),  # Actual color
                 ('SPAN', (4, 3), (6, 3)),  # Actual fmc title
+                ('BACKGROUND', (4, 3), (6, 3), colors.lightgrey),
                 ('SPAN', (4, 4), (6, 4)),  # Actual value
                 ('SPAN', (4, 5), (6, 5)),  # Actual value
 
@@ -314,7 +313,7 @@ class FileTerumo(QWidget):
             remarks_table = Table(
                 remarks_data,
                 colWidths=[540],
-                rowHeights=[20, 72]  # row 1 = 20pt, row 2 = 72pt minimum
+                rowHeights=[20, 82]  # row 1 = 20pt, row 2 = 72pt minimum
             )
 
             remarks_table.setStyle(TableStyle([
@@ -331,14 +330,14 @@ class FileTerumo(QWidget):
 
             # Approved by section
             # Approved by section (name inline and underlined, title below with indent)
-            approved_by_html = f"<b>Approved by:</b> <u>{str(field_result[10])}</u>"
+            approved_by_html = f"Approved by: <u>{str(field_result[10])}</u>"
             content.append(Paragraph(approved_by_html, left_style))
 
             # Add position/title under the name with indentation
-            content.append(Indenter(left=70))
+            content.append(Indenter(left=68))
             # position_html = f"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{str(terumo_res[22])}"
             content.append(Paragraph(str(terumo_res[22]), left_style))
-            content.append(Indenter(left=-70))
+            content.append(Indenter(left=-68))
 
             # --- Document Content End ---
 
