@@ -1,5 +1,7 @@
 import re
 
+from db import db_con
+
 
 def match_customer(self, cx_name):
     from table.coa_data_entry import populate_coa_summary
@@ -24,6 +26,7 @@ def match_customer(self, cx_name):
             "Heat Stability (1-5)**"
         ]
         populate_coa_summary(self)
+        note_summary_table(self, self.summary_initial_v_header, cx_name)
 
     elif "global konteiner" in cx_name.lower():
         self.summary_initial_v_header = [
@@ -43,7 +46,15 @@ def match_customer(self, cx_name):
         self.plastimer_expiry_input.setDate(expiry_date)
         self.plastimer_expiry_input.setStyleSheet("min-width: 150px;")
     elif "zeller" in cx_name.lower():
+        zeller_item_code = db_con.get_zeller_item_code(self.color_code_input.text())
+        if zeller_item_code:
+            # Extract the string from the tuple
+            zeller_text = zeller_item_code[0]
+            zeller_code = zeller_text.split()[-1]  # Get the last part (e.g., ZP4087)
 
+            self.zp_code_input.setText(zeller_code)
+        else:
+            self.zp_code_input.clear()
         self.coa_others_input.setPlainText("*ASTM D 1238")
 
     else:
