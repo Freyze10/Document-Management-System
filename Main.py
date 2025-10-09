@@ -1,5 +1,5 @@
 from PyQt6.QtCore import Qt, QDate, QRegularExpression, QTimer, pyqtSignal, QThread
-from PyQt6.QtGui import QIcon, QRegularExpressionValidator, QFont, QAction
+from PyQt6.QtGui import QIcon, QRegularExpressionValidator, QFont, QAction, QKeySequence, QShortcut
 from PyQt6.QtWidgets import QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, \
     QTableWidget, QLineEdit, QHeaderView, QTableWidgetItem, QScrollArea, QTextEdit, QPushButton, QDateEdit, \
     QMessageBox, QAbstractItemView, QGroupBox, QCompleter, QDialog, QLabel, QProgressBar, QStackedLayout
@@ -226,6 +226,10 @@ class MainWindow(QMainWindow):
         self.suitability_input = QLineEdit()
         self.coa_others_input = QTextEdit()
         self.summary_initial_v_header = ["Color", "Light Fastness (1-8)", "Heat Stability (1-5)"]
+        #  print only if in the  data entry tab
+        coa_shortcut_print = QShortcut(QKeySequence("Ctrl+P"), self)
+        coa_shortcut_print.activated.connect(self.coa_print_data_entry)
+
         # Zeller
         self.zp_code_input = QLineEdit()
         self.zp_code_label = QLabel("ZP Code:")
@@ -836,7 +840,8 @@ class MainWindow(QMainWindow):
         if print_after:
             returning_coa_id = db_con.save_certificate_of_analysis(coa_data, summary_of_analysis)
             self.open_coa_preview(returning_coa_id, "temp")
-
+            self.coa_scroll_area.verticalScrollBar().setValue(0)
+            table.load_coa_table(self)
             return
         # Save
         try:
@@ -879,6 +884,11 @@ class MainWindow(QMainWindow):
         global current_coa_id
         current_coa_id = None
         self.coa_btn_submit_clicked()
+
+    def coa_print_data_entry(self):
+        # only trigger if the second tab (index 1) is active
+        if self.coa_sub_tabs.currentIndex() == 1:
+            self.coa_btn_submit_clicked(print_after=True)
 
     def terumo_submit_clicked(self):
         try:
@@ -1325,6 +1335,7 @@ class MainWindow(QMainWindow):
         self.worker = Worker()
         self.worker.finished.connect(self.loading.accept)
         self.worker.start()
+        coa_data_entry.enable_auto_fill(self)
 
     def run_sync_script_rrf(self):
         # Show loading dialog

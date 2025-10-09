@@ -65,10 +65,12 @@ def load_coa_details(self, coa_id, is_rrf):
         self.summary_analysis_table.setItem(row_idx, 1, QTableWidgetItem(str(delivery_value) if delivery_value else ""))
 
     adjust_table_height(self)
+    self.delivery_receipt_input.blockSignals(False)
 
+
+def enable_auto_fill(self):
     self.coa_customer_input.blockSignals(False)
     self.color_code_input.blockSignals(False)
-    self.delivery_receipt_input.blockSignals(False)
 
 
 def coa_data_entry_form(self, is_rrf=False):
@@ -457,16 +459,6 @@ def coa_data_entry_form(self, is_rrf=False):
         print(f"Error loading COA form: {e}")
 
 
-def save_as_new_clicked(self):
-    global current_coa_id
-    current_coa_id = None
-    self.coa_btn_submit_clicked()
-
-
-# def save_and_print_clicked(self):
-#     self.coa_btn_submit_clicked(print_after=True)
-
-
 def adjust_table_height(self):
     self.summary_analysis_table.verticalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
 
@@ -640,17 +632,17 @@ def populate_coa_summary(self):
         self.summary_analysis_table.setHorizontalHeaderLabels(["Standard", "Delivery"])
         self.summary_analysis_table.setVerticalHeaderLabels(self.summary_initial_v_header)
 
-        # If nothing found → just return (empty table with headers)
-        if self.is_zeller:
-            zeller_item_code = db_con.get_zeller_item_code(self.color_code_input.text())
-            if zeller_item_code:
-                # Extract the string from the tuple
-                zeller_text = zeller_item_code[0]
-                zeller_code = zeller_text.split()[-1]  # Get the last part (e.g., ZP4087)
-
-                self.zp_code_input.setText(zeller_code)
-            else:
-                self.zp_code_input.clear()
+        # # If nothing found → just return (empty table with headers)
+        # if self.is_zeller:
+        #     zeller_item_code = db_con.get_zeller_item_code(self.color_code_input.text())
+        #     if zeller_item_code:
+        #         # Extract the string from the tuple
+        #         zeller_text = zeller_item_code[0]
+        #         zeller_code = zeller_text.split()[-1]  # Get the last part (e.g., ZP4087)
+        #
+        #         self.zp_code_input.setText(zeller_code)
+        #     else:
+        #         self.zp_code_input.clear()
         if not result_color:
             return
 
