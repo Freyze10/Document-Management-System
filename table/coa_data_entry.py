@@ -526,9 +526,9 @@ def clear_coa_form(self):
 
 def populate_coa_fields(self, dr_no):
     try:
-        fields = db_con.get_dr_details(dr_no)
-        if not fields:  # None or empty tuple
-            # Clear fields or just exit
+        records = db_con.get_dr_details(dr_no)
+        if not records:
+            # No data, clear fields
             self.coa_customer_input.clear()
             self.color_code_input.clear()
             self.po_number_input.clear()
@@ -539,23 +539,39 @@ def populate_coa_fields(self, dr_no):
             self.delivery_date_input.setDate(QDate.currentDate())
             return
 
+        # Find the first record that is NOT yet in your database
+        selected_record = None
+        for record in records:
+            dr_no_val = record[0]
+            product_code_val = record[1]
+            if not db_con.record_exists(dr_no_val, product_code_val):
+                selected_record = record
+                break
+
+        # If all records exist, fall back to first one
+        if selected_record is None:
+            selected_record = records[0]
+
         # === Populate inputs ===
-        lot_no = lot_format.normalize(fields[5])
+        lot_no = lot_format.normalize(selected_record[5])
 
-        self.coa_customer_input.setText(str(fields[2]))
-        self.color_code_input.setText(str(fields[1]))
-        self.po_number_input.setText(str(fields[4]))
+        self.coa_customer_input.setText(str(selected_record[2]))
+        self.color_code_input.setText(str(selected_record[1]))
+        self.po_number_input.setText(str(selected_record[4]))
         self.lot_number_input.setText(lot_no)
-        self.quantity_delivered_input.setText(str(fields[6]))
+        self.quantity_delivered_input.setText(str(selected_record[6]))
 
-        if fields[3]:
-            self.delivery_date_input.setDate(QDate(fields[3].year, fields[3].month, fields[3].day))
+        if selected_record[3]:
+            self.delivery_date_input.setDate(
+                QDate(selected_record[3].year, selected_record[3].month, selected_record[3].day)
+            )
 
         # for bottom note
-        match_customer(self, fields[2])
+        match_customer(self, selected_record[2])
         adjust_table_height(self)
+
     except Exception as e:
-        print(e)
+        print("Error in populate_coa_fields:", e)
 
 
 global dr_num

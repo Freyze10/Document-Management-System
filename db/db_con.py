@@ -1130,13 +1130,26 @@ def get_dr_details(dr_no):
                     WHERE a.dr_no = b.dr_no AND a.dr_no=%s ORDER BY a.id DESC""",
         (dr_no,)
     )
-    record = cur.fetchone()  # only one row expected
+    records = cur.fetchall()  # ✅ fetch all rows
 
     cur.close()
     conn.close()
-    if record is None:
-        return ()  # or return None, depending on how you want to handle it
-    return record
+    return records or []
+
+
+def record_exists(dr_no, product_code):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT 1 FROM certificates_of_analysis WHERE delivery_receipt_number = %s AND color_code = %s LIMIT 1",
+        (dr_no, product_code)
+    )
+    exists = cur.fetchone() is not None
+
+    cur.close()
+    conn.close()
+    return exists
 
 
 def get_rrf_details(rrf_no):

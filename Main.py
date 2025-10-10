@@ -839,6 +839,8 @@ class MainWindow(QMainWindow):
         # Print after save and stay in the same entry page
         if print_after:
             returning_coa_id = db_con.save_certificate_of_analysis(coa_data, summary_of_analysis)
+            self.coa_customer_input.blockSignals(True)
+            self.color_code_input.blockSignals(True)
             self.open_coa_preview(returning_coa_id, "temp")
             self.coa_scroll_area.verticalScrollBar().setValue(0)
             table.load_coa_table(self)
@@ -881,8 +883,7 @@ class MainWindow(QMainWindow):
             self.coa_sub_tabs.setCurrentIndex(0)
 
     def save_as_new_clicked(self):
-        global current_coa_id
-        current_coa_id = None
+        coa_data_entry.current_coa_id = None
         self.coa_btn_submit_clicked()
 
     def coa_print_data_entry(self):
