@@ -158,12 +158,12 @@ class MultiDateInput(QWidget):
         """Return the selected dates as QDate objects."""
         return self.selected_dates
 
-if __name__ == "__main__":
-    app = QApplication([])
-    app.setStyleSheet(CALENDAR_STYLE)  # Apply global stylesheet
-    window = MultiDateInput()
-    window.setWindowTitle("Multi-Date Picker Example")
-    window.setStyleSheet("background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px;")
-    window.resize(400, 150)
-    window.show()
-    app.exec()
+# if __name__ == "__main__":
+#     app = QApplication([])
+#     app.setStyleSheet(CALENDAR_STYLE)  # Apply global stylesheet
+#     window = MultiDateInput()
+#     window.setWindowTitle("Multi-Date Picker Example")
+#     window.setStyleSheet("background-color: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px;")
+#     window.resize(400, 150)
+#     window.show()
+#     app.exec()
