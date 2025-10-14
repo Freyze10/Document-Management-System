@@ -297,6 +297,60 @@ def create_tables():
         );
     """)
 
+    # --- Step 1: Create Trigger Function (only if not exists) ---
+    cur.execute("""
+    DO $do$
+    BEGIN
+        IF NOT EXISTS (
+            SELECT 1 FROM pg_proc WHERE proname = 'before_insert_certificates_of_analysis'
+        ) THEN
+            EXECUTE $func$
+            CREATE FUNCTION before_insert_certificates_of_analysis()
+            RETURNS TRIGGER AS $body$
+            BEGIN
+                -- Check if a record already exists with the same key fields
+                IF EXISTS (
+                    SELECT 1 FROM certificates_of_analysis
+                    WHERE delivery_receipt_number = NEW.delivery_receipt_number
+                      AND delivery_date = NEW.delivery_date
+                      AND customer_name = NEW.customer_name
+                      AND color_code = NEW.color_code
+                      AND lot_number = NEW.lot_number
+                ) THEN
+                    -- Delete the existing record and its related analysis results
+                    DELETE FROM certificates_of_analysis
+                    WHERE delivery_receipt_number = NEW.delivery_receipt_number
+                      AND delivery_date = NEW.delivery_date
+                      AND customer_name = NEW.customer_name
+                      AND color_code = NEW.color_code
+                      AND lot_number = NEW.lot_number;
+                END IF;
+
+                RETURN NEW; -- Continue with the new insert
+            END;
+            $body$ LANGUAGE plpgsql;
+            $func$;
+        END IF;
+    END
+    $do$;
+    """)
+
+    # --- Step 2: Attach Trigger (only if not exists) ---
+    cur.execute("""
+    DO $do$
+    BEGIN
+        IF NOT EXISTS (
+            SELECT 1 FROM pg_trigger WHERE tgname = 'trg_before_insert_certificates_of_analysis'
+        ) THEN
+            CREATE TRIGGER trg_before_insert_certificates_of_analysis
+            BEFORE INSERT ON certificates_of_analysis
+            FOR EACH ROW
+            EXECUTE FUNCTION before_insert_certificates_of_analysis();
+        END IF;
+    END
+    $do$;
+    """)
+
     db_dr.create_delivery_legacy_tables()
 
     conn.commit()
