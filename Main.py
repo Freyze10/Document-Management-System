@@ -10,7 +10,7 @@ from print.print_msds import FileMSDS
 from print.print_coa import FileCOA
 from print.print_terumo import FileTerumo
 import Login
-from utils import abs_path, scroll_date, calendar_design, check_cx
+from utils import abs_path, scroll_date, calendar_design, check_cx, multiple_dates
 
 class MainWindow(QMainWindow):
     def __init__(self, username=None):
@@ -158,12 +158,7 @@ class MainWindow(QMainWindow):
         self.delivery_date_input.installEventFilter(self.wheel_filter)
 
         self.lot_number_input = QLineEdit()
-        self.production_date_input = QDateEdit()
-        self.production_date_input.setCalendarPopup(True)
-        self.production_date_input.setDate(QDate(QDate.currentDate().year(), QDate.currentDate().month(), 1))
-        self.production_date_input.calendarWidget().setMinimumSize(370, 230)
-        self.production_date_input.calendarWidget().setStyleSheet(calendar_design.STYLESHEET)
-        self.production_date_input.installEventFilter(self.wheel_filter)
+        self.production_date_input = multiple_dates.MultiDateInput()
 
         self.is_rrf = False
         self.delivery_receipt_label = QLabel("Delivery Receipt No:")

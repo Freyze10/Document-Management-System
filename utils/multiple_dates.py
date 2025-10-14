@@ -35,11 +35,7 @@ QCalendarWidget QMenu {
     background-color: #ffffff;
     border: 1px solid #dee2e6;
 }
-QLineEdit {
-    padding: 5px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-}
+
 """
 OKBUTTON = """
 QPushButton {
@@ -63,6 +59,8 @@ class CustomCalendarWidget(QCalendarWidget):
         super().__init__(parent)
         self.selected_dates = set()
         self.setGridVisible(True)
+        # Remove vertical header
+        self.setVerticalHeaderFormat(QCalendarWidget.VerticalHeaderFormat.NoVerticalHeader)
 
     def paintCell(self, painter: QPainter, rect: QRect, date: QDate):
         super().paintCell(painter, rect, date)
@@ -111,7 +109,7 @@ class MultiDateCalendar(QDialog):
         self.ok_button = QPushButton("OK")
         self.ok_button.setFont(QFont("Arial", 12, QFont.Weight.Bold))  # Explicit font settings
         self.ok_button.clicked.connect(self.accept)
-        self.ok_buttonsetStyleSheet(OKBUTTON)
+        self.ok_button.setStyleSheet(OKBUTTON)
 
         layout.addWidget(self.calendar)
         layout.addWidget(self.label)
@@ -132,20 +130,20 @@ class MultiDateInput(QWidget):
         super().__init__()
         layout = QVBoxLayout(self)
 
-        # Label and input layout
-        input_layout = QHBoxLayout()
-        label = QLabel("Production Dates:")
-        label.setStyleSheet("color: #343a40; font-size: 12px; padding: 5px;")
-        input_layout.addWidget(label)
-
+        # Remove the label and use only the QLineEdit
         self.multi_date_input = QLineEdit()
         self.multi_date_input.setPlaceholderText("Click to select multiple dates")
-        self.multi_date_input.setReadOnly(True)
-        self.multi_date_input.setStyleSheet("background-color: #fff9c4; padding: 5px; border: 1px solid #ced4da; border-radius: 4px;")
+        self.multi_date_input.setStyleSheet("""
+            font-size: 12px;
+            padding: 6px 8px;
+            border: 1px solid #ced4da; /* Lighter, more neutral border */
+            border-radius: 6px; /* Slightly less rounded for a crisp look */
+            background-color: #ffffff;
+            min-height: 28px; /* Consistent height */
+            selection-background-color: #aed6f1;
+        """)
         self.multi_date_input.mousePressEvent = self.open_calendar_dialog
-        input_layout.addWidget(self.multi_date_input)
-
-        layout.addLayout(input_layout)
+        layout.addWidget(self.multi_date_input)
 
         self.selected_dates = []
 
@@ -153,7 +151,7 @@ class MultiDateInput(QWidget):
         dialog = MultiDateCalendar(self, preselected_dates=self.selected_dates)
         if dialog.exec():
             self.selected_dates = dialog.get_selected_dates()
-            text = ", ".join(d.toString("yyyy-MM-dd") for d in self.selected_dates)
+            text = ", ".join(d.toString("dd/MM/yyyy") for d in self.selected_dates)
             self.multi_date_input.setText(text)
 
     def get_selected_dates(self):

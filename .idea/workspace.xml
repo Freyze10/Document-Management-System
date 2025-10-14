@@ -103,7 +103,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Python.multiple_dates">
+  <component name="RunManager" selected="Python.Login">
     <configuration name="Login" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="LAB-DMS" />
       <option name="ENV_FILES" value="" />
@@ -216,10 +216,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.multiple_dates" />
         <item itemvalue="Python.Login" />
-        <item itemvalue="Python.msds_data_entry" />
+        <item itemvalue="Python.multiple_dates" />
         <item itemvalue="Python.Main" />
+        <item itemvalue="Python.msds_data_entry" />
         <item itemvalue="Python.db_rrf" />
       </list>
     </recent_temporary>
@@ -256,7 +256,23 @@
       <option name="project" value="LOCAL" />
       <updated>1760402476991</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="created dialog mult date">
+      <option name="closed" value="true" />
+      <created>1760429032391</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1760429032391</updated>
+    </task>
+    <task id="LOCAL-00004" summary="created dialog mult date">
+      <option name="closed" value="true" />
+      <created>1760431484717</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1760431484717</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -285,7 +301,8 @@
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="modified" />
-    <option name="LAST_COMMIT_MESSAGE" value="modified" />
+    <MESSAGE value="created dialog mult date" />
+    <option name="LAST_COMMIT_MESSAGE" value="created dialog mult date" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -307,7 +324,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/utils/multiple_dates.py</url>
-          <line>162</line>
+          <line>160</line>
           <option name="timeStamp" value="15" />
         </line-breakpoint>
       </breakpoints>
