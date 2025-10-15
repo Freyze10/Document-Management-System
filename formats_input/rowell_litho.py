@@ -4,9 +4,10 @@ from PyQt6.QtCore import QDate, Qt, pyqtSignal, QThread
 from PyQt6.QtWidgets import (
     QLabel, QHBoxLayout, QHeaderView, QTableWidgetItem, QLineEdit,
     QAbstractItemView, QWidget, QVBoxLayout, QGroupBox, QGridLayout,
-    QTableWidget, QScrollArea, QDateEdit, QPushButton
+    QTableWidget, QScrollArea, QDateEdit, QPushButton, QCompleter
 )
 
+from alert import window_alert
 from db import db_dr, db_con
 from utils import abs_path, lot_format, multiple_dates  # Assuming utils is available with abs_path
 from utils.loading import LoadingDialog
@@ -170,6 +171,34 @@ class RowellWidget(QWidget):
         self.date_input = QDateEdit()
         self.date_input.setCalendarPopup(True)
         self.date_input.setDate(QDate.currentDate())
+        self.certified_by_lists = db_con.get_all_certified_by()
+        # Create QCompleter with the list
+        style_completer = """
+                    QListView {
+                        background-color: white;
+                        border: 1px solid gray;
+                        font-size: 12px;
+                        padding: 4px;
+                    }
+                    QListView::item {
+                        padding: 6px;
+                    }
+                    QListView::item:hover{
+                        background-color: lightgrey;
+                    }
+                    QListView::item:selected {
+                        background-color: #0078d7;  /* Windows blue */
+                        color: white;
+                    }
+                """
+        self.certified_completer = QCompleter(self.certified_by_lists)
+        self.certified_completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
+        self.certified_completer.setFilterMode(Qt.MatchFlag.MatchContains)
+        self.certified_completer.setCompletionMode(QCompleter.CompletionMode.PopupCompletion)
+        self.certified_completer.setCurrentRow(0)
+        self.certified_completer.popup().setStyleSheet(style_completer)
+        self.certified_by_name_input.setCompleter(self.certified_completer)
+
 
         # Row 0
         general_info_layout.addWidget(QLabel("Customer:"), 0, 0, Qt.AlignmentFlag.AlignRight)
@@ -459,6 +488,7 @@ class RowellWidget(QWidget):
         data = {
             'customer': self.customer_input.text(),
             'product_name': self.product_name_input.text(),
+            'delivery_receipt_no': self.delivery_receipt_input.text(),
             'code': self.code_input.text(),
             'lot_number': self.lot_number_input.text(),
             'quantity': self.quantity_input.text(),
@@ -470,8 +500,38 @@ class RowellWidget(QWidget):
         }
         properties_data = self.get_properties_table_data()
         # Process the data (you can implement your own logic here)
+
+        required_fields = {
+            "Customer Name": data['customer'],
+            "Color Code": data['code'],
+            "Product Name": data['product_name'],
+            "Manufacturing Date": data['manufacturing_date'],
+            "Lot Number": data['lot_number'],
+            "Delivery Receipt": data['delivery_receipt_no'],
+            "Certified By": data['certified_by'],
+            "Shelf Life": data['shelf_life']
+        }
+
+        # Check if any required field is empty
+        for field, value in required_fields.items():
+            if not value:  # empty string
+                window_alert.show_message(self, "Missing Input", f"Please fill in:  {field}", icon_type="warning")
+                return  # stop processing
+
+        # Check summary of analysis if no empty row
+        if not any(any(cell for cell in row) for row in properties_data.values()):
+            window_alert.show_message(self, "Missing Input", "Please fill in the Summary of Analysis table.",
+                                      icon_type="warning")
+            return
+
+            # Validate certified_by against the list from the database
+        if self.certified_by_name_input.text() not in self.certified_by_lists:
+            window_alert.show_message(self, "Invalid Input", f"Certified By: '{self.certified_by_name_input.text()}' is not in the list.",
+                                      icon_type="warning")
+            return
+
+
         print("Form submitted with data:", data)
-        print("Form table with data:", properties_data)
 
         # Optionally, you can add database operations here
         # db_con.insert_rowell_data(data)
