@@ -331,6 +331,7 @@ class MainWindow(QMainWindow):
         self.terumo_submit_btn = QPushButton("Submit")
         self.terumo_submit_btn.clicked.connect(self.terumo_submit_clicked)
         self.all_terumo_id = db_con.get_all_terumo_id()
+        self.all_packageworld_rowell_id = db_con.get_all_packageworld_rowell_id()
 
 
 
@@ -1201,6 +1202,11 @@ class MainWindow(QMainWindow):
                 terumo.load_coa_details(self, coa_id)
                 self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
                 self.coa_data_entry_sub_tabs.setCurrentIndex(1)
+            elif coa_id in self.all_packageworld_rowell_id:
+                rowell_litho.current_coa_id = coa_id
+                rowell_litho.RowellWidget.load_coa_details(RowellWidget, coa_id)
+                self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
+                self.coa_data_entry_sub_tabs.setCurrentIndex(2)
             else:
                 coa_data_entry.current_coa_id = coa_id
                 coa_data_entry.load_coa_details(self, coa_id, self.is_rrf)

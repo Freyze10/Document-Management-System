@@ -1127,6 +1127,22 @@ def get_coa_analysis_results(coa_id):
     return results
 
 
+def get_packageworld_rowell_properties(coa_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT parameter_name, new_delivery, standard, method_used 
+        FROM tbl_packageworld_and_rowell 
+        WHERE coa_id = %s;
+    """, (coa_id,))
+    results = cur.fetchall()
+
+    cur.close()
+    conn.close()
+    return results
+
+
 def get_single_coa_data_rrf(coa_id):
     conn = get_connection()
     cur = conn.cursor()
@@ -1404,6 +1420,18 @@ def get_all_terumo_id():
 
     cur.execute("SELECT coa_id FROM tbl_terumo;")
     records = cur.fetchall()  # only one row expected
+
+    cur.close()
+    conn.close()
+    return [row[0] for row in records]
+
+
+def get_all_packageworld_rowell_id():
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("SELECT DISTINCT coa_id FROM tbl_packageworld_and_rowell ORDER BY coa_id DESC;")
+    records = cur.fetchall()
 
     cur.close()
     conn.close()
