@@ -352,7 +352,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760497514033</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="added save function">
+      <option name="closed" value="true" />
+      <created>1760498349140</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1760498349140</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -391,7 +399,8 @@
     <MESSAGE value="added default value func" />
     <MESSAGE value="modified clear and defaults" />
     <MESSAGE value="added validation" />
-    <option name="LAST_COMMIT_MESSAGE" value="added validation" />
+    <MESSAGE value="added save function" />
+    <option name="LAST_COMMIT_MESSAGE" value="added save function" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -408,13 +417,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/db/db_con.py</url>
-          <line>361</line>
+          <line>372</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
           <line>372</line>
           <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/db/db_con.py</url>
+          <line>281</line>
+          <option name="timeStamp" value="23" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

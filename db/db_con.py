@@ -280,6 +280,17 @@ def create_tables():
         """)
 
     cur.execute("""
+            CREATE TABLE IF NOT EXISTS tbl_packageworld_and_rowell (
+                id SERIAL PRIMARY KEY,
+                coa_id INTEGER NOT NULL REFERENCES certificates_of_analysis(id) ON DELETE CASCADE,
+                parameter_name VARCHAR(255) NOT NULL,
+                new_delivery VARCHAR(100),
+                standard VARCHAR(100),
+                method_used VARCHAR(100)
+            );
+        """)
+
+    cur.execute("""
         CREATE TABLE IF NOT EXISTS tbl_user (
             id SERIAL PRIMARY KEY,
             username VARCHAR(128) NOT NULL,
