@@ -493,17 +493,17 @@ class RowellWidget(QWidget):
         """Handle submit button click"""
         # Collect data from fields
         data = {
-            'customer': self.customer_input.text(),
-            'product_name': self.product_name_input.text(),
-            'delivery_receipt_no': self.delivery_receipt_input.text(),
-            'code': self.code_input.text(),
+            'customer_name': self.customer_input.text(),
+            'color_code': self.code_input.text(),
             'lot_number': self.lot_number_input.text(),
-            'quantity': self.quantity_input.text(),
+            'delivery_receipt_number': self.delivery_receipt_input.text(),
+            'quantity_delivered': self.quantity_input.text(),
             'manufacturing_date': self.manufacturing_date_input.get_selected_dates(),
             'shelf_life': self.shelf_life_input.text(),
             'certified_by': self.certified_by_name_input.text(),
-            'position': self.position_input.text(),
-            'date': self.date_input.date().toString("yyyy-MM-dd")
+            'certification_date': self.date_input.date().toString("yyyy-MM-dd"),
+            'product_name': self.product_name_input.text(),
+            'position': self.position_input.text()
         }
         properties_data = self.get_properties_table_data()
         # Process the data (you can implement your own logic here)

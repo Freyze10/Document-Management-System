@@ -607,6 +607,69 @@ def save_terumo_coa(data, terumo):
             conn.close()
 
 
+def save_packageworld_rowell_coi(data, table):
+    conn = get_connection()
+    try:
+        cur = conn.cursor()
+
+        # Insert into certificates_of_analysis
+        cur.execute("""
+            INSERT INTO certificates_of_analysis (
+                customer_name, 
+                color_code, 
+                lot_number, 
+                delivery_receipt_number, 
+                quantity_delivered, 
+                production_date, 
+                certification_date, 
+                certified_by, 
+                shelf_life_coa,
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            RETURNING id;
+        """, (
+            data["customer_name"], data["color_code"], data["lot_number"],
+            data["delivery_receipt_number"], data["quantity_delivered"], data["manufacturing_date"],
+            data["certification_date"], data["certified_by"],
+            data["shelf_life"]
+        ))
+
+        coa_id = cur.fetchone()[0]
+        # insert production name and the position of qc analyst to the first row of the table
+
+        cur.execute("""
+            INSERT INTO tbl_packageworld_and_rowell (
+                coa_id, parameter_name, new_delivery
+            ) VALUES (%s, %s, %s)
+        """, (coa_id, data["product_name"], data["position"]))
+
+        # Insert analysis results
+        for idx, values in table.items():
+            parameter_name = values[0]
+            new_delivery = values[1]
+            standard = values[2]
+            method_used = values[3]
+
+            cur.execute("""
+                        INSERT INTO tbl_packageworld_and_rowell (
+                            coa_id, parameter_name, new_delivery, standard, method_used
+                        ) VALUES (%s, %s, %s, %s, %s)
+                    """, (coa_id, parameter_name, new_delivery, standard, method_used))
+        conn.commit()
+        cur.close()
+        conn.close()
+
+    except Exception as e:
+        if conn:
+            conn.rollback()
+        raise e
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
+
+
 def save_certificate_of_analysis_rrf(data, summary_of_analysis):
     conn = get_connection()
     try:
