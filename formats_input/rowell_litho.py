@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
 )
 
 from db import db_dr, db_con
-from utils import abs_path  # Assuming utils is available with abs_path
+from utils import abs_path, lot_format, multiple_dates  # Assuming utils is available with abs_path
 from utils.loading import LoadingDialog
 from utils.debounce import setup_finished_typing
 
@@ -16,6 +16,7 @@ class RowellWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.setup_ui()
+        self.default_values()
     def setup_ui(self):
         # Main container with scroll area
         main_layout = QVBoxLayout(self)
@@ -154,9 +155,7 @@ class RowellWidget(QWidget):
         self.code_input = QLineEdit()
         self.lot_number_input = QLineEdit()
         self.quantity_input = QLineEdit()
-        self.manufacturing_date_input = QDateEdit()
-        self.manufacturing_date_input.setCalendarPopup(True)
-        self.manufacturing_date_input.setDate(QDate.currentDate())
+        self.manufacturing_date_input = multiple_dates.MultiDateInput()
         self.shelf_life_input = QLineEdit()
         self.delivery_receipt_input = QLineEdit()
         self.delivery_receipt_timer = setup_finished_typing(
@@ -399,18 +398,34 @@ class RowellWidget(QWidget):
     def populate_data(self, dr_no):
         records = db_con.get_dr_details(dr_no)
 
-        self.customer_input.setText("Rowell Lithography & Metal Closure, Inc.")
-        self.product_name_input.setText("Riteseal 88 Non PVC Liner Compound Blue")
-        self.code_input.setText("BA17042E")
-        self.lot_number_input.setText("CMA-16261")
-        self.quantity_input.setText("50 Kg.")
-        self.manufacturing_date_input.setDate(QDate(2025, 3, 28))
-        self.shelf_life_input.setText(
-            "12 months from date of production *Shelf life is stated as a maximum from date of production when the product is stored in unbroken packaging.")
-        self.certified_by_name_input.setText("Linzy Jam Bautista")
-        self.position_input.setText("QC Analyst")
-        self.date_input.setDate(QDate(2025, 3, 29))
+        if not records:
+            # No data, clear fields
+            self.default_values()
+            self.code_input.clear()
+            self.lot_number_input.clear()
+            self.quantity_input.clear()
+            self.manufacturing_date_input.clear_value()
+            return
 
+        # Find the first record that is NOT yet in your database
+        selected_record = None
+        for record in records:
+            dr_no_val = record[0]
+            product_code_val = record[1]
+            if not db_con.record_exists(dr_no_val, product_code_val):
+                selected_record = record
+                break
+
+        # If all records exist, fall back to first one
+        if selected_record is None:
+            selected_record = records[0]
+
+        lot_no = lot_format.normalize(selected_record[5])
+
+        self.customer_input.setText(str(selected_record[2]))
+        self.code_input.setText(str(selected_record[1]))
+        self.lot_number_input.setText(lot_no)
+        self.quantity_input.setText(str(selected_record[6]))
 
     def get_properties_table_data(self):
         data = {}
@@ -432,20 +447,11 @@ class RowellWidget(QWidget):
     
     def clear_form(self):
         """Clear all input fields"""
-        self.customer_input.clear()
-        self.product_name_input.clear()
+        self.default_values()
         self.code_input.clear()
         self.lot_number_input.clear()
         self.quantity_input.clear()
-        self.manufacturing_date_input.setDate(QDate.currentDate())
-        self.shelf_life_input.clear()
-        self.certified_by_name_input.clear()
-        self.position_input.clear()
-        self.date_input.setDate(QDate.currentDate())
-
-        # Clear table
-        self.properties_table.clearContents()
-        self.properties_table.setRowCount(0)
+        self.manufacturing_date_input.clear_value()
 
     def on_submit_clicked(self):
         """Handle submit button click"""
@@ -456,7 +462,7 @@ class RowellWidget(QWidget):
             'code': self.code_input.text(),
             'lot_number': self.lot_number_input.text(),
             'quantity': self.quantity_input.text(),
-            'manufacturing_date': self.manufacturing_date_input.date().toString("yyyy-MM-dd"),
+            'manufacturing_date': self.manufacturing_date_input.get_selected_dates(),
             'shelf_life': self.shelf_life_input.text(),
             'certified_by': self.certified_by_name_input.text(),
             'position': self.position_input.text(),
