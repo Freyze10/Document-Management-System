@@ -9,9 +9,14 @@ from PyQt6.QtWidgets import (
 
 from alert import window_alert
 from db import db_dr, db_con
+from table import table
 from utils import abs_path, lot_format, multiple_dates  # Assuming utils is available with abs_path
 from utils.loading import LoadingDialog
 from utils.debounce import setup_finished_typing
+
+
+current_coa_id = None
+
 
 class RowellWidget(QWidget):
     def __init__(self):
@@ -24,9 +29,9 @@ class RowellWidget(QWidget):
         main_layout.setContentsMargins(0, 0, 0, 0)
 
         # Create scroll area
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setFrameShape(QScrollArea.Shape.NoFrame)
+        self.scroll_area = QScrollArea()
+        self.scroll_area.setWidgetResizable(True)
+        self.scroll_area.setFrameShape(QScrollArea.Shape.NoFrame)
 
         # Create the form widget that will be inside scroll area
         form_widget = QWidget()
@@ -316,8 +321,8 @@ class RowellWidget(QWidget):
         main_v_layout.addStretch(1)
 
         # Set the form widget to scroll area
-        scroll_area.setWidget(form_widget)
-        main_layout.addWidget(scroll_area)
+        self.scroll_area.setWidget(form_widget)
+        main_layout.addWidget(self.scroll_area)
 
     def create_properties_table(self):
         table = self.setup_table_widget()
@@ -476,6 +481,8 @@ class RowellWidget(QWidget):
     
     def clear_form(self):
         """Clear all input fields"""
+        global current_coa_id
+        current_coa_id = None
         self.default_values()
         self.code_input.clear()
         self.lot_number_input.clear()
@@ -530,11 +537,24 @@ class RowellWidget(QWidget):
                                       icon_type="warning")
             return
 
-
-        print("Form submitted with data:", data)
-
-        # Optionally, you can add database operations here
-        # db_con.insert_rowell_data(data)
+        try:
+            global current_coa_id
+            if current_coa_id is not None:  # Update existing COA
+                db_con.update_certificate_of_analysis_rrf(current_coa_id, data, properties_data)
+                window_alert.show_message(self, "Success", f"Certificate of Analysis updated successfully!",
+                                          icon_type="info")
+                current_coa_id = None
+            else:  # Insert new COA
+                db_con.save_certificate_of_analysis(data, properties_data)
+                window_alert.show_message(self, "Success", f"Certificate of Analysis saved successfully!",
+                                          icon_type="info")
+                current_coa_id = None
+        except Exception as e:
+            window_alert.show_message(self, "Database Error", str(e), icon_type="critical")
+        finally:
+            self.clear_form()
+            table.load_coa_table(self)
+            self.scroll_area.verticalScrollBar().setValue(0)
 
     def run_sync_script(self):
         # Show loading dialog

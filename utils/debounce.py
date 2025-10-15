@@ -13,3 +13,4 @@ def setup_finished_typing(self, line_edit, callback, delay=800):
 
     # Optionally return the timer in case you want to manipulate it later
     return timer
+
