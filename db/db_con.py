@@ -1134,7 +1134,8 @@ def get_packageworld_rowell_properties(coa_id):
     cur.execute("""
         SELECT parameter_name, new_delivery, standard, method_used 
         FROM tbl_packageworld_and_rowell 
-        WHERE coa_id = %s;
+        WHERE coa_id = %s
+        ORDER BY id ASC;
     """, (coa_id,))
     results = cur.fetchall()
 

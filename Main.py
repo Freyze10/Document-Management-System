@@ -1197,22 +1197,25 @@ class MainWindow(QMainWindow):
             else:
                 self.open_coa_preview(coa_id, display_text)
         if column == 2:  # edit column
-            if coa_id in self.all_terumo_id:
-                terumo.current_coa_id = coa_id  # Store the selected COA ID
-                terumo.load_coa_details(self, coa_id)
-                self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
-                self.coa_data_entry_sub_tabs.setCurrentIndex(1)
-            elif coa_id in self.all_packageworld_rowell_id:
-                rowell_litho.current_coa_id = coa_id
-                rowell_litho.RowellWidget.load_coa_details(RowellWidget, coa_id)
-                self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
-                self.coa_data_entry_sub_tabs.setCurrentIndex(2)
-            else:
-                coa_data_entry.current_coa_id = coa_id
-                coa_data_entry.load_coa_details(self, coa_id, self.is_rrf)
-                # Switch to the COA tab
-                self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
-                self.coa_data_entry_sub_tabs.setCurrentIndex(0)
+            try:
+                if coa_id in self.all_terumo_id:
+                    terumo.current_coa_id = coa_id  # Store the selected COA ID
+                    terumo.load_coa_details(self, coa_id)
+                    self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
+                    self.coa_data_entry_sub_tabs.setCurrentIndex(1)
+                elif coa_id in self.all_packageworld_rowell_id:
+                    rowell_litho.current_coa_id = coa_id
+                    self.coa_rowell_tab.load_coa_details(coa_id)
+                    self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
+                    self.coa_data_entry_sub_tabs.setCurrentIndex(2)
+                else:
+                    coa_data_entry.current_coa_id = coa_id
+                    coa_data_entry.load_coa_details(self, coa_id, self.is_rrf)
+                    # Switch to the COA tab
+                    self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
+                    self.coa_data_entry_sub_tabs.setCurrentIndex(0)
+            except Exception as e:
+                print(f"coa cell clicked {e}")
         if column == 3:  # delete column
             msg = " - RRF" if self.is_rrf else ""
             confirm = window_alert.show_message(self, "Confirm Deletion",

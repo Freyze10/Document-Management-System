@@ -23,6 +23,7 @@ class RowellWidget(QWidget):
         super().__init__()
         self.setup_ui()
         self.default_values()
+        print('1')
     def setup_ui(self):
         # Main container with scroll area
         main_layout = QVBoxLayout(self)
@@ -327,47 +328,6 @@ class RowellWidget(QWidget):
         self.scroll_area.setWidget(form_widget)
         main_layout.addWidget(self.scroll_area)
 
-    def load_coa_details(self, coa_id):
-        self.delivery_receipt_input.blockSignals(True)
-        field_result = db_con.get_single_coa_data(coa_id)
-        properties_table_result = db_con.get_packageworld_rowell_properties(coa_id)
-
-        # === Populate inputs ===
-        if field_result:
-            self.customer_input.setText(field_result[1])
-            self.code_input.setText(field_result[2])
-            self.lot_number_input.setText(lot_format.normalize(field_result[3]))
-            self.delivery_receipt_input.setText(field_result[5])
-            self.quantity_input.setText(str(field_result[6]))
-            if field_result[7]:
-                self.delivery_date.setDate(
-                    QDate(field_result[7].year, field_result[7].month, field_result[7].day)
-                )
-            if field_result[8]:
-                self.manufacturing_date_input.display_value(field_result[8])
-            self.shelf_life_input.setText(field_result[12])
-            self.certified_by_name_input.setText(field_result[10])
-            if field_result[9]:
-                self.date_input.setDate(
-                    QDate(field_result[9].year, field_result[9].month, field_result[9].day)
-                )
-            self.product_name_input.setText(field_result[11])
-            self.position_input.setText(field_result[12])
-
-        # === Populate properties table ===
-        self.properties_table.setRowCount(0)
-        self.properties_table.setRowCount(len(properties_table_result) - 1)
-        for row_idx, (property_name, delivery, standard, method) in enumerate(properties_table_result[1:]):
-            self.properties_table.setItem(row_idx, 0, QTableWidgetItem(property_name))
-            self.properties_table.setItem(row_idx, 1, QTableWidgetItem(delivery))
-            self.properties_table.setItem(row_idx, 2, QTableWidgetItem(standard))
-            self.properties_table.setItem(row_idx, 3, QTableWidgetItem(method))
-
-        self.adjust_table_height()
-
-
-        self.delivery_receipt_input.blockSignals(False)
-
     def create_properties_table(self):
         table = self.setup_table_widget()
         table.setColumnCount(4)
@@ -472,6 +432,7 @@ class RowellWidget(QWidget):
             self.properties_table.setItem(row_idx, 3, QTableWidgetItem(method))
 
         self.adjust_table_height()
+        print('defaulr')
 
     def populate_data(self, dr_no):
         records = db_con.get_dr_details(dr_no)
@@ -508,6 +469,7 @@ class RowellWidget(QWidget):
             self.delivery_date.setDate(
                 QDate(selected_record[3].year, selected_record[3].month, selected_record[3].day)
             )
+        print('dr')
 
     def get_properties_table_data(self):
         data = {}
@@ -536,6 +498,7 @@ class RowellWidget(QWidget):
         self.lot_number_input.clear()
         self.quantity_input.clear()
         self.manufacturing_date_input.clear_value()
+        print('clear')
 
     def on_submit_clicked(self):
         """Handle submit button click"""
@@ -603,6 +566,50 @@ class RowellWidget(QWidget):
         except Exception as e:
             window_alert.show_message(self, "Database Error", str(e), icon_type="critical")
 
+    def load_coa_details(self, coa_id):
+
+        try:
+            self.delivery_receipt_input.blockSignals(True)
+            field_result = db_con.get_single_coa_data(coa_id)
+            properties_table_result = db_con.get_packageworld_rowell_properties(coa_id)
+
+            # === Populate inputs ===
+            if field_result:
+                self.customer_input.setText(str(field_result[1]))
+                self.code_input.setText(str(field_result[2]))
+                self.lot_number_input.setText(str(lot_format.normalize(field_result[3])))
+                self.delivery_receipt_input.setText(str(field_result[5]))
+                self.quantity_input.setText(str(field_result[6]))
+                if field_result[7]:
+                    self.delivery_date.setDate(
+                        QDate(field_result[7].year, field_result[7].month, field_result[7].day)
+                    )
+                if field_result[8]:
+                    self.manufacturing_date_input.display_value(str(field_result[8]))
+                self.shelf_life_input.setText(str(field_result[12]))
+                self.certified_by_name_input.setText(str(field_result[10]))
+                if field_result[9]:
+                    self.date_input.setDate(
+                        QDate(field_result[9].year, field_result[9].month, field_result[9].day)
+                    )
+            print(properties_table_result)
+            self.product_name_input.setText(str(properties_table_result[0][0]))
+            self.position_input.setText(str(properties_table_result[0][1]))
+
+            # === Populate properties table ===
+            self.properties_table.setRowCount(0)
+            self.properties_table.setRowCount(len(properties_table_result) - 1)
+            for row_idx, (property_name, delivery, standard, method) in enumerate(properties_table_result[1:]):
+                self.properties_table.setItem(row_idx, 0, QTableWidgetItem(property_name))
+                self.properties_table.setItem(row_idx, 1, QTableWidgetItem(delivery))
+                self.properties_table.setItem(row_idx, 2, QTableWidgetItem(standard))
+                self.properties_table.setItem(row_idx, 3, QTableWidgetItem(method))
+
+            self.adjust_table_height()
+            self.delivery_receipt_input.blockSignals(False)
+
+        except Exception as e:
+            print(f"Load Rowell COI error: {e}")
 
     def run_sync_script(self):
         # Show loading dialog
