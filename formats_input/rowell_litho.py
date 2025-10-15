@@ -23,7 +23,7 @@ class RowellWidget(QWidget):
         super().__init__()
         self.setup_ui()
         self.default_values()
-        print('1')
+
     def setup_ui(self):
         # Main container with scroll area
         main_layout = QVBoxLayout(self)
@@ -304,8 +304,8 @@ class RowellWidget(QWidget):
         self.btn_submit.clicked.connect(self.on_submit_clicked)
         submit_button_row.addWidget(self.btn_submit)
 
-        self.btn_clear = QPushButton("Clear")
-        self.btn_clear.setStyleSheet("""
+        self.btn_print = QPushButton("Print")
+        self.btn_print.setStyleSheet("""
             QPushButton {
                 background-color: #6c757d;
             }
@@ -316,8 +316,8 @@ class RowellWidget(QWidget):
                 background-color: #545b62;
             }
         """)
-        self.btn_clear.clicked.connect(self.clear_form)
-        submit_button_row.addWidget(self.btn_clear)
+        # self.btn_print.clicked.connect(self.print)
+        submit_button_row.addWidget(self.btn_print)
 
         submit_button_row.addStretch()
         main_v_layout.addLayout(submit_button_row)
@@ -432,7 +432,6 @@ class RowellWidget(QWidget):
             self.properties_table.setItem(row_idx, 3, QTableWidgetItem(method))
 
         self.adjust_table_height()
-        print('defaulr')
 
     def populate_data(self, dr_no):
         records = db_con.get_dr_details(dr_no)
@@ -469,7 +468,6 @@ class RowellWidget(QWidget):
             self.delivery_date.setDate(
                 QDate(selected_record[3].year, selected_record[3].month, selected_record[3].day)
             )
-        print('dr')
 
     def get_properties_table_data(self):
         data = {}
@@ -498,7 +496,6 @@ class RowellWidget(QWidget):
         self.lot_number_input.clear()
         self.quantity_input.clear()
         self.manufacturing_date_input.clear_value()
-        print('clear')
 
     def on_submit_clicked(self):
         """Handle submit button click"""
@@ -592,7 +589,7 @@ class RowellWidget(QWidget):
                     self.date_input.setDate(
                         QDate(field_result[9].year, field_result[9].month, field_result[9].day)
                     )
-            print(properties_table_result)
+                    
             self.product_name_input.setText(str(properties_table_result[0][0]))
             self.position_input.setText(str(properties_table_result[0][1]))
 
