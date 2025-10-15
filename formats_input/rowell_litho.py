@@ -492,51 +492,53 @@ class RowellWidget(QWidget):
     def on_submit_clicked(self):
         """Handle submit button click"""
         # Collect data from fields
-        data = {
-            'customer_name': self.customer_input.text(),
-            'color_code': self.code_input.text(),
-            'lot_number': self.lot_number_input.text(),
-            'delivery_receipt_number': self.delivery_receipt_input.text(),
-            'quantity_delivered': self.quantity_input.text(),
-            'manufacturing_date': self.manufacturing_date_input.get_selected_dates(),
-            'shelf_life': self.shelf_life_input.text(),
-            'certified_by': self.certified_by_name_input.text(),
-            'certification_date': self.date_input.date().toString("yyyy-MM-dd"),
-            'product_name': self.product_name_input.text(),
-            'position': self.position_input.text()
-        }
-        properties_data = self.get_properties_table_data()
-        # Process the data (you can implement your own logic here)
+        try:
+            data = {
+                'customer_name': self.customer_input.text(),
+                'color_code': self.code_input.text(),
+                'lot_number': self.lot_number_input.text(),
+                'delivery_receipt_number': self.delivery_receipt_input.text(),
+                'quantity_delivered': self.quantity_input.text(),
+                'manufacturing_date': self.manufacturing_date_input.get_selected_dates(),
+                'shelf_life': self.shelf_life_input.text(),
+                'certified_by': self.certified_by_name_input.text(),
+                'certification_date': self.date_input.date().toString("yyyy-MM-dd"),
+                'product_name': self.product_name_input.text(),
+                'position': self.position_input.text()
+            }
+            properties_data = self.get_properties_table_data()
+            # Process the data (you can implement your own logic here)
 
-        required_fields = {
-            "Customer Name": data['customer'],
-            "Color Code": data['code'],
-            "Product Name": data['product_name'],
-            "Manufacturing Date": data['manufacturing_date'],
-            "Lot Number": data['lot_number'],
-            "Delivery Receipt": data['delivery_receipt_no'],
-            "Certified By": data['certified_by'],
-            "Shelf Life": data['shelf_life']
-        }
+            required_fields = {
+                "Customer Name": data['customer'],
+                "Color Code": data['code'],
+                "Product Name": data['product_name'],
+                "Manufacturing Date": data['manufacturing_date'],
+                "Lot Number": data['lot_number'],
+                "Delivery Receipt": data['delivery_receipt_no'],
+                "Certified By": data['certified_by'],
+                "Shelf Life": data['shelf_life']
+            }
 
-        # Check if any required field is empty
-        for field, value in required_fields.items():
-            if not value:  # empty string
-                window_alert.show_message(self, "Missing Input", f"Please fill in:  {field}", icon_type="warning")
-                return  # stop processing
+            # Check if any required field is empty
+            for field, value in required_fields.items():
+                if not value:  # empty string
+                    window_alert.show_message(self, "Missing Input", f"Please fill in:  {field}", icon_type="warning")
+                    return  # stop processing
 
-        # Check summary of analysis if no empty row
-        if not any(any(cell for cell in row) for row in properties_data.values()):
-            window_alert.show_message(self, "Missing Input", "Please fill in the Summary of Analysis table.",
-                                      icon_type="warning")
-            return
+            # Check summary of analysis if no empty row
+            if not any(any(cell for cell in row) for row in properties_data.values()):
+                window_alert.show_message(self, "Missing Input", "Please fill in the Summary of Analysis table.",
+                                          icon_type="warning")
+                return
 
-            # Validate certified_by against the list from the database
-        if self.certified_by_name_input.text() not in self.certified_by_lists:
-            window_alert.show_message(self, "Invalid Input", f"Certified By: '{self.certified_by_name_input.text()}' is not in the list.",
-                                      icon_type="warning")
-            return
-
+                # Validate certified_by against the list from the database
+            if self.certified_by_name_input.text() not in self.certified_by_lists:
+                window_alert.show_message(self, "Invalid Input", f"Certified By: '{self.certified_by_name_input.text()}' is not in the list.",
+                                          icon_type="warning")
+                return
+        except Exception as e:
+            print(e)
         try:
             global current_coa_id
             if current_coa_id is not None:  # Update existing COA
@@ -545,7 +547,7 @@ class RowellWidget(QWidget):
                                           icon_type="info")
                 current_coa_id = None
             else:  # Insert new COA
-                db_con.save_certificate_of_analysis(data, properties_data)
+                db_con.save_packageworld_rowell_coi(data, properties_data)
                 window_alert.show_message(self, "Success", f"Certificate of Analysis saved successfully!",
                                           icon_type="info")
                 current_coa_id = None

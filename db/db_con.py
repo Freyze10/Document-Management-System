@@ -623,7 +623,7 @@ def save_packageworld_rowell_coi(data, table):
                 production_date, 
                 certification_date, 
                 certified_by, 
-                shelf_life_coa,
+                shelf_life_coa
             )
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id;
