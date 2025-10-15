@@ -288,7 +288,23 @@
       <option name="project" value="LOCAL" />
       <updated>1760432968330</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="added multiple selection func">
+      <option name="closed" value="true" />
+      <created>1760489768644</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1760489768644</updated>
+    </task>
+    <task id="LOCAL-00008" summary="added widget rowell">
+      <option name="closed" value="true" />
+      <created>1760492145577</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1760492145577</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -320,7 +336,9 @@
     <MESSAGE value="created dialog mult date" />
     <MESSAGE value="fixed add multiple date" />
     <MESSAGE value="removed exec debug" />
-    <option name="LAST_COMMIT_MESSAGE" value="removed exec debug" />
+    <MESSAGE value="added multiple selection func" />
+    <MESSAGE value="added widget rowell" />
+    <option name="LAST_COMMIT_MESSAGE" value="added widget rowell" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -339,6 +357,11 @@
           <url>file://$PROJECT_DIR$/db/db_con.py</url>
           <line>361</line>
           <option name="timeStamp" value="14" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Main.py</url>
+          <line>365</line>
+          <option name="timeStamp" value="19" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

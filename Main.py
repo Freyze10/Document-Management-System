@@ -10,7 +10,9 @@ from print.print_msds import FileMSDS
 from print.print_coa import FileCOA
 from print.print_terumo import FileTerumo
 import Login
-from utils import abs_path, scroll_date, calendar_design, check_cx, multiple_dates
+from utils import abs_path, scroll_date, calendar_design, check_cx, multiple_dates, loading
+from formats_input import rowell_litho
+
 
 class MainWindow(QMainWindow):
     def __init__(self, username=None):
@@ -358,8 +360,12 @@ class MainWindow(QMainWindow):
         self.coa_data_entry_sub_tabs = QTabWidget()
         self.coa_default_tab = QWidget()
         self.coa_terumo_tab = QWidget()
+        self.coa_rowell_tab = rowell_litho.RowellWidget()
+
         self.coa_data_entry_sub_tabs.addTab(self.coa_default_tab, "COA")
         self.coa_data_entry_sub_tabs.addTab(self.coa_terumo_tab, "Terumo (COA)")
+        self.coa_data_entry_sub_tabs.addTab(self.coa_rowell_tab, "Rowell (COI)")
+
         self.coa_data_entry_layout = QVBoxLayout(self.coa_data_entry_tab)
         self.coa_data_entry_layout.addWidget(self.coa_data_entry_sub_tabs)
 
@@ -1317,7 +1323,7 @@ class MainWindow(QMainWindow):
 
     def run_sync_script(self):
         # Show loading dialog
-        self.loading = LoadingDialog(self)
+        self.loading = loading.LoadingDialog(self)
         self.loading.show()
 
         # Run in a worker thread instead of subprocess
@@ -1335,7 +1341,7 @@ class MainWindow(QMainWindow):
 
     def run_sync_script_rrf(self):
         # Show loading dialog
-        self.rrf_loading_dialog = LoadingDialog(self)
+        self.rrf_loading_dialog = loading.LoadingDialog(self)
         self.rrf_loading_dialog.show()
 
         # Run in a worker thread
@@ -1497,21 +1503,3 @@ class UserWidget(QWidget):
         layout.addWidget(self.logout_button, alignment=Qt.AlignmentFlag.AlignVCenter)
         layout.addStretch()  # Pushes content to the left (or right if widget is set to the right)
 
-
-class LoadingDialog(QDialog):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.setWindowTitle("Syncing...")
-        self.setModal(True)  # blocks interaction with main window
-        self.setWindowFlag(Qt.WindowType.WindowCloseButtonHint, False)  # disable close button
-        self.setFixedSize(200, 100)
-
-        layout = QVBoxLayout(self)
-        self.label = QLabel("Please wait, syncing...")
-        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.label)
-
-        self.progress = QProgressBar()
-        self.progress.setRange(0, 0)  # Indeterminate (infinite loading)
-        self.progress.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.progress)
