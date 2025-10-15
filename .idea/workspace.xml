@@ -304,7 +304,23 @@
       <option name="project" value="LOCAL" />
       <updated>1760492145577</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="added sync dr and position">
+      <option name="closed" value="true" />
+      <created>1760494537860</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1760494537860</updated>
+    </task>
+    <task id="LOCAL-00010" summary="added sync dr and position">
+      <option name="closed" value="true" />
+      <created>1760494544597</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1760494544597</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -338,7 +354,8 @@
     <MESSAGE value="removed exec debug" />
     <MESSAGE value="added multiple selection func" />
     <MESSAGE value="added widget rowell" />
-    <option name="LAST_COMMIT_MESSAGE" value="added widget rowell" />
+    <MESSAGE value="added sync dr and position" />
+    <option name="LAST_COMMIT_MESSAGE" value="added sync dr and position" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -360,7 +377,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>365</line>
+          <line>372</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
       </breakpoints>

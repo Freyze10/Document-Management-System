@@ -7,15 +7,15 @@ from PyQt6.QtWidgets import (
     QTableWidget, QScrollArea, QDateEdit, QPushButton
 )
 
-from db import db_dr
+from db import db_dr, db_con
 from utils import abs_path  # Assuming utils is available with abs_path
 from utils.loading import LoadingDialog
+from utils.debounce import setup_finished_typing
 
 class RowellWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.setup_ui()
-        self.populate_data()
     def setup_ui(self):
         # Main container with scroll area
         main_layout = QVBoxLayout(self)
@@ -159,6 +159,18 @@ class RowellWidget(QWidget):
         self.manufacturing_date_input.setDate(QDate.currentDate())
         self.shelf_life_input = QLineEdit()
         self.delivery_receipt_input = QLineEdit()
+        self.delivery_receipt_timer = setup_finished_typing(
+            self,
+            self.delivery_receipt_input,
+            lambda: self.populate_data(self.delivery_receipt_input.text()),
+            delay=1200
+        )
+        # Initialize certification fields
+        self.certified_by_name_input = QLineEdit()
+        self.position_input = QLineEdit()
+        self.date_input = QDateEdit()
+        self.date_input.setCalendarPopup(True)
+        self.date_input.setDate(QDate.currentDate())
 
         # Row 0
         general_info_layout.addWidget(QLabel("Customer:"), 0, 0, Qt.AlignmentFlag.AlignRight)
@@ -232,13 +244,6 @@ class RowellWidget(QWidget):
         certification_layout.setHorizontalSpacing(30)
         certification_layout.setVerticalSpacing(15)
         certification_layout.setContentsMargins(20, 25, 20, 20)
-
-        # Initialize certification fields
-        self.certified_by_name_input = QLineEdit()
-        self.position_input = QLineEdit()
-        self.date_input = QDateEdit()
-        self.date_input.setCalendarPopup(True)
-        self.date_input.setDate(QDate.currentDate())
 
         # Certified by name
         certification_layout.addWidget(QLabel("Certified by:"), 0, 0, Qt.AlignmentFlag.AlignRight)
@@ -365,21 +370,14 @@ class RowellWidget(QWidget):
         table_border_thickness = 2
         self.properties_table.setFixedHeight(row_height_total + header_height + table_border_thickness + 4)
 
-    def populate_data(self):
-        """Populate with sample data from PDF"""
+    def default_values(self):
         self.customer_input.setText("Rowell Lithography & Metal Closure, Inc.")
         self.product_name_input.setText("Riteseal 88 Non PVC Liner Compound Blue")
-        self.code_input.setText("BA17042E")
-        self.lot_number_input.setText("CMA-16261")
-        self.quantity_input.setText("50 Kg.")
-        self.manufacturing_date_input.setDate(QDate(2025, 3, 28))
         self.shelf_life_input.setText(
             "12 months from date of production *Shelf life is stated as a maximum from date of production when the product is stored in unbroken packaging.")
         self.certified_by_name_input.setText("Linzy Jam Bautista")
         self.position_input.setText("QC Analyst")
-        self.date_input.setDate(QDate(2025, 3, 29))
 
-        # Populate tables
         properties_data = [
             ("Color", "Blue", "Blue", "MBPI"),
             ("Specific Gravity", "1.00", "1.00 ± 0.20", "MBPI"),
@@ -398,6 +396,40 @@ class RowellWidget(QWidget):
 
         self.adjust_table_height()
 
+    def populate_data(self, dr_no):
+        records = db_con.get_dr_details(dr_no)
+
+        self.customer_input.setText("Rowell Lithography & Metal Closure, Inc.")
+        self.product_name_input.setText("Riteseal 88 Non PVC Liner Compound Blue")
+        self.code_input.setText("BA17042E")
+        self.lot_number_input.setText("CMA-16261")
+        self.quantity_input.setText("50 Kg.")
+        self.manufacturing_date_input.setDate(QDate(2025, 3, 28))
+        self.shelf_life_input.setText(
+            "12 months from date of production *Shelf life is stated as a maximum from date of production when the product is stored in unbroken packaging.")
+        self.certified_by_name_input.setText("Linzy Jam Bautista")
+        self.position_input.setText("QC Analyst")
+        self.date_input.setDate(QDate(2025, 3, 29))
+
+
+    def get_properties_table_data(self):
+        data = {}
+        row_count = self.properties_table.rowCount()
+        col_count = self.properties_table.columnCount()
+
+        for row in range(row_count):
+            # Get values in that row
+            row_values = []
+            for col in range(col_count):
+                cell_item = self.properties_table.item(row, col)
+                value = cell_item.text() if cell_item else ""
+                row_values.append(value)
+
+            # Store row header with its values
+            data[row] = row_values
+
+        return data
+    
     def clear_form(self):
         """Clear all input fields"""
         self.customer_input.clear()
@@ -430,9 +462,10 @@ class RowellWidget(QWidget):
             'position': self.position_input.text(),
             'date': self.date_input.date().toString("yyyy-MM-dd")
         }
-
+        properties_data = self.get_properties_table_data()
         # Process the data (you can implement your own logic here)
         print("Form submitted with data:", data)
+        print("Form table with data:", properties_data)
 
         # Optionally, you can add database operations here
         # db_con.insert_rowell_data(data)

@@ -11,6 +11,7 @@ from print.print_coa import FileCOA
 from print.print_terumo import FileTerumo
 import Login
 from utils import abs_path, scroll_date, calendar_design, check_cx, multiple_dates, loading
+from utils.debounce import setup_finished_typing
 from formats_input import rowell_litho
 
 
@@ -40,21 +41,21 @@ class MainWindow(QMainWindow):
         tel_regex = QRegularExpression(r'^(\d{7,12}|\(\d{1,4}\)\s?\d{6,10})$')
         tel_validator = QRegularExpressionValidator(tel_regex)
         self.tel_label_input.setValidator(tel_validator)
-        self.tel_label_timer = self.setup_finished_typing(
-            self.tel_label_input, self.check_tel_number, delay=3000
+        self.tel_label_timer = setup_finished_typing(
+            self, self.tel_label_input, self.check_tel_number, delay=3000
         )
 
         self.facsimile_label_input = QLineEdit()
         self.facsimile_label_input.setValidator(tel_validator)
-        self.facsimile_label_timer = self.setup_finished_typing(
-            self.facsimile_label_input, self.check_tel_number, delay=3000
+        self.facsimile_label_timer = setup_finished_typing(
+            self, self.facsimile_label_input, self.check_tel_number, delay=3000
         )
         self.email_label_input = QLineEdit()
         email_regex = QRegularExpression(r'^[\w\.-]+@[\w\.-]+\.\w{2,4}$')
         email_validator = QRegularExpressionValidator(email_regex)
         self.email_label_input.setValidator(email_validator)
-        self.email_label_timer = self.setup_finished_typing(
-            self.email_label_input, self.check_email, delay=3000
+        self.email_label_timer = setup_finished_typing(
+            self, self.email_label_input, self.check_email, delay=3000
         )
 
         #Section2
@@ -138,13 +139,15 @@ class MainWindow(QMainWindow):
         self.summary_analysis_table = QTableWidget()
         #inputs variable
         self.coa_customer_input = QLineEdit()
-        self.coa_customer_timer = self.setup_finished_typing(
+        self.coa_customer_timer = setup_finished_typing(
+            self,
             self.coa_customer_input,
             lambda: check_cx.match_customer(self, self.coa_customer_input.text()),
             delay=700
         )
         self.color_code_input = QLineEdit()
-        self.color_code_timer = self.setup_finished_typing(
+        self.color_code_timer = setup_finished_typing(
+            self,
             self.color_code_input,
             lambda: coa_data_entry.populate_coa_summary(self),
             delay=1000
@@ -192,7 +195,8 @@ class MainWindow(QMainWindow):
         self.delivery_receipt_input = QLineEdit()
         self.dr_completer.popup().setStyleSheet(style_completer)
         self.delivery_receipt_input.setCompleter(self.dr_completer)
-        self.delivery_receipt_timer = self.setup_finished_typing(
+        self.delivery_receipt_timer = setup_finished_typing(
+            self,
             self.delivery_receipt_input,
             lambda: coa_data_entry.populate_coa_fields(self, self.delivery_receipt_input.text()),
             delay=1200
@@ -263,7 +267,8 @@ class MainWindow(QMainWindow):
         # TERUMO COA inputs
         self.terumo_delivery_receipt = QLineEdit()
         self.terumo_delivery_receipt.setCompleter(self.dr_completer)
-        self.terumo_delivery_receipt_timer = self.setup_finished_typing(
+        self.terumo_delivery_receipt_timer = setup_finished_typing(
+            self,
             self.terumo_delivery_receipt,
             lambda: terumo.populate_terumo_coa_fields(self, self.terumo_delivery_receipt.text()),
             delay=1200
@@ -271,13 +276,15 @@ class MainWindow(QMainWindow):
         self.terumo_customer_input = QLineEdit()
         self.terumo_item_code = QLineEdit()
         self.terumo_item_description = QLineEdit()
-        self.terumo_item_decription_timer = self.setup_finished_typing(
+        self.terumo_item_decription_timer = setup_finished_typing(
+            self,
             self.terumo_item_description,
             lambda: terumo.populate_item_code(self, self.terumo_item_description.text()),
             delay=1200
         )
         self.terumo_lot_number = QLineEdit()
-        self.terumo_lot_timer = self.setup_finished_typing(
+        self.terumo_lot_timer = setup_finished_typing(
+            self,
             self.terumo_lot_number,
             lambda: terumo.seperate_lots(self, self.terumo_lot_number.text()),
             delay=1200
@@ -623,7 +630,8 @@ class MainWindow(QMainWindow):
         self.msds_records_table.cellEntered.connect(self.on_cell_hover)
         self.msds_records_table.cellClicked.connect(self.msds_cell_clicked)
         # connect search function
-        self.msds_label_timer = self.setup_finished_typing(
+        self.msds_label_timer = setup_finished_typing(
+            self,
             self.msds_search_bar,
             lambda: table.search_msds(self, self.msds_search_bar.text()),
             delay=600
@@ -632,7 +640,8 @@ class MainWindow(QMainWindow):
         self.coa_records_table.setMouseTracking(True)
         self.coa_records_table.cellEntered.connect(self.on_cell_hover)
         self.coa_records_table.cellClicked.connect(self.coa_cell_clicked)
-        self.coa_label_timer = self.setup_finished_typing(
+        self.coa_label_timer = setup_finished_typing(
+            self,
             self.coa_search_bar,
             lambda: table.search_coa(self, self.coa_search_bar.text()),
             delay=600
@@ -1244,18 +1253,6 @@ class MainWindow(QMainWindow):
         except Exception as e:
             window_alert.show_message(self, "Unexpected Error", f"An error occurred: {str(e)}", icon_type="critical")
 
-    def setup_finished_typing(self, line_edit, callback, delay=800):
-        timer = QTimer()
-        timer.setSingleShot(True)
-
-        # Connect the timer timeout to the callback
-        timer.timeout.connect(callback)
-
-        # Restart timer on every text change
-        line_edit.textChanged.connect(lambda: timer.start(delay))
-
-        # Optionally return the timer in case you want to manipulate it later
-        return timer
 
     def check_email(self):
         text = self.email_label_input.text()
