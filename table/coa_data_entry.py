@@ -35,7 +35,7 @@ def load_coa_details(self, coa_id, is_rrf):
     if field_result[7]:
         self.delivery_date_input.setDate(QDate(field_result[7].year, field_result[7].month, field_result[7].day))
     if field_result[8]:
-        self.production_date_input.setDate(QDate(field_result[8].year, field_result[8].month, field_result[8].day))
+        self.production_date_input.display_value(str(field_result[8]))
     if field_result[9]:
         self.creation_date_input.setDate(QDate(field_result[9].year, field_result[9].month, field_result[9].day))
 
@@ -505,7 +505,7 @@ def clear_coa_form(self):
         self.date_evaluated_input.clear()
 
         self.delivery_date_input.setDate(QDate.currentDate())
-        self.production_date_input.setDate(QDate.currentDate())
+        self.production_date_input.clear_value()
         self.creation_date_input.setDate(QDate.currentDate())
 
         self.summary_analysis_table.clearContents()
@@ -610,7 +610,7 @@ def populate_coa_rrf_fields(self, rrf_no):
         if not add_lot_po:  # None or empty
             self.po_number_input.clear()
             self.lot_number_input.clear()
-            self.production_date_input.setDate(QDate.currentDate())
+            self.production_date_input.clear_value()
             return
 
         # === Populate inputs ===
@@ -621,8 +621,7 @@ def populate_coa_rrf_fields(self, rrf_no):
         self.lot_number_input.setText(lot_no)
 
         if add_prod_date[0]:
-            self.production_date_input.setDate(
-                QDate(add_prod_date[0].year, add_prod_date[0].month, add_prod_date[0].day))
+            self.production_date_input.display_value(str(add_prod_date[0]))
     except Exception as e:
         print(e, "rrf fields")
     finally:

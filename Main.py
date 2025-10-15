@@ -768,7 +768,7 @@ class MainWindow(QMainWindow):
         quantity_delivered = self.quantity_delivered_input.text()
         delivery_date = self.delivery_date_input.date().toString("yyyy-MM-dd")
         lot_number = self.lot_number_input.text()
-        production_date = self.production_date_input.date().toString("yyyy-MM-dd")
+        production_date = self.production_date_input.get_selected_dates()
         delivery_receipt = self.delivery_receipt_input.text()
         po_number = self.po_number_input.text()
         summary_of_analysis = self.get_coa_summary_analysis_table_data()

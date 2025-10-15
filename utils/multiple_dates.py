@@ -156,7 +156,15 @@ class MultiDateInput(QWidget):
 
     def get_selected_dates(self):
         """Return the selected dates as QDate objects."""
-        return self.selected_dates
+        return self.multi_date_input.text()
+
+    def clear_value(self):
+        self.multi_date_input.clear()
+        self.selected_dates = []
+
+    def display_value(self, value):
+        self.multi_date_input.setText(value)
+
 
 # if __name__ == "__main__":
 #     app = QApplication([])
