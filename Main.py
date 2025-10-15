@@ -775,7 +775,7 @@ class MainWindow(QMainWindow):
                 self.msds_scroll_area.verticalScrollBar().setValue(0)
                 self.msds_sub_tabs.setCurrentIndex(0)
         except Exception as e:
-            window_alert.show_message(self, "Unexpected Error", f"An error occurred: {str(e)}", icon_type="critical")
+            window_alert.show_message(self, "Unexpected Error", f"An error occurred msds submit: {str(e)}", icon_type="critical")
 
     def coa_btn_submit_clicked(self, print_after=False):
         customer_name = self.coa_customer_input.text()
@@ -803,6 +803,7 @@ class MainWindow(QMainWindow):
             "Quantity Delivered": quantity_delivered,
             "Lot Number": lot_number,
             "Delivery Receipt": delivery_receipt,
+            "Production Date": production_date,
             "Certified By": certified_by,
             "Storage": storage,
             "Shelf Life": shelf_life
@@ -1238,11 +1239,12 @@ class MainWindow(QMainWindow):
                 self.msds_search_bar.hide()
                 self.msds_scroll_area.verticalScrollBar().setValue(0)
         except Exception as e:
-            window_alert.show_message(self, "Unexpected Error", f"An error occurred: {str(e)}", icon_type="critical")
+            window_alert.show_message(self, "Unexpected Error", f"An error occurred toggle msds: {str(e)}", icon_type="critical")
 
     def toggle_coa_search_bar(self, index):
         try:
             if index == 0:  # Records tab
+                table.load_coa_table(self)
                 self.coa_search_bar.show()
                 self.coa_search_bar.setFocus()
                 coa_data_entry.clear_coa_form(self)
@@ -1251,9 +1253,7 @@ class MainWindow(QMainWindow):
                 self.coa_search_bar.hide()
                 self.coa_scroll_area.verticalScrollBar().setValue(0)
         except Exception as e:
-            window_alert.show_message(self, "Unexpected Error", f"An error occurred: {str(e)}", icon_type="critical")
-
-
+            window_alert.show_message(self, "Unexpected Error", f"An error occurred toggle coa: {str(e)}", icon_type="critical")
     def check_email(self):
         text = self.email_label_input.text()
         validator = self.email_label_input.validator()

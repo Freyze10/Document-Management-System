@@ -130,7 +130,7 @@ class RowellWidget(QWidget):
         """)
 
         # === Header ===
-        header = QLabel("Certificate of Inspection\nPVC-FREE COMPOUND FOOD APPROVED")
+        header = QLabel("""Certificate of Inspection\nPVC-FREE COMPOUND FOOD APPROVED""")
         header.setStyleSheet("""
             font-size: 32px;
             font-weight: 700;
@@ -140,6 +140,7 @@ class RowellWidget(QWidget):
             border-bottom: 3px solid #007bff;
             text-align: center;
         """)
+        header.setAlignment(Qt.AlignmentFlag.AlignCenter)
         header_layout = QHBoxLayout()
         header_layout.addStretch()
         header_layout.addWidget(header)
@@ -162,6 +163,8 @@ class RowellWidget(QWidget):
         self.lot_number_input = QLineEdit()
         self.quantity_input = QLineEdit()
         self.manufacturing_date_input = multiple_dates.MultiDateInput()
+        self.delivery_date = QDateEdit()
+        self.delivery_date.setDate(QDate.currentDate())
         self.shelf_life_input = QLineEdit()
         self.delivery_receipt_input = QLineEdit()
         self.delivery_receipt_timer = setup_finished_typing(
@@ -460,6 +463,10 @@ class RowellWidget(QWidget):
         self.code_input.setText(str(selected_record[1]))
         self.lot_number_input.setText(lot_no)
         self.quantity_input.setText(str(selected_record[6]))
+        if selected_record[3]:
+            self.delivery_date.setDate(
+                QDate(selected_record[3].year, selected_record[3].month, selected_record[3].day)
+            )
 
     def get_properties_table_data(self):
         data = {}
@@ -492,53 +499,52 @@ class RowellWidget(QWidget):
     def on_submit_clicked(self):
         """Handle submit button click"""
         # Collect data from fields
-        try:
-            data = {
-                'customer_name': self.customer_input.text(),
-                'color_code': self.code_input.text(),
-                'lot_number': self.lot_number_input.text(),
-                'delivery_receipt_number': self.delivery_receipt_input.text(),
-                'quantity_delivered': self.quantity_input.text(),
-                'manufacturing_date': self.manufacturing_date_input.get_selected_dates(),
-                'shelf_life': self.shelf_life_input.text(),
-                'certified_by': self.certified_by_name_input.text(),
-                'certification_date': self.date_input.date().toString("yyyy-MM-dd"),
-                'product_name': self.product_name_input.text(),
-                'position': self.position_input.text()
-            }
-            properties_data = self.get_properties_table_data()
-            # Process the data (you can implement your own logic here)
+        data = {
+            'customer_name': self.customer_input.text(),
+            'color_code': self.code_input.text(),
+            'lot_number': self.lot_number_input.text(),
+            'delivery_receipt_number': self.delivery_receipt_input.text(),
+            'quantity_delivered': self.quantity_input.text(),
+            'manufacturing_date': self.manufacturing_date_input.get_selected_dates(),
+            'delivery_date': self.delivery_date.date().toString("yyyy-MM-dd"),
+            'shelf_life': self.shelf_life_input.text(),
+            'certified_by': self.certified_by_name_input.text(),
+            'certification_date': self.date_input.date().toString("yyyy-MM-dd"),
+            'product_name': self.product_name_input.text(),
+            'position': self.position_input.text()
+        }
+        properties_data = self.get_properties_table_data()
+        # Process the data (you can implement your own logic here)
 
-            required_fields = {
-                "Customer Name": data['customer'],
-                "Color Code": data['code'],
-                "Product Name": data['product_name'],
-                "Manufacturing Date": data['manufacturing_date'],
-                "Lot Number": data['lot_number'],
-                "Delivery Receipt": data['delivery_receipt_no'],
-                "Certified By": data['certified_by'],
-                "Shelf Life": data['shelf_life']
-            }
+        required_fields = {
+            "Customer Name": data['customer_name'],
+            "Color Code": data['color_code'],
+            "Product Name": data['product_name'],
+            "Manufacturing Date": data['manufacturing_date'],
+            "Lot Number": data['lot_number'],
+            "Delivery Receipt": data['delivery_receipt_number'],
+            "Total Quantity": data['quantity_delivered'],
+            "Certified By": data['certified_by'],
+            "Shelf Life": data['shelf_life']
+        }
 
-            # Check if any required field is empty
-            for field, value in required_fields.items():
-                if not value:  # empty string
-                    window_alert.show_message(self, "Missing Input", f"Please fill in:  {field}", icon_type="warning")
-                    return  # stop processing
+        # Check if any required field is empty
+        for field, value in required_fields.items():
+            if not value:  # empty string
+                window_alert.show_message(self, "Missing Input", f"Please fill in:  {field}", icon_type="warning")
+                return  # stop processing
 
-            # Check summary of analysis if no empty row
-            if not any(any(cell for cell in row) for row in properties_data.values()):
-                window_alert.show_message(self, "Missing Input", "Please fill in the Summary of Analysis table.",
-                                          icon_type="warning")
-                return
+        # Check summary of analysis if no empty row
+        if not any(any(cell for cell in row) for row in properties_data.values()):
+            window_alert.show_message(self, "Missing Input", "Please fill in the Summary of Analysis table.",
+                                      icon_type="warning")
+            return
 
-                # Validate certified_by against the list from the database
-            if self.certified_by_name_input.text() not in self.certified_by_lists:
-                window_alert.show_message(self, "Invalid Input", f"Certified By: '{self.certified_by_name_input.text()}' is not in the list.",
-                                          icon_type="warning")
-                return
-        except Exception as e:
-            print(e)
+            # Validate certified_by against the list from the database
+        if self.certified_by_name_input.text() not in self.certified_by_lists:
+            window_alert.show_message(self, "Invalid Input", f"Certified By: '{self.certified_by_name_input.text()}' is not in the list.",
+                                      icon_type="warning")
+            return
         try:
             global current_coa_id
             if current_coa_id is not None:  # Update existing COA
@@ -551,12 +557,11 @@ class RowellWidget(QWidget):
                 window_alert.show_message(self, "Success", f"Certificate of Analysis saved successfully!",
                                           icon_type="info")
                 current_coa_id = None
+            self.clear_form()
+            self.scroll_area.verticalScrollBar().setValue(0)
         except Exception as e:
             window_alert.show_message(self, "Database Error", str(e), icon_type="critical")
-        finally:
-            self.clear_form()
-            table.load_coa_table(self)
-            self.scroll_area.verticalScrollBar().setValue(0)
+
 
     def run_sync_script(self):
         # Show loading dialog

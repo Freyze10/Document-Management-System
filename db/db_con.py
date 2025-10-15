@@ -617,7 +617,8 @@ def save_packageworld_rowell_coi(data, table):
             INSERT INTO certificates_of_analysis (
                 customer_name, 
                 color_code, 
-                lot_number, 
+                lot_number,
+                delivery_date,
                 delivery_receipt_number, 
                 quantity_delivered, 
                 production_date, 
@@ -625,10 +626,10 @@ def save_packageworld_rowell_coi(data, table):
                 certified_by, 
                 shelf_life_coa
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             RETURNING id;
         """, (
-            data["customer_name"], data["color_code"], data["lot_number"],
+            data["customer_name"], data["color_code"], data["lot_number"], data["delivery_date"],
             data["delivery_receipt_number"], data["quantity_delivered"], data["manufacturing_date"],
             data["certification_date"], data["certified_by"],
             data["shelf_life"]
