@@ -8,11 +8,10 @@ from PyQt6.QtWidgets import (
 )
 from alert import window_alert
 from db import db_dr, db_con
-from table import table
 from utils import abs_path, lot_format, multiple_dates, prod_date_format  # Assuming utils is available with abs_path
 from utils.loading import LoadingDialog
 from utils.debounce import setup_finished_typing
-from print.print_packageworld_rowell import FileRowell
+from print.print_pvc_free import FilePVC
 
 current_coa_id = None
 
@@ -665,7 +664,7 @@ class RowellWidget(QWidget):
             if self.rowell_widget is not None:
                 self.rowell_widget.close()
                 self.rowell_widget.deleteLater()  # Good practice
-            self.rowell_widget = FileRowell()
+            self.rowell_widget = FilePVC()
             self.rowell_widget.show_pdf_preview(coa_id, filename)
             self.rowell_widget.resize(900, 800)
             self.rowell_widget.show()

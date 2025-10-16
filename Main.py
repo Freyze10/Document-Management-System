@@ -9,7 +9,7 @@ from table import msds_data_entry, coa_data_entry, table, terumo
 from print.print_msds import FileMSDS
 from print.print_coa import FileCOA
 from print.print_terumo import FileTerumo
-from print.print_packageworld_rowell import FileRowell
+from print.print_pvc_free import FilePVC
 import Login
 from utils import abs_path, scroll_date, calendar_design, check_cx, multiple_dates, loading
 from utils.debounce import setup_finished_typing
@@ -1341,7 +1341,7 @@ class MainWindow(QMainWindow):
             if self.rowell_widget is not None:
                 self.rowell_widget.close()
                 self.rowell_widget.deleteLater()  # Good practice
-            self.rowell_widget = FileRowell()
+            self.rowell_widget = FilePVC()
             self.rowell_widget.show_pdf_preview(coa_id, filename)
             self.rowell_widget.resize(900, 800)
             self.rowell_widget.show()

@@ -23,7 +23,7 @@ from db import db_con
 from print.pdf_header import add_coa_header_only
 
 
-class FileRowell(QWidget):
+class FilePVC(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Certificate of Inspection Preview")
