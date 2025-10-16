@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (
     QTableWidget, QScrollArea, QDateEdit, QPushButton, QCompleter
 )
 
+from Main import MainWindow
 from alert import window_alert
 from db import db_dr, db_con
 from table import table
@@ -332,7 +333,7 @@ class RowellWidget(QWidget):
                 background-color: #545b62;
             }
         """)
-        # self.btn_print.clicked.connect(self.print)
+        self.btn_print.clicked.connect(lambda: self.on_submit_clicked(print_after=True))
         submit_button_row.addWidget(self.btn_print)
 
         submit_button_row.addStretch()
@@ -433,7 +434,7 @@ class RowellWidget(QWidget):
         properties_data = [
             ("Color", "Blue", "Blue", "MBPI"),
             ("Specific Gravity", "1.00", "1.00 ± 0.20", "MBPI"),
-            ("Durometer Hardness Shore \"A\"", "88.02", "90.0 ± 5.00", "ASTM D 2240"),
+            ("Durometer Hardness Shore \"A\"", "90.16", "90.0 ± 5.00", "ASTM D 2240"),
             ("Pellet Size Length, mm", "3.00", "3.00 ± 0.50", "MBPI"),
             ("Diameter, mm", "2.90", "2.50 ± 0.50", "MBPI"),
             ("Odor", "no undesirable odor", "no undesirable odor", "MBPI")
@@ -511,10 +512,11 @@ class RowellWidget(QWidget):
         self.lot_number_input.clear()
         self.quantity_input.clear()
         self.delivery_receipt_input.clear()
+        self.certified_by_name_input.clear()
         self.manufacturing_date_input.clear_value()
         self.btn_submit.setText("Submit")
 
-    def on_submit_clicked(self):
+    def on_submit_clicked(self, print_after=False):
         """Handle submit button click"""
         # Collect data from fields
         data = {
@@ -562,6 +564,13 @@ class RowellWidget(QWidget):
         if self.certified_by_name_input.text() not in self.certified_by_lists:
             window_alert.show_message(self, "Invalid Input", f"Certified By: '{self.certified_by_name_input.text()}' is not in the list.",
                                       icon_type="warning")
+            return
+
+        if print_after:
+            returning_coa_id = db_con.save_packageworld_rowell_coi(data, properties_data)
+            MainWindow.open_packageworld_rowell_preview(MainWindow(), returning_coa_id, "temp")
+            self.scroll_area.verticalScrollBar().setValue(0)
+
             return
 
         try:

@@ -660,6 +660,7 @@ def save_packageworld_rowell_coi(data, table):
         cur.close()
         conn.close()
 
+        return coa_id
     except Exception as e:
         if conn:
             conn.rollback()
