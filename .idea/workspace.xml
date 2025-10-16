@@ -440,7 +440,23 @@
       <option name="project" value="LOCAL" />
       <updated>1760575836149</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="creating the preview">
+      <option name="closed" value="true" />
+      <created>1760578042719</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1760578042719</updated>
+    </task>
+    <task id="LOCAL-00027" summary="fixed the formats">
+      <option name="closed" value="true" />
+      <created>1760578652993</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1760578652993</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -490,7 +506,9 @@
     <MESSAGE value="added save as new button" />
     <MESSAGE value="added update function" />
     <MESSAGE value="added print preview file" />
-    <option name="LAST_COMMIT_MESSAGE" value="added print preview file" />
+    <MESSAGE value="creating the preview" />
+    <MESSAGE value="fixed the formats" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed the formats" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

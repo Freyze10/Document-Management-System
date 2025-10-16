@@ -10,7 +10,7 @@ from PyQt6.QtWidgets import (
 from alert import window_alert
 from db import db_dr, db_con
 from table import table
-from utils import abs_path, lot_format, multiple_dates  # Assuming utils is available with abs_path
+from utils import abs_path, lot_format, multiple_dates, prod_date_format  # Assuming utils is available with abs_path
 from utils.loading import LoadingDialog
 from utils.debounce import setup_finished_typing
 
@@ -523,7 +523,7 @@ class RowellWidget(QWidget):
             'lot_number': self.lot_number_input.text(),
             'delivery_receipt_number': self.delivery_receipt_input.text(),
             'quantity_delivered': self.quantity_input.text(),
-            'manufacturing_date': self.manufacturing_date_input.get_selected_dates(),
+            'manufacturing_date': prod_date_format.dates_for_db(self.manufacturing_date_input.get_selected_dates()),
             'delivery_date': self.delivery_date.date().toString("yyyy-MM-dd"),
             'shelf_life': self.shelf_life_input.text(),
             'certified_by': self.certified_by_name_input.text(),
@@ -600,7 +600,7 @@ class RowellWidget(QWidget):
                         QDate(field_result[7].year, field_result[7].month, field_result[7].day)
                     )
                 if field_result[8]:
-                    self.manufacturing_date_input.display_value(str(field_result[8]))
+                    self.manufacturing_date_input.display_value(prod_date_format.dates_for_display(str(field_result[8])))
                 self.shelf_life_input.setText(str(field_result[12]))
                 self.certified_by_name_input.setText(str(field_result[10]))
                 if field_result[9]:

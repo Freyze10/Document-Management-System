@@ -29,7 +29,7 @@ def add_first_page_header(canvas, doc):
     )
 
 
-def add_coa_header(canvas, doc):
+def add_coa_header(canvas, doc, header_only=False):
     from reportlab.lib.units import cm
 
     canvas.saveState()
@@ -86,3 +86,39 @@ def add_coa_header(canvas, doc):
     )
 
     canvas.restoreState()
+
+
+def add_coa_header_only(canvas, doc, header_only=False):
+    from reportlab.lib.units import cm
+
+    canvas.saveState()
+
+    # Page size and margins
+    page_width, page_height = doc.pagesize
+    left_margin = doc.leftMargin
+    right_margin = doc.rightMargin
+
+    # --- First Logo: stretched edge to edge ---
+    logo_path = abs_path.resource("img/MBPI_Logo.jpg")
+    logo_width = page_width - left_margin - right_margin
+    logo_height = 3.32 * cm
+    x_logo = left_margin
+    y_logo_top = page_height - logo_height
+    canvas.drawImage(
+        logo_path,
+        x_logo, y_logo_top,
+        width=logo_width,
+        height=logo_height,
+        preserveAspectRatio=False
+    )
+
+    # --- COA Title: fixed size and centered ---
+    second_image_path = abs_path.resource("img/coa_title.png")
+    second_image_width = 11.16 * cm
+    second_image_height = 1.45 * cm
+
+    # Center horizontally
+    x_second_image = (page_width - second_image_width) / 2
+    # Place immediately below logo, with slight overlap or gap as desired
+    y_second_image_top = y_logo_top - second_image_height - (0.2 * cm)  # Adjust overlap/gap here
+

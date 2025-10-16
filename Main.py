@@ -1333,15 +1333,18 @@ class MainWindow(QMainWindow):
 
     def open_packageworld_rowell_preview(self, coa_id, filename):
         # If the widget already exists, close it first to avoid multiple instances
-        if self.rowell_widget is not None:
-            self.rowell_widget.close()
-            self.rowell_widget.deleteLater()  # Good practice
-        self.rowell_widget = FileRowell()
-        self.rowell_widget.show_pdf_preview(coa_id, filename)
-        self.rowell_widget.resize(900, 800)
-        self.rowell_widget.show()
-        self.rowell_widget.activateWindow()
-        self.rowell_widget.raise_()
+        try:
+            if self.rowell_widget is not None:
+                self.rowell_widget.close()
+                self.rowell_widget.deleteLater()  # Good practice
+            self.rowell_widget = FileRowell()
+            self.rowell_widget.show_pdf_preview(coa_id, filename)
+            self.rowell_widget.resize(900, 800)
+            self.rowell_widget.show()
+            self.rowell_widget.activateWindow()
+            self.rowell_widget.raise_()
+        except Exception as e:
+            print(e)
 
     def run_sync_script(self):
         # Show loading dialog
