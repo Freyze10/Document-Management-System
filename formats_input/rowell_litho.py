@@ -660,6 +660,7 @@ class RowellWidget(QWidget):
 
     def open_packageworld_rowell_preview(self, coa_id, filename):
         # If the widget already exists, close it first to avoid multiple instances
+
         try:
             if self.rowell_widget is not None:
                 self.rowell_widget.close()

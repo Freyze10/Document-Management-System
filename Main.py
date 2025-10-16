@@ -1199,7 +1199,7 @@ class MainWindow(QMainWindow):
                 if coa_id in self.all_terumo_id:
                     self.open_terumo_preview(coa_id, display_text)
                 elif coa_id in self.all_packageworld_rowell_id:
-                    rowell_litho.RowellWidget.open_packageworld_rowell_preview(rowell_litho.RowellWidget(), coa_id, display_text)
+                    rowell_litho.RowellWidget.open_packageworld_rowell_preview(self.coa_rowell_tab, coa_id, display_text)
                 else:
                     self.open_coa_preview(coa_id, display_text)
             except Exception as e:
