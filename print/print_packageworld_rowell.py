@@ -129,23 +129,23 @@ class FileRowell(QWidget):
         styles.add(ParagraphStyle(
             name="CustomTitle",
             fontName="Helvetica",
-            fontSize=20,
+            fontSize=22,
             leading=16,
             alignment=TA_CENTER
         ))
 
         styles.add(ParagraphStyle(
             name="CustomSubtitle",
-            fontName="Times-Roman",
-            fontSize=12,
+            fontName="Helvetica",
+            fontSize=11,
             leading=14,
             alignment=TA_CENTER
         ))
 
         styles.add(ParagraphStyle(
             name="SectionHeader",
-            fontName="Times-Roman",
-            fontSize=11,
+            fontName="Helvetica",
+            fontSize=10,
             leading=14,
             spaceBefore=10,
             spaceAfter=4
@@ -153,38 +153,38 @@ class FileRowell(QWidget):
 
         styles.add(ParagraphStyle(
             name="FieldLabel",
-            fontName="Times-Roman",
-            fontSize=11,
+            fontName="Helvetica",
+            fontSize=10,
             leading=13,
             spaceAfter=2
         ))
 
         styles.add(ParagraphStyle(
             name="TableLabel_left",
-            fontName="Times-Roman",
-            fontSize=11,
+            fontName="Helvetica",
+            fontSize=10,
             leading=13,
             # alignment = TA_CENTER
         ))
 
         styles.add(ParagraphStyle(
             name="TableLabel",
-            fontName="Times-Roman",
-            fontSize=11,
+            fontName="Helvetica",
+            fontSize=10,
             leading=13,
             alignment=TA_CENTER
         ))
         styles.add(ParagraphStyle(
             name="TableLabelBold",
-            fontName="Times-Roman",
-            fontSize=11,
+            fontName="Helvetica-Bold",
+            fontSize=10,
             leading=13,
             alignment=TA_CENTER
         ))
         styles.add(ParagraphStyle(
             name="SmallText",
-            fontName="Times-Italic",
-            fontSize=9,
+            fontName="Helvetica",
+            fontSize=8,
             leading=11,
             leftIndent=10,
             spaceAfter=10
@@ -204,8 +204,8 @@ class FileRowell(QWidget):
 
         def add_field_row(label, value):
             field_rows.append([
-                Paragraph(f"<b>{label}</b>", styles["FieldLabel"]),
-                Paragraph(value, styles["FieldLabel"])
+                Paragraph(f"{label}", styles["FieldLabel"]),
+                Paragraph(f"{value}", styles["FieldLabel"])
             ])
 
         # 🗓 Manufacturing Date formatting
@@ -223,8 +223,9 @@ class FileRowell(QWidget):
                     formatted_dates.append(d)
             mfg_date_str = ", ".join(formatted_dates)
 
+        customer_name = "<b>" + str(field_result[1]) + "</b>"
         # 🧾 Add field rows
-        add_field_row("Customer:", field_result[1])
+        add_field_row("Customer:", customer_name)
         add_field_row("Product Name:", properties_table_result[0][0])
         add_field_row("Code:", field_result[2])
         add_field_row("Lot Number:", field_result[3])
@@ -257,11 +258,11 @@ class FileRowell(QWidget):
             ('GRID', (0, 0), (-1, -1), 0, colors.white),
         ]))
         content.append(info_table)
-        content.append(Spacer(1, 12))
+        content.append(Spacer(1, 10))
 
         # === SECTION HEADER ===
         content.append(Paragraph("<u>PHYSICAL / TYPICAL PROPERTIES</u>", styles["SectionHeader"]))
-        content.append(Spacer(1, 12))
+        content.append(Spacer(1, 14))
 
         # === TABLE DATA ===
         table_data = []
@@ -340,7 +341,7 @@ class FileRowell(QWidget):
 
         properties_table.setStyle(TableStyle(table_style))
         content.append(properties_table)
-        content.append(Spacer(1, 25))
+        content.append(Spacer(1, 36))
 
         # === CERTIFICATION SECTION ===
         cert_date_raw = str(field_result[9]).strip()

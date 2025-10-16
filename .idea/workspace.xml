@@ -480,7 +480,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760594753233</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="changed format function of date">
+      <option name="closed" value="true" />
+      <created>1760595075211</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1760595075211</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -508,7 +516,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fixed add multiple date" />
     <MESSAGE value="removed exec debug" />
     <MESSAGE value="added multiple selection func" />
     <MESSAGE value="added widget rowell" />
@@ -533,7 +540,8 @@
     <MESSAGE value="fixing print preview" />
     <MESSAGE value="fixing table display in print" />
     <MESSAGE value="fixed table and auto center" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed table and auto center" />
+    <MESSAGE value="changed format function of date" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed format function of date" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
