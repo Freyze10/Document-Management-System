@@ -1495,16 +1495,19 @@ def get_all_terumo_id():
 
 
 def get_all_pvc_free_id():
-    conn = get_connection()
-    cur = conn.cursor()
+    try:
+        conn = get_connection()
+        cur = conn.cursor()
+        cur.execute("SELECT DISTINCT coa_id FROM tbl_pvc_free ORDER BY coa_id DESC;")
+        records = cur.fetchall()
+        return [row[0] for row in records] if records else []
 
-    cur.execute("SELECT DISTINCT coa_id FROM tbl_pvc_free ORDER BY coa_id DESC;")
-    records = cur.fetchall()
-
-    cur.close()
-    conn.close()
-    return [row[0] for row in records]
-
+    except Exception as e:
+        print(f"Database error in get_all_pvc_free_id: {e}")
+        return []
+    finally:
+        cur.close()
+        conn.close()
 
 
 def get_all_certified_by():

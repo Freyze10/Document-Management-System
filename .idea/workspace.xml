@@ -544,7 +544,23 @@
       <option name="project" value="LOCAL" />
       <updated>1760604750442</updated>
     </task>
-    <option name="localTasksCounter" value="39" />
+    <task id="LOCAL-00039" summary="refactored files and class">
+      <option name="closed" value="true" />
+      <created>1760604880539</created>
+      <option name="number" value="00039" />
+      <option name="presentableId" value="LOCAL-00039" />
+      <option name="project" value="LOCAL" />
+      <updated>1760604880539</updated>
+    </task>
+    <task id="LOCAL-00040" summary="refactored files and class">
+      <option name="closed" value="true" />
+      <created>1760604882923</created>
+      <option name="number" value="00040" />
+      <option name="presentableId" value="LOCAL-00040" />
+      <option name="project" value="LOCAL" />
+      <updated>1760604882923</updated>
+    </task>
+    <option name="localTasksCounter" value="41" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -572,7 +588,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added validation" />
     <MESSAGE value="added save function" />
     <MESSAGE value="added database for rowell and packagewrld" />
     <MESSAGE value="added save function in dbs" />
@@ -597,7 +612,8 @@
     <MESSAGE value="fixed print var passing" />
     <MESSAGE value="fixed duplicate object" />
     <MESSAGE value="changed naming" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed naming" />
+    <MESSAGE value="refactored files and class" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactored files and class" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

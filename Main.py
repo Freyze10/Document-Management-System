@@ -1192,7 +1192,6 @@ class MainWindow(QMainWindow):
         coa_id = self.coa_records_table.item(row, 0).data(Qt.ItemDataRole.UserRole)
         self.all_terumo_id = db_con.get_all_terumo_id()
         self.all_packageworld_rowell_id = db_con.get_all_pvc_free_id()
-
         if column == 1:  # view column
             try:
                 display_text = self.coa_records_table.item(row, 0).text()
