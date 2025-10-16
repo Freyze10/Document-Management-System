@@ -9,6 +9,7 @@ from table import msds_data_entry, coa_data_entry, table, terumo
 from print.print_msds import FileMSDS
 from print.print_coa import FileCOA
 from print.print_terumo import FileTerumo
+from print.print_packageworld_rowell import FileRowell
 import Login
 from utils import abs_path, scroll_date, calendar_design, check_cx, multiple_dates, loading
 from utils.debounce import setup_finished_typing
@@ -338,6 +339,7 @@ class MainWindow(QMainWindow):
         self.coa_widget = None
         self.msds_widget = None
         self.terumo_widget = None
+        self.rowell_widget = None
 
         self.msds_tab = QWidget()  #MSDS Main Tab
         self.msds_layout = QVBoxLayout(self.msds_tab)
@@ -1194,6 +1196,8 @@ class MainWindow(QMainWindow):
             display_text = self.coa_records_table.item(row, 0).text()
             if coa_id in self.all_terumo_id:
                 self.open_terumo_preview(coa_id, display_text)
+            elif coa_id in self.all_packageworld_rowell_id:
+                self.open_packageworld_rowell_preview(coa_id, display_text)
             else:
                 self.open_coa_preview(coa_id, display_text)
         if column == 2:  # edit column
@@ -1326,6 +1330,18 @@ class MainWindow(QMainWindow):
         self.terumo_widget.show()
         self.terumo_widget.activateWindow()
         self.terumo_widget.raise_()
+
+    def open_packageworld_rowell_preview(self, coa_id, filename):
+        # If the widget already exists, close it first to avoid multiple instances
+        if self.rowell_widget is not None:
+            self.rowell_widget.close()
+            self.rowell_widget.deleteLater()  # Good practice
+        self.rowell_widget = FileRowell()
+        self.rowell_widget.show_pdf_preview(coa_id, filename)
+        self.rowell_widget.resize(900, 800)
+        self.rowell_widget.show()
+        self.rowell_widget.activateWindow()
+        self.rowell_widget.raise_()
 
     def run_sync_script(self):
         # Show loading dialog
