@@ -6,15 +6,13 @@ from PyQt6.QtWidgets import (
     QAbstractItemView, QWidget, QVBoxLayout, QGroupBox, QGridLayout,
     QTableWidget, QScrollArea, QDateEdit, QPushButton, QCompleter
 )
-
-from Main import MainWindow
 from alert import window_alert
 from db import db_dr, db_con
 from table import table
 from utils import abs_path, lot_format, multiple_dates, prod_date_format  # Assuming utils is available with abs_path
 from utils.loading import LoadingDialog
 from utils.debounce import setup_finished_typing
-
+from print.print_packageworld_rowell import FileRowell
 
 current_coa_id = None
 
@@ -24,6 +22,7 @@ class RowellWidget(QWidget):
         super().__init__()
         self.setup_ui()
         self.default_values()
+        self.rowell_widget = None
 
     def setup_ui(self):
         # Main container with scroll area
@@ -568,7 +567,7 @@ class RowellWidget(QWidget):
 
         if print_after:
             returning_coa_id = db_con.save_packageworld_rowell_coi(data, properties_data)
-            MainWindow.open_packageworld_rowell_preview(MainWindow(), returning_coa_id, "temp")
+            self.open_packageworld_rowell_preview(returning_coa_id, "temp")
             self.scroll_area.verticalScrollBar().setValue(0)
 
             return
@@ -658,3 +657,18 @@ class RowellWidget(QWidget):
         self.worker = Worker()
         self.worker.finished.connect(self.loading.accept)
         self.worker.start()
+
+    def open_packageworld_rowell_preview(self, coa_id, filename):
+        # If the widget already exists, close it first to avoid multiple instances
+        try:
+            if self.rowell_widget is not None:
+                self.rowell_widget.close()
+                self.rowell_widget.deleteLater()  # Good practice
+            self.rowell_widget = FileRowell()
+            self.rowell_widget.show_pdf_preview(coa_id, filename)
+            self.rowell_widget.resize(900, 800)
+            self.rowell_widget.show()
+            self.rowell_widget.activateWindow()
+            self.rowell_widget.raise_()
+        except Exception as e:
+            print(e)

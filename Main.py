@@ -339,7 +339,6 @@ class MainWindow(QMainWindow):
         self.coa_widget = None
         self.msds_widget = None
         self.terumo_widget = None
-        self.rowell_widget = None
 
         self.msds_tab = QWidget()  #MSDS Main Tab
         self.msds_layout = QVBoxLayout(self.msds_tab)
@@ -1191,15 +1190,20 @@ class MainWindow(QMainWindow):
 
     def coa_cell_clicked(self, row, column):
         coa_id = self.coa_records_table.item(row, 0).data(Qt.ItemDataRole.UserRole)
+        self.all_terumo_id = db_con.get_all_terumo_id()
+        self.all_packageworld_rowell_id = db_con.get_all_packageworld_rowell_id()
 
         if column == 1:  # view column
-            display_text = self.coa_records_table.item(row, 0).text()
-            if coa_id in self.all_terumo_id:
-                self.open_terumo_preview(coa_id, display_text)
-            elif coa_id in self.all_packageworld_rowell_id:
-                self.open_packageworld_rowell_preview(coa_id, display_text)
-            else:
-                self.open_coa_preview(coa_id, display_text)
+            try:
+                display_text = self.coa_records_table.item(row, 0).text()
+                if coa_id in self.all_terumo_id:
+                    self.open_terumo_preview(coa_id, display_text)
+                elif coa_id in self.all_packageworld_rowell_id:
+                    rowell_litho.RowellWidget.open_packageworld_rowell_preview(rowell_litho.RowellWidget(), coa_id, display_text)
+                else:
+                    self.open_coa_preview(coa_id, display_text)
+            except Exception as e:
+                print(e)
         if column == 2:  # edit column
             try:
                 if coa_id in self.all_terumo_id:

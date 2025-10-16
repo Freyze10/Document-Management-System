@@ -1,6 +1,7 @@
 import platform
 import io
 import re
+from datetime import datetime
 
 from PyQt6.QtCore import QBuffer, QIODevice, QSize, Qt, QPointF
 from PyQt6.QtGui import QPainter, QPageSize, QPageLayout, QAction, QIcon
@@ -167,8 +168,21 @@ class FileCOA(QWidget):
             Paragraph(f"Lot Number: {field_result[3]}", styles['NormalText']))
         content.append(Spacer(1, 10))
 
+        production_date = field_result[8]
+        if isinstance(production_date, datetime):
+            production_date_str = production_date.strftime("%B %d, %Y")
+        else:
+            formatted_dates = []
+            for d in str(production_date).split(","):
+                d = d.strip()
+                try:
+                    parsed = datetime.strptime(d, "%Y-%m-%d")
+                    formatted_dates.append(parsed.strftime("%B %d, %Y"))
+                except ValueError:
+                    formatted_dates.append(d)
+            production_date_str = ", ".join(formatted_dates)
         content.append(Paragraph(
-            f"Production Date: {field_result[8].strftime('%B %d, %Y')}",
+            f"Production Date: {production_date_str}",
             styles['NormalText']))
         content.append(Spacer(1, 10))
 

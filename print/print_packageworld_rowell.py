@@ -106,7 +106,7 @@ class FileRowell(QWidget):
         viewer_container.addStretch(1)
         main_layout.addLayout(viewer_container)
 
-        # Keyboard shortcut
+        # Keyboard shortcut 1
         self.print_action = QAction(self)
         self.print_action.setShortcut("Ctrl+P")
         self.print_action.triggered.connect(self.print_pdf)
@@ -398,7 +398,6 @@ class FileRowell(QWidget):
 
     def show_pdf_preview(self, coa_id, filename):
         self.file_name = filename
-        self.coa_id = coa_id
         pdf_bytes = self.generate_pdf(coa_id)
         # Wrap the PDF bytes in a QBuffer
         self.buffer = QBuffer()  # keep it as an instance attribute so it's not garbage collected
