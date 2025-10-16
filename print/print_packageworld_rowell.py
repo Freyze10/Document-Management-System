@@ -343,8 +343,24 @@ class FileRowell(QWidget):
         content.append(Spacer(1, 25))
 
         # === CERTIFICATION SECTION ===
-        cert_date = field_result[9]
-        cert_date_str = cert_date.strftime("%B %d, %Y") if isinstance(cert_date, datetime) else cert_date
+        cert_date_raw = str(field_result[9]).strip()
+
+        # Prepare list to collect formatted dates
+        formatted_dates = []
+
+        # Split by commas (can be single or multiple)
+        for date_str in cert_date_raw.split(','):
+            date_str = date_str.strip()
+            try:
+                # Try parsing in ISO format (yyyy-mm-dd)
+                date_obj = datetime.strptime(date_str, "%Y-%m-%d")
+                formatted_dates.append(date_obj.strftime("%B %d, %Y"))
+            except ValueError:
+                # If parsing fails, keep original (fallback)
+                formatted_dates.append(date_str)
+
+        # Join all formatted dates with commas
+        cert_date_str = ", ".join(formatted_dates)
 
         font_name = styles["FieldLabel"].fontName
         font_size = styles["FieldLabel"].fontSize

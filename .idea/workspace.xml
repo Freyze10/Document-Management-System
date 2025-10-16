@@ -472,7 +472,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760587691857</updated>
     </task>
-    <option name="localTasksCounter" value="30" />
+    <task id="LOCAL-00030" summary="fixed table and auto center">
+      <option name="closed" value="true" />
+      <created>1760594753233</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1760594753233</updated>
+    </task>
+    <option name="localTasksCounter" value="31" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -500,7 +508,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="created dialog mult date" />
     <MESSAGE value="fixed add multiple date" />
     <MESSAGE value="removed exec debug" />
     <MESSAGE value="added multiple selection func" />
@@ -525,7 +532,8 @@
     <MESSAGE value="fixed the formats" />
     <MESSAGE value="fixing print preview" />
     <MESSAGE value="fixing table display in print" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixing table display in print" />
+    <MESSAGE value="fixed table and auto center" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed table and auto center" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
