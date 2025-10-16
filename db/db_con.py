@@ -280,7 +280,7 @@ def create_tables():
         """)
 
     cur.execute("""
-            CREATE TABLE IF NOT EXISTS tbl_packageworld_and_rowell (
+            CREATE TABLE IF NOT EXISTS tbl_pvc_free (
                 id SERIAL PRIMARY KEY,
                 coa_id INTEGER NOT NULL REFERENCES certificates_of_analysis(id) ON DELETE CASCADE,
                 parameter_name VARCHAR(255) NOT NULL,
@@ -607,7 +607,7 @@ def save_terumo_coa(data, terumo):
             conn.close()
 
 
-def save_packageworld_rowell_coi(data, table):
+def save_pvc_free_coi(data, table):
     conn = get_connection()
     try:
         cur = conn.cursor()
@@ -639,7 +639,7 @@ def save_packageworld_rowell_coi(data, table):
         # insert production name and the position of qc analyst to the first row of the table
 
         cur.execute("""
-            INSERT INTO tbl_packageworld_and_rowell (
+            INSERT INTO tbl_pvc_free (
                 coa_id, parameter_name, new_delivery
             ) VALUES (%s, %s, %s)
         """, (coa_id, data["product_name"], data["position"]))
@@ -652,7 +652,7 @@ def save_packageworld_rowell_coi(data, table):
             method_used = values[3]
 
             cur.execute("""
-                        INSERT INTO tbl_packageworld_and_rowell (
+                        INSERT INTO tbl_pvc_free (
                             coa_id, parameter_name, new_delivery, standard, method_used
                         ) VALUES (%s, %s, %s, %s, %s)
                     """, (coa_id, parameter_name, new_delivery, standard, method_used))
@@ -1013,7 +1013,7 @@ def update_terumo_coa(coa_id, data, terumo):
             conn.close()
 
 
-def update_packageworld_rowell_coi(coa_id, data, table):
+def update_pvc_free_coi(coa_id, data, table):
     conn = get_connection()
     try:
         cur = conn.cursor()
@@ -1040,15 +1040,15 @@ def update_packageworld_rowell_coi(coa_id, data, table):
             coa_id
         ))
 
-        # Delete old entries from tbl_packageworld_and_rowell for this coa_id
+        # Delete old entries from tbl_pvc_free for this coa_id
         cur.execute("""
-            DELETE FROM tbl_packageworld_and_rowell
+            DELETE FROM tbl_pvc_free
             WHERE coa_id = %s;
         """, (coa_id,))
 
         # Reinsert the first row (product name and position)
         cur.execute("""
-            INSERT INTO tbl_packageworld_and_rowell (
+            INSERT INTO tbl_pvc_free (
                 coa_id, parameter_name, new_delivery
             ) VALUES (%s, %s, %s)
         """, (coa_id, data["product_name"], data["position"]))
@@ -1061,7 +1061,7 @@ def update_packageworld_rowell_coi(coa_id, data, table):
             method_used = values[3]
 
             cur.execute("""
-                INSERT INTO tbl_packageworld_and_rowell (
+                INSERT INTO tbl_pvc_free (
                     coa_id, parameter_name, new_delivery, standard, method_used
                 ) VALUES (%s, %s, %s, %s, %s)
             """, (coa_id, parameter_name, new_delivery, standard, method_used))
@@ -1194,13 +1194,13 @@ def get_coa_analysis_results(coa_id):
     return results
 
 
-def get_packageworld_rowell_properties(coa_id):
+def get_pvc_free_properties(coa_id):
     conn = get_connection()
     cur = conn.cursor()
 
     cur.execute("""
         SELECT parameter_name, new_delivery, standard, method_used 
-        FROM tbl_packageworld_and_rowell 
+        FROM tbl_pvc_free 
         WHERE coa_id = %s
         ORDER BY id ASC;
     """, (coa_id,))
@@ -1494,11 +1494,11 @@ def get_all_terumo_id():
     return [row[0] for row in records]
 
 
-def get_all_packageworld_rowell_id():
+def get_all_pvc_free_id():
     conn = get_connection()
     cur = conn.cursor()
 
-    cur.execute("SELECT DISTINCT coa_id FROM tbl_packageworld_and_rowell ORDER BY coa_id DESC;")
+    cur.execute("SELECT DISTINCT coa_id FROM tbl_pvc_free ORDER BY coa_id DESC;")
     records = cur.fetchall()
 
     cur.close()

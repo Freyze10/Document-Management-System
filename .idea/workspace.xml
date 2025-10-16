@@ -528,7 +528,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760599612848</updated>
     </task>
-    <option name="localTasksCounter" value="37" />
+    <task id="LOCAL-00037" summary="fixed duplicate object">
+      <option name="closed" value="true" />
+      <created>1760603721094</created>
+      <option name="number" value="00037" />
+      <option name="presentableId" value="LOCAL-00037" />
+      <option name="project" value="LOCAL" />
+      <updated>1760603721094</updated>
+    </task>
+    <option name="localTasksCounter" value="38" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -556,7 +564,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added default value func" />
     <MESSAGE value="modified clear and defaults" />
     <MESSAGE value="added validation" />
     <MESSAGE value="added save function" />
@@ -581,7 +588,8 @@
     <MESSAGE value="added kg format" />
     <MESSAGE value="added save and print" />
     <MESSAGE value="fixed print var passing" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed print var passing" />
+    <MESSAGE value="fixed duplicate object" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed duplicate object" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

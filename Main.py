@@ -332,7 +332,7 @@ class MainWindow(QMainWindow):
         self.terumo_submit_btn = QPushButton("Submit")
         self.terumo_submit_btn.clicked.connect(self.terumo_submit_clicked)
         self.all_terumo_id = db_con.get_all_terumo_id()
-        self.all_packageworld_rowell_id = db_con.get_all_packageworld_rowell_id()
+        self.all_packageworld_rowell_id = db_con.get_all_pvc_free_id()
 
 
 
@@ -1191,7 +1191,7 @@ class MainWindow(QMainWindow):
     def coa_cell_clicked(self, row, column):
         coa_id = self.coa_records_table.item(row, 0).data(Qt.ItemDataRole.UserRole)
         self.all_terumo_id = db_con.get_all_terumo_id()
-        self.all_packageworld_rowell_id = db_con.get_all_packageworld_rowell_id()
+        self.all_packageworld_rowell_id = db_con.get_all_pvc_free_id()
 
         if column == 1:  # view column
             try:

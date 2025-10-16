@@ -566,7 +566,7 @@ class RowellWidget(QWidget):
             return
 
         if print_after:
-            returning_coa_id = db_con.save_packageworld_rowell_coi(data, properties_data)
+            returning_coa_id = db_con.save_pvc_free_coi(data, properties_data)
             self.open_packageworld_rowell_preview(returning_coa_id, "temp")
             self.scroll_area.verticalScrollBar().setValue(0)
 
@@ -575,12 +575,12 @@ class RowellWidget(QWidget):
         try:
             global current_coa_id
             if current_coa_id is not None:  # Update existing COA
-                db_con.update_packageworld_rowell_coi(current_coa_id, data, properties_data)
+                db_con.update_pvc_free_coi(current_coa_id, data, properties_data)
                 window_alert.show_message(self, "Success", f"Certificate of Analysis updated successfully!",
                                           icon_type="info")
                 current_coa_id = None
             else:  # Insert new COA
-                db_con.save_packageworld_rowell_coi(data, properties_data)
+                db_con.save_pvc_free_coi(data, properties_data)
                 window_alert.show_message(self, "Success", f"Certificate of Analysis saved successfully!",
                                           icon_type="info")
                 current_coa_id = None
@@ -594,7 +594,7 @@ class RowellWidget(QWidget):
         try:
             self.delivery_receipt_input.blockSignals(True)
             field_result = db_con.get_single_coa_data(coa_id)
-            properties_table_result = db_con.get_packageworld_rowell_properties(coa_id)
+            properties_table_result = db_con.get_pvc_free_properties(coa_id)
 
             # === Populate inputs ===
             if field_result:

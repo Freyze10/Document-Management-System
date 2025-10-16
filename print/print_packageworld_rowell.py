@@ -115,7 +115,7 @@ class FileRowell(QWidget):
     def generate_pdf(self, coa_id, is_rrf=False):
         """Generate PDF from Rowell inspection data (precisely aligned with COI PDF layout)"""
         field_result = db_con.get_single_coa_data(coa_id)
-        properties_table_result = db_con.get_packageworld_rowell_properties(coa_id)
+        properties_table_result = db_con.get_pvc_free_properties(coa_id)
 
         buffer = io.BytesIO()
         doc = SimpleDocTemplate(
