@@ -112,13 +112,15 @@ def add_coa_header_only(canvas, doc, header_only=False):
         preserveAspectRatio=False
     )
 
-    # --- COA Title: fixed size and centered ---
-    second_image_path = abs_path.resource("img/coa_title.png")
-    second_image_width = 11.16 * cm
-    second_image_height = 1.45 * cm
+    canvas.setFont('Times-Roman', 9)
+    canvas.setFillColorRGB(0.1, 0.1, 0.1)
 
-    # Center horizontally
-    x_second_image = (page_width - second_image_width) / 2
-    # Place immediately below logo, with slight overlap or gap as desired
-    y_second_image_top = y_logo_top - second_image_height - (0.2 * cm)  # Adjust overlap/gap here
+    form_id_text = "FM00003A"
+    text_width = canvas.stringWidth(form_id_text, 'Times-Roman', 9)
+    canvas.drawString(
+        page_width - right_margin - text_width,
+        doc.bottomMargin,
+        form_id_text
+    )
 
+    canvas.restoreState()

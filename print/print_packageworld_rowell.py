@@ -111,7 +111,7 @@ class FileRowell(QWidget):
         self.addAction(self.print_action)
 
     def generate_pdf(self, coa_id, is_rrf=False):
-        """Generate PDF from Rowell inspection data (visually matched to reference layout)"""
+        """Generate PDF from Rowell inspection data (precisely aligned with COI PDF layout)"""
         field_result = db_con.get_single_coa_data(coa_id)
         properties_table_result = db_con.get_packageworld_rowell_properties(coa_id)
 
@@ -119,32 +119,86 @@ class FileRowell(QWidget):
         doc = SimpleDocTemplate(
             buffer,
             pagesize=letter,
-            rightMargin=60, leftMargin=60, topMargin=90, bottomMargin=50
+            rightMargin=60, leftMargin=60, topMargin=85, bottomMargin=45
         )
 
         styles = getSampleStyleSheet()
 
-        # Custom styles
-        styles.add(
-            ParagraphStyle(name="CustomTitle", fontName="Times-Bold", fontSize=14, leading=16, alignment=TA_CENTER))
-        styles.add(
-            ParagraphStyle(name="CustomSubtitle", fontName="Times-Bold", fontSize=12, leading=14, alignment=TA_CENTER))
-        styles.add(ParagraphStyle(name="FieldLabel", fontName="Times-Roman", fontSize=11, leading=13, spaceAfter=2))
-        styles.add(
-            ParagraphStyle(name="SectionHeader", fontName="Times-Bold", fontSize=12, leading=14, alignment=TA_CENTER,
-                           spaceBefore=16, spaceAfter=8))
-        styles.add(ParagraphStyle(name="SmallText", fontName="Times-Roman", fontSize=9, leading=11, leftIndent=10,
-                                  spaceAfter=10))
+        # === Font hierarchy and custom styles ===
+        styles.add(ParagraphStyle(
+            name="CustomTitle",
+            fontName="Times-Bold",
+            fontSize=14,
+            leading=16,
+            alignment=TA_CENTER
+        ))
+
+        styles.add(ParagraphStyle(
+            name="CustomSubtitle",
+            fontName="Times-Bold",
+            fontSize=12,
+            leading=14,
+            alignment=TA_CENTER
+        ))
+
+        styles.add(ParagraphStyle(
+            name="SectionHeader",
+            fontName="Times-Bold",
+            fontSize=12,
+            leading=14,
+            alignment=TA_CENTER,
+            spaceBefore=10,
+            spaceAfter=4
+        ))
+
+        styles.add(ParagraphStyle(
+            name="FieldLabel",
+            fontName="Times-Roman",
+            fontSize=11,
+            leading=13,
+            spaceAfter=2
+        ))
+
+        styles.add(ParagraphStyle(
+            name="TableLabel_left",
+            fontName="Times-Roman",
+            fontSize=11,
+            leading=13,
+            # alignment = TA_CENTER
+        ))
+
+        styles.add(ParagraphStyle(
+            name="TableLabel",
+            fontName="Times-Roman",
+            fontSize=11,
+            leading=13,
+            alignment=TA_CENTER
+        ))
+        styles.add(ParagraphStyle(
+            name="TableLabelBold",
+            fontName="Times-Roman",
+            fontSize=11,
+            leading=13,
+            alignment=TA_CENTER
+        ))
+        styles.add(ParagraphStyle(
+            name="SmallText",
+            fontName="Times-Italic",
+            fontSize=9,
+            leading=11,
+            leftIndent=10,
+            spaceAfter=10
+        ))
 
         content = []
 
-        # HEADER
+        # === HEADER SECTION ===
         content.append(Paragraph("CERTIFICATE OF INSPECTION", styles["CustomTitle"]))
-        content.append(Spacer(1, 4))
+        content.append(Spacer(1, 6))
         content.append(Paragraph("PVC-FREE COMPOUND FOOD APPROVED", styles["CustomSubtitle"]))
-        content.append(Spacer(1, 18))
+        content.append(Spacer(1, 22))
 
-        # CUSTOMER INFO (in a table, no borders)
+        # === CUSTOMER INFO (table without borders) ===
         page_width = letter[0] - 120
         field_rows = []
 
@@ -154,7 +208,7 @@ class FileRowell(QWidget):
                 Paragraph(value, styles["FieldLabel"])
             ])
 
-        # Format Manufacturing Date(s)
+        # 🗓 Manufacturing Date formatting
         mfg_date = field_result[8]
         if isinstance(mfg_date, datetime):
             mfg_date_str = mfg_date.strftime("%B %d, %Y")
@@ -169,7 +223,7 @@ class FileRowell(QWidget):
                     formatted_dates.append(d)
             mfg_date_str = ", ".join(formatted_dates)
 
-        # Add fields
+        # 🧾 Add field rows
         add_field_row("Customer:", field_result[1])
         add_field_row("Product Name:", properties_table_result[0][0])
         add_field_row("Code:", field_result[2])
@@ -177,20 +231,19 @@ class FileRowell(QWidget):
         add_field_row("Total Quantity:", field_result[6])
         add_field_row("Manufacturing Date:", mfg_date_str)
 
-        # Handle Shelf Life split (*)
+        # Shelf Life formatting
         shelf_life_value = str(field_result[12]).strip()
         if "*" in shelf_life_value:
             before_star, after_star = shelf_life_value.split("*", 1)
             combined = (
-                f'<font name="{styles["FieldLabel"].fontName}" size="{styles["FieldLabel"].fontSize}">{before_star.strip()}</font>'
+                f'<font name="Times-Roman" size="11">{before_star.strip()}</font>'
                 '<br/>'
-                f'<font name="{styles["SmallText"].fontName}" size="{styles["SmallText"].fontSize}">*{after_star.strip()}</font>'
+                f'<font name="Times-Italic" size="9">*{after_star.strip()}</font>'
             )
             add_field_row("Shelf Life:", combined)
         else:
             add_field_row("Shelf Life:", shelf_life_value)
 
-        # Build info table
         info_table = Table(field_rows, colWidths=[page_width * 0.25, page_width * 0.75])
         info_table.setStyle(TableStyle([
             ('FONTNAME', (0, 0), (-1, -1), 'Times-Roman'),
@@ -199,61 +252,107 @@ class FileRowell(QWidget):
             ('ALIGN', (0, 0), (0, -1), 'RIGHT'),
             ('LEFTPADDING', (0, 0), (-1, -1), 2),
             ('RIGHTPADDING', (0, 0), (-1, -1), 0),
-            ('TOPPADDING', (0, 0), (-1, -1), 2),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 2),
-            ('GRID', (0, 0), (-1, -1), 0, colors.white),  # No visible borders
+            ('TOPPADDING', (0, 0), (-1, -1), 1.5),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 1.5),
+            ('GRID', (0, 0), (-1, -1), 0, colors.white),
         ]))
         content.append(info_table)
-
         content.append(Spacer(1, 16))
 
-        # SECTION HEADER
+        # === SECTION HEADER ===
         content.append(Paragraph("PHYSICAL / TYPICAL PROPERTIES", styles["SectionHeader"]))
-        content.append(Spacer(1, 6))
+        content.append(Spacer(1, 8))
 
-        # PROPERTY TABLE
-        table_data = [["", "New Delivery", "Standard", "Method Used"]]
-        for row in properties_table_result[1:]:
-            table_data.append([row[0], row[1], row[2], row[3]])
+        # === TABLE DATA ===
+        table_data = []
+        header_row = [
+            Paragraph("", styles["TableLabelBold"]),
+            Paragraph("New Delivery", styles["TableLabelBold"]),
+            Paragraph("Standard", styles["TableLabelBold"]),
+            Paragraph("Method Used", styles["TableLabelBold"])
+        ]
+        table_data.append(header_row)
+
+        # Assume: rows for Pellet Size Length, mm and Diameter, mm are consecutive
+        combined_label = None
+        combined_value = []
+        combined_std = []
+        combined_method = []
+
+        for i, row in enumerate(properties_table_result[1:]):
+            label_text = row[0]
+            if label_text.strip() == "Pellet Size Length, mm":
+                # Start combining
+                combined_label = "Pellet Size<br/>Length, mm"
+                combined_value = [str(row[1])]
+                combined_std = [str(row[2])]
+                combined_method = [str(row[3])]
+                # Look ahead for "Diameter, mm"
+                if i + 2 <= len(properties_table_result[1:]):
+                    next_row = properties_table_result[1:][i + 1]
+                    if next_row[0].strip() == "Diameter, mm":
+                        combined_label += "<br/>Diameter, mm"
+                        combined_value.append(str(next_row[1]))
+                        combined_std.append(str(next_row[2]))
+                        skip_next = True
+                    else:
+                        skip_next = False
+                else:
+                    skip_next = False
+
+                label_p = Paragraph(combined_label, styles["TableLabel_left"])
+                value_p = Paragraph("<br/>".join(combined_value), styles["TableLabel"])
+                std_p = Paragraph("<br/>".join(combined_std), styles["TableLabel"])
+                method_p = Paragraph("<br/>".join(combined_method), styles["TableLabel"])
+                table_data.append([label_p, value_p, std_p, method_p])
+            elif label_text.strip() == "Diameter, mm" and 'skip_next' in locals() and skip_next:
+                skip_next = False  # Already processed above, skip this time
+                continue
+            else:
+                label_p = Paragraph(label_text, styles["TableLabel_left"])
+                value_p = Paragraph(str(row[1]), styles["TableLabel"])
+                std_p = Paragraph(str(row[2]), styles["TableLabel"])
+                method_p = Paragraph(str(row[3]), styles["TableLabel"])
+                table_data.append([label_p, value_p, std_p, method_p])
 
         properties_table = Table(
             table_data,
-            colWidths=[page_width * 0.3, page_width * 0.2, page_width * 0.25, page_width * 0.25]
+            colWidths=[page_width * 0.25, page_width * 0.25, page_width * 0.25, page_width * 0.25]
         )
-        properties_table.setStyle(TableStyle([
-            ('FONTNAME', (0, 0), (-1, 0), 'Times-Bold'),
-            ('FONTSIZE', (0, 0), (-1, 0), 11),
-            ('ALIGN', (0, 0), (-1, 0), 'CENTER'),
+
+        table_style = [
+            ('ALIGN', (0, 0), (3, -1), 'CENTER'),  # Center header row
             ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
             ('GRID', (0, 0), (-1, -1), 0.75, colors.black),
-            ('ALIGN', (0, 1), (0, -1), 'LEFT'),
-            ('ALIGN', (1, 1), (-1, -1), 'CENTER'),
+
+            # Vertical alignment
+            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('VALIGN', (1, 4), (2, 4), 'BOTTOM'),
+            ('VALIGN', (1, 4), (2, 4), 'BOTTOM'),
+
+            # Padding
+            ('TOPPADDING', (0, 0), (-1, -1), 2),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+
+            # Font setup
             ('FONTNAME', (0, 1), (-1, -1), 'Times-Roman'),
             ('FONTSIZE', (0, 1), (-1, -1), 11),
-            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('TOPPADDING', (0, 0), (-1, -1), 5),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
-        ]))
+        ]
+
+        properties_table.setStyle(TableStyle(table_style))
         content.append(properties_table)
         content.append(Spacer(1, 25))
 
-        # CERTIFICATION SECTION
+        # === CERTIFICATION SECTION ===
         cert_date = field_result[9]
         cert_date_str = cert_date.strftime("%B %d, %Y") if isinstance(cert_date, datetime) else cert_date
 
-        content.append(Spacer(1, 5))
-        content.append(Paragraph("Certified by:    ________________________", styles["FieldLabel"]))
-
+        content.append(Paragraph("Certified by:  ________________________", styles["FieldLabel"]))
         indent_style = ParagraphStyle(name="Indented", parent=styles["FieldLabel"], leftIndent=80, spaceAfter=2)
         content.append(Paragraph(field_result[10], indent_style))
         content.append(Paragraph(properties_table_result[0][1], indent_style))
-        content.append(Spacer(1, 5))
+        content.append(Spacer(1, 10))
         content.append(Paragraph(f"Date: {cert_date_str}", styles["FieldLabel"]))
-
-        # FORM NUMBER (bottom-right)
-        form_style = ParagraphStyle(name="FormNumber", parent=styles["SmallText"], alignment=2)
-        content.append(Spacer(1, 20))
-        content.append(Paragraph("FM00003A", form_style))
 
         doc.build(content, onFirstPage=add_coa_header_only)
         buffer.seek(0)
