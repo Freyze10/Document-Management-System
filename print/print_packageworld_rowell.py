@@ -13,6 +13,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib import colors
+from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Indenter
 
 from alert import window_alert
@@ -119,7 +120,7 @@ class FileRowell(QWidget):
         doc = SimpleDocTemplate(
             buffer,
             pagesize=letter,
-            rightMargin=60, leftMargin=60, topMargin=85, bottomMargin=45
+            rightMargin=60, leftMargin=60, topMargin=95, bottomMargin=45
         )
 
         styles = getSampleStyleSheet()
@@ -127,15 +128,15 @@ class FileRowell(QWidget):
         # === Font hierarchy and custom styles ===
         styles.add(ParagraphStyle(
             name="CustomTitle",
-            fontName="Times-Bold",
-            fontSize=14,
+            fontName="Helvetica",
+            fontSize=20,
             leading=16,
             alignment=TA_CENTER
         ))
 
         styles.add(ParagraphStyle(
             name="CustomSubtitle",
-            fontName="Times-Bold",
+            fontName="Times-Roman",
             fontSize=12,
             leading=14,
             alignment=TA_CENTER
@@ -143,10 +144,9 @@ class FileRowell(QWidget):
 
         styles.add(ParagraphStyle(
             name="SectionHeader",
-            fontName="Times-Bold",
-            fontSize=12,
+            fontName="Times-Roman",
+            fontSize=11,
             leading=14,
-            alignment=TA_CENTER,
             spaceBefore=10,
             spaceAfter=4
         ))
@@ -194,8 +194,8 @@ class FileRowell(QWidget):
 
         # === HEADER SECTION ===
         content.append(Paragraph("CERTIFICATE OF INSPECTION", styles["CustomTitle"]))
-        content.append(Spacer(1, 6))
-        content.append(Paragraph("PVC-FREE COMPOUND FOOD APPROVED", styles["CustomSubtitle"]))
+        content.append(Spacer(1, 24))
+        content.append(Paragraph("<u>PVC-FREE COMPOUND FOOD APPROVED</u>", styles["CustomSubtitle"]))
         content.append(Spacer(1, 22))
 
         # === CUSTOMER INFO (table without borders) ===
@@ -238,7 +238,7 @@ class FileRowell(QWidget):
             combined = (
                 f'<font name="Times-Roman" size="11">{before_star.strip()}</font>'
                 '<br/>'
-                f'<font name="Times-Italic" size="9">*{after_star.strip()}</font>'
+                f'<font name="Times-Roman" size="9">*{after_star.strip()}</font>'
             )
             add_field_row("Shelf Life:", combined)
         else:
@@ -253,15 +253,15 @@ class FileRowell(QWidget):
             ('LEFTPADDING', (0, 0), (-1, -1), 2),
             ('RIGHTPADDING', (0, 0), (-1, -1), 0),
             ('TOPPADDING', (0, 0), (-1, -1), 1.5),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 1.5),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
             ('GRID', (0, 0), (-1, -1), 0, colors.white),
         ]))
         content.append(info_table)
-        content.append(Spacer(1, 16))
+        content.append(Spacer(1, 12))
 
         # === SECTION HEADER ===
-        content.append(Paragraph("PHYSICAL / TYPICAL PROPERTIES", styles["SectionHeader"]))
-        content.append(Spacer(1, 8))
+        content.append(Paragraph("<u>PHYSICAL / TYPICAL PROPERTIES</u>", styles["SectionHeader"]))
+        content.append(Spacer(1, 12))
 
         # === TABLE DATA ===
         table_data = []
@@ -322,7 +322,6 @@ class FileRowell(QWidget):
 
         table_style = [
             ('ALIGN', (0, 0), (3, -1), 'CENTER'),  # Center header row
-            ('BACKGROUND', (0, 0), (-1, 0), colors.lightgrey),
             ('GRID', (0, 0), (-1, -1), 0.75, colors.black),
 
             # Vertical alignment
@@ -347,11 +346,22 @@ class FileRowell(QWidget):
         cert_date = field_result[9]
         cert_date_str = cert_date.strftime("%B %d, %Y") if isinstance(cert_date, datetime) else cert_date
 
+        font_name = styles["FieldLabel"].fontName
+        font_size = styles["FieldLabel"].fontSize
         content.append(Paragraph("Certified by:  ________________________", styles["FieldLabel"]))
-        indent_style = ParagraphStyle(name="Indented", parent=styles["FieldLabel"], leftIndent=80, spaceAfter=2)
+        underline_text = "________________________"
+        underline_width = stringWidth(underline_text, font_name, font_size)
+        name_width = stringWidth(str(field_result[10]), font_name, font_size)
+        cert_label_width = stringWidth("Certified by:  ", font_name, font_size)
+        indent_value = cert_label_width + (underline_width - name_width) / 2
+
+        indent_style = ParagraphStyle(name="Indented", parent=styles["FieldLabel"], leftIndent=indent_value)
         content.append(Paragraph(field_result[10], indent_style))
-        content.append(Paragraph(properties_table_result[0][1], indent_style))
-        content.append(Spacer(1, 10))
+
+        position_width = stringWidth(str(properties_table_result[0][1]), font_name, font_size)
+        indent_value_plus = cert_label_width + (underline_width - position_width) / 2
+        indent_style_plus = ParagraphStyle(name="Indented", parent=styles["FieldLabel"], leftIndent=indent_value_plus)
+        content.append(Paragraph(properties_table_result[0][1], indent_style_plus))
         content.append(Paragraph(f"Date: {cert_date_str}", styles["FieldLabel"]))
 
         doc.build(content, onFirstPage=add_coa_header_only)
