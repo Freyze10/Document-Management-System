@@ -488,7 +488,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760595075211</updated>
     </task>
-    <option name="localTasksCounter" value="32" />
+    <task id="LOCAL-00032" summary="changed font">
+      <option name="closed" value="true" />
+      <created>1760595989823</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1760595989823</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -516,7 +524,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="removed exec debug" />
     <MESSAGE value="added multiple selection func" />
     <MESSAGE value="added widget rowell" />
     <MESSAGE value="added sync dr and position" />
@@ -541,7 +548,8 @@
     <MESSAGE value="fixing table display in print" />
     <MESSAGE value="fixed table and auto center" />
     <MESSAGE value="changed format function of date" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed format function of date" />
+    <MESSAGE value="changed font" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed font" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -193,8 +193,9 @@ class FileRowell(QWidget):
         content = []
 
         # === HEADER SECTION ===
+        content.append(Spacer(1, 12))
         content.append(Paragraph("CERTIFICATE OF INSPECTION", styles["CustomTitle"]))
-        content.append(Spacer(1, 24))
+        content.append(Spacer(1, 34))
         content.append(Paragraph("<u>PVC-FREE COMPOUND FOOD APPROVED</u>", styles["CustomSubtitle"]))
         content.append(Spacer(1, 22))
 
@@ -261,7 +262,7 @@ class FileRowell(QWidget):
         content.append(Spacer(1, 10))
 
         # === SECTION HEADER ===
-        content.append(Paragraph("<u>PHYSICAL / TYPICAL PROPERTIES</u>", styles["SectionHeader"]))
+        content.append(Paragraph("<b><u>PHYSICAL / TYPICAL PROPERTIES</u></b>", styles["SectionHeader"]))
         content.append(Spacer(1, 14))
 
         # === TABLE DATA ===
