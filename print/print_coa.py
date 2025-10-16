@@ -336,16 +336,6 @@ class FileCOA(QWidget):
 
         content.append(Spacer(1, 14))  # Space before footer note
 
-        # right_align = ParagraphStyle(
-        #     name='RightAlign',
-        #     fontName='Times-Roman',
-        #     fontSize=9,
-        #     alignment=TA_RIGHT,
-        #     rightIndent=0  # no extra space, just at margin
-        # )
-        #
-        # content.append(Paragraph("FM00003A", right_align))
-
         doc.build(content, onFirstPage=add_coa_header)
         buffer.seek(0)
         return buffer.getvalue()  # returns PDF bytes

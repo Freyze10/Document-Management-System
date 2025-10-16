@@ -428,7 +428,6 @@ class RowellWidget(QWidget):
         self.product_name_input.setText("Riteseal 88 Non PVC Liner Compound Blue")
         self.shelf_life_input.setText(
             "12 months from date of production *Shelf life is stated as a maximum from date of production when the product is stored in unbroken packaging.")
-        self.certified_by_name_input.setText("Linzy Jam Bautista")
         self.position_input.setText("QC Analyst")
 
         properties_data = [
@@ -511,7 +510,9 @@ class RowellWidget(QWidget):
         self.code_input.clear()
         self.lot_number_input.clear()
         self.quantity_input.clear()
+        self.delivery_receipt_input.clear()
         self.manufacturing_date_input.clear_value()
+        self.btn_submit.setText("Submit")
 
     def on_submit_clicked(self):
         """Handle submit button click"""
@@ -566,7 +567,7 @@ class RowellWidget(QWidget):
         try:
             global current_coa_id
             if current_coa_id is not None:  # Update existing COA
-                db_con.update_certificate_of_analysis_rrf(current_coa_id, data, properties_data)
+                db_con.update_packageworld_rowell_coi(current_coa_id, data, properties_data)
                 window_alert.show_message(self, "Success", f"Certificate of Analysis updated successfully!",
                                           icon_type="info")
                 current_coa_id = None
@@ -620,6 +621,7 @@ class RowellWidget(QWidget):
                 self.properties_table.setItem(row_idx, 3, QTableWidgetItem(method))
 
             self.adjust_table_height()
+            self.btn_submit.setText("Update")
             self.btn_save_as_new.setVisible(True)
             self.delivery_receipt_input.blockSignals(False)
 

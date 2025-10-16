@@ -1012,6 +1012,72 @@ def update_terumo_coa(coa_id, data, terumo):
             conn.close()
 
 
+def update_packageworld_rowell_coi(coa_id, data, table):
+    conn = get_connection()
+    try:
+        cur = conn.cursor()
+
+        # Update certificates_of_analysis
+        cur.execute("""
+            UPDATE certificates_of_analysis
+            SET 
+                customer_name = %s,
+                color_code = %s,
+                lot_number = %s,
+                delivery_date = %s,
+                delivery_receipt_number = %s,
+                quantity_delivered = %s,
+                production_date = %s,
+                certification_date = %s,
+                certified_by = %s,
+                shelf_life_coa = %s
+            WHERE id = %s;
+        """, (
+            data["customer_name"], data["color_code"], data["lot_number"], data["delivery_date"],
+            data["delivery_receipt_number"], data["quantity_delivered"], data["manufacturing_date"],
+            data["certification_date"], data["certified_by"], data["shelf_life"],
+            coa_id
+        ))
+
+        # Delete old entries from tbl_packageworld_and_rowell for this coa_id
+        cur.execute("""
+            DELETE FROM tbl_packageworld_and_rowell
+            WHERE coa_id = %s;
+        """, (coa_id,))
+
+        # Reinsert the first row (product name and position)
+        cur.execute("""
+            INSERT INTO tbl_packageworld_and_rowell (
+                coa_id, parameter_name, new_delivery
+            ) VALUES (%s, %s, %s)
+        """, (coa_id, data["product_name"], data["position"]))
+
+        # Reinsert analysis results
+        for idx, values in table.items():
+            parameter_name = values[0]
+            new_delivery = values[1]
+            standard = values[2]
+            method_used = values[3]
+
+            cur.execute("""
+                INSERT INTO tbl_packageworld_and_rowell (
+                    coa_id, parameter_name, new_delivery, standard, method_used
+                ) VALUES (%s, %s, %s, %s, %s)
+            """, (coa_id, parameter_name, new_delivery, standard, method_used))
+
+        conn.commit()
+
+    except Exception as e:
+        if conn:
+            conn.rollback()
+        raise e
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
+
+
 #     Read
 def get_all_msds_data():
     conn = get_connection()
