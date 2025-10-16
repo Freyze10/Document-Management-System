@@ -300,6 +300,22 @@ class RowellWidget(QWidget):
         submit_button_row = QHBoxLayout()
         submit_button_row.addStretch()
 
+        self.btn_save_as_new = QPushButton("Save as New")
+        self.btn_save_as_new.setStyleSheet("""
+                    QPushButton {
+                        background-color: #17a2b8;
+                    }
+                    QPushButton:hover {
+                        background-color: #138496;
+                    }
+                    QPushButton:pressed {
+                        background-color: #117a8b;
+                    }
+                """)
+        self.btn_save_as_new.clicked.connect(self.rowell_save_as_new_clicked)
+        self.btn_save_as_new.setVisible(False)
+        submit_button_row.addWidget(self.btn_save_as_new)
+
         self.btn_submit = QPushButton("Submit")
         self.btn_submit.clicked.connect(self.on_submit_clicked)
         submit_button_row.addWidget(self.btn_submit)
@@ -546,6 +562,7 @@ class RowellWidget(QWidget):
             window_alert.show_message(self, "Invalid Input", f"Certified By: '{self.certified_by_name_input.text()}' is not in the list.",
                                       icon_type="warning")
             return
+
         try:
             global current_coa_id
             if current_coa_id is not None:  # Update existing COA
@@ -603,10 +620,16 @@ class RowellWidget(QWidget):
                 self.properties_table.setItem(row_idx, 3, QTableWidgetItem(method))
 
             self.adjust_table_height()
+            self.btn_save_as_new.setVisible(True)
             self.delivery_receipt_input.blockSignals(False)
 
         except Exception as e:
             print(f"Load Rowell COI error: {e}")
+
+    def rowell_save_as_new_clicked(self):
+        global current_coa_id
+        current_coa_id = None
+        self.on_submit_clicked()
 
     def run_sync_script(self):
         # Show loading dialog
