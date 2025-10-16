@@ -1,4 +1,5 @@
 import io
+import re
 from datetime import datetime
 
 from PyQt6.QtCore import QBuffer, QIODevice, QSize, Qt, QPointF
@@ -224,13 +225,22 @@ class FileRowell(QWidget):
                     formatted_dates.append(d)
             mfg_date_str = ", ".join(formatted_dates)
 
+        quantity = str(field_result[6]).strip()
+
+        # First, try to replace kg/KG/kg./KG. if present at the end
+        filtered_quantity = re.sub(r'(\s*kg\.?$|\s*KG\.?$)', ' Kg.', quantity, flags=re.IGNORECASE)
+
+        # If 'kg' is not present at the end, append " Kg."
+        if not re.search(r'(kg\.?$|KG\.?$)', quantity.strip(), re.IGNORECASE):
+            filtered_quantity = quantity.strip() + " Kg."
+
         customer_name = "<b>" + str(field_result[1]) + "</b>"
         # 🧾 Add field rows
         add_field_row("Customer:", customer_name)
         add_field_row("Product Name:", properties_table_result[0][0])
         add_field_row("Code:", field_result[2])
         add_field_row("Lot Number:", field_result[3])
-        add_field_row("Total Quantity:", field_result[6])
+        add_field_row("Total Quantity:", filtered_quantity)
         add_field_row("Manufacturing Date:", mfg_date_str)
 
         # Shelf Life formatting
