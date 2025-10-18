@@ -201,7 +201,7 @@ class FilePVC(QWidget):
         content.append(Spacer(1, 22))
 
         # === CUSTOMER INFO (table without borders) ===
-        page_width = letter[0] - 120
+        page_width = letter[0] - 130
         field_rows = []
 
         def add_field_row(label, value):
@@ -248,9 +248,9 @@ class FilePVC(QWidget):
         if "*" in shelf_life_value:
             before_star, after_star = shelf_life_value.split("*", 1)
             combined = (
-                f'<font name="Times-Roman" size="11">{before_star.strip()}</font>'
+                f'<font name="Helvetica" size="10">{before_star.strip()}</font>'
                 '<br/>'
-                f'<font name="Times-Roman" size="9">*{after_star.strip()}</font>'
+                f'<font name="Helvetica" size="8">*{after_star.strip()}</font>'
             )
             add_field_row("Shelf Life:", combined)
         else:
@@ -265,7 +265,7 @@ class FilePVC(QWidget):
             ('LEFTPADDING', (0, 0), (-1, -1), 2),
             ('RIGHTPADDING', (0, 0), (-1, -1), 0),
             ('TOPPADDING', (0, 0), (-1, -1), 1.5),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+            ('BOTTOMPADDING', (0, 0), (-1, -1), 7),
             ('GRID', (0, 0), (-1, -1), 0, colors.white),
         ]))
         content.append(info_table)
