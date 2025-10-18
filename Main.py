@@ -13,7 +13,7 @@ from print.print_pvc_free import FilePVC
 import Login
 from utils import abs_path, scroll_date, calendar_design, check_cx, multiple_dates, loading
 from utils.debounce import setup_finished_typing
-from formats_input import rowell_litho
+from formats_input import rowell_litho, packageworld
 
 
 class MainWindow(QMainWindow):
@@ -370,10 +370,12 @@ class MainWindow(QMainWindow):
         self.coa_default_tab = QWidget()
         self.coa_terumo_tab = QWidget()
         self.coa_rowell_tab = rowell_litho.RowellWidget()
+        self.coa_PackageWorld_tab = packageworld.PackageWorldWidget()
 
         self.coa_data_entry_sub_tabs.addTab(self.coa_default_tab, "COA")
         self.coa_data_entry_sub_tabs.addTab(self.coa_terumo_tab, "Terumo (COA)")
         self.coa_data_entry_sub_tabs.addTab(self.coa_rowell_tab, "Rowell (COI)")
+        self.coa_data_entry_sub_tabs.addTab(self.coa_PackageWorld_tab, "Package World (COI)")
 
         self.coa_data_entry_layout = QVBoxLayout(self.coa_data_entry_tab)
         self.coa_data_entry_layout.addWidget(self.coa_data_entry_sub_tabs)
@@ -1188,6 +1190,38 @@ class MainWindow(QMainWindow):
                 finally:
                     table.load_msds_table(self)
 
+    def check_print_pvc(self, coa_id, display_text):
+        cus_name = db_con.get_customer_name_data(coa_id)
+        cus_name = cus_name[0]
+        cus_name = cus_name.lower() if cus_name else ""
+
+        if "rowell" in cus_name:
+            rowell_litho.RowellWidget.open_packageworld_rowell_preview(
+                self.coa_rowell_tab, coa_id, display_text
+            )
+
+        elif "package" in cus_name:
+            packageworld.PackageWorldWidget.open_packageworld_preview(
+                self.coa_PackageWorld_tab, coa_id, display_text
+            )
+
+    def check_edit_pvc(self, coa_id):
+        cus_name = db_con.get_customer_name_data(coa_id)
+        cus_name = cus_name[0]
+        cus_name = cus_name.lower() if cus_name else ""
+
+        if "rowell" in cus_name:
+            rowell_litho.current_coa_id = coa_id
+            self.coa_rowell_tab.load_coa_details(coa_id)
+            self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
+            self.coa_data_entry_sub_tabs.setCurrentIndex(2)
+
+        elif "package" in cus_name:
+            rowell_litho.current_coa_id = coa_id
+            self.coa_PackageWorld_tab.load_coa_details(coa_id)
+            self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
+            self.coa_data_entry_sub_tabs.setCurrentIndex(3)
+
     def coa_cell_clicked(self, row, column):
         coa_id = self.coa_records_table.item(row, 0).data(Qt.ItemDataRole.UserRole)
         self.all_terumo_id = db_con.get_all_terumo_id()
@@ -1198,7 +1232,7 @@ class MainWindow(QMainWindow):
                 if coa_id in self.all_terumo_id:
                     self.open_terumo_preview(coa_id, display_text)
                 elif coa_id in self.all_packageworld_rowell_id:
-                    rowell_litho.RowellWidget.open_packageworld_rowell_preview(self.coa_rowell_tab, coa_id, display_text)
+                    self.check_print_pvc(coa_id, display_text)
                 else:
                     self.open_coa_preview(coa_id, display_text)
             except Exception as e:
@@ -1211,10 +1245,8 @@ class MainWindow(QMainWindow):
                     self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
                     self.coa_data_entry_sub_tabs.setCurrentIndex(1)
                 elif coa_id in self.all_packageworld_rowell_id:
-                    rowell_litho.current_coa_id = coa_id
-                    self.coa_rowell_tab.load_coa_details(coa_id)
-                    self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
-                    self.coa_data_entry_sub_tabs.setCurrentIndex(2)
+                    self.check_edit_pvc(coa_id)
+
                 else:
                     coa_data_entry.current_coa_id = coa_id
                     coa_data_entry.load_coa_details(self, coa_id, self.is_rrf)
@@ -1333,21 +1365,6 @@ class MainWindow(QMainWindow):
         self.terumo_widget.show()
         self.terumo_widget.activateWindow()
         self.terumo_widget.raise_()
-
-    def open_packageworld_rowell_preview(self, coa_id, filename):
-        # If the widget already exists, close it first to avoid multiple instances
-        try:
-            if self.rowell_widget is not None:
-                self.rowell_widget.close()
-                self.rowell_widget.deleteLater()  # Good practice
-            self.rowell_widget = FilePVC()
-            self.rowell_widget.show_pdf_preview(coa_id, filename)
-            self.rowell_widget.resize(900, 800)
-            self.rowell_widget.show()
-            self.rowell_widget.activateWindow()
-            self.rowell_widget.raise_()
-        except Exception as e:
-            print(e)
 
     def run_sync_script(self):
         # Show loading dialog

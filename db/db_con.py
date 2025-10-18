@@ -1494,6 +1494,21 @@ def get_all_terumo_id():
     return [row[0] for row in records]
 
 
+def get_customer_name_data(coa_id):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        "SELECT customer_name FROM certificates_of_analysis WHERE id = %s;",
+        (coa_id,)
+    )
+    record = cur.fetchone()  # only one row expected
+
+    cur.close()
+    conn.close()
+    return record
+
+
 def get_all_pvc_free_id():
     try:
         conn = get_connection()
