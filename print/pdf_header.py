@@ -81,7 +81,7 @@ def add_coa_header(canvas, doc, header_only=False):
     text_width = canvas.stringWidth(form_id_text, 'Times-Roman', 9)
     canvas.drawString(
         page_width - right_margin - text_width,
-        doc.bottomMargin,
+        doc.bottomMargin + 15,
         form_id_text
     )
 
@@ -119,7 +119,7 @@ def add_coa_header_only(canvas, doc, header_only=False):
     text_width = canvas.stringWidth(form_id_text, 'Times-Roman', 9)
     canvas.drawString(
         page_width - right_margin - text_width,
-        doc.bottomMargin,
+        doc.bottomMargin + 15,
         form_id_text
     )
 
