@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00008" summary="added widget rowell">
-      <option name="closed" value="true" />
-      <created>1760492145577</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1760492145577</updated>
-    </task>
     <task id="LOCAL-00009" summary="added sync dr and position">
       <option name="closed" value="true" />
       <created>1760494537860</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760929715637</updated>
     </task>
-    <option name="localTasksCounter" value="57" />
+    <task id="LOCAL-00057" summary="changed position footer coa">
+      <option name="closed" value="true" />
+      <created>1760929916910</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1760929916910</updated>
+    </task>
+    <option name="localTasksCounter" value="58" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="changed format function of date" />
     <MESSAGE value="changed font" />
     <MESSAGE value="adjust spacing" />
     <MESSAGE value="added kg format" />
@@ -685,7 +684,8 @@
     <MESSAGE value="added smypc widget" />
     <MESSAGE value="modified printing in sympc" />
     <MESSAGE value="added format for techno_trade" />
-    <option name="LAST_COMMIT_MESSAGE" value="added format for techno_trade" />
+    <MESSAGE value="changed position footer coa" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed position footer coa" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
