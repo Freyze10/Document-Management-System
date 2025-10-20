@@ -240,22 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00001" summary="modified">
-      <option name="closed" value="true" />
-      <created>1758069633694</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1758069633694</updated>
-    </task>
-    <task id="LOCAL-00002" summary="modified">
-      <option name="closed" value="true" />
-      <created>1760402476991</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1760402476991</updated>
-    </task>
     <task id="LOCAL-00003" summary="created dialog mult date">
       <option name="closed" value="true" />
       <created>1760429032391</created>
@@ -632,7 +616,23 @@
       <option name="project" value="LOCAL" />
       <updated>1760924221333</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="modified save function">
+      <option name="closed" value="true" />
+      <created>1760924639973</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1760924639973</updated>
+    </task>
+    <task id="LOCAL-00051" summary="changed variable naming">
+      <option name="closed" value="true" />
+      <created>1760925116652</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1760925116652</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,8 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added update function" />
-    <MESSAGE value="added print preview file" />
     <MESSAGE value="creating the preview" />
     <MESSAGE value="fixed the formats" />
     <MESSAGE value="fixing print preview" />
@@ -685,7 +683,9 @@
     <MESSAGE value="addedd deliuvery date" />
     <MESSAGE value="fixed save func" />
     <MESSAGE value="added print dynamiccaaps" />
-    <option name="LAST_COMMIT_MESSAGE" value="added print dynamiccaaps" />
+    <MESSAGE value="modified save function" />
+    <MESSAGE value="changed variable naming" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed variable naming" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

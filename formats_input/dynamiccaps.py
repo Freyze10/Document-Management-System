@@ -315,7 +315,7 @@ class DynamiccapsWidget(QWidget):
                         background-color: #117a8b;
                     }
                 """)
-        self.btn_save_as_new.clicked.connect(self.package_save_as_new_clicked)
+        self.btn_save_as_new.clicked.connect(self.dynamiccapskage_save_as_new_clicked)
         self.btn_save_as_new.setVisible(False)
         submit_button_row.addWidget(self.btn_save_as_new)
 
@@ -640,7 +640,7 @@ class DynamiccapsWidget(QWidget):
         except Exception as e:
             print(f"Load Rowell COI error: {e}")
 
-    def package_save_as_new_clicked(self):
+    def dynamiccapskage_save_as_new_clicked(self):
         global current_coa_id
         current_coa_id = None
         self.on_submit_clicked()
