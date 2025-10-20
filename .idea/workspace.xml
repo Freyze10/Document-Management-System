@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00006" summary="removed exec debug">
-      <option name="closed" value="true" />
-      <created>1760432968330</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1760432968330</updated>
-    </task>
     <task id="LOCAL-00007" summary="added multiple selection func">
       <option name="closed" value="true" />
       <created>1760489768644</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760928138236</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="modified printing in sympc">
+      <option name="closed" value="true" />
+      <created>1760928793619</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1760928793619</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fixing table display in print" />
     <MESSAGE value="fixed table and auto center" />
     <MESSAGE value="changed format function of date" />
     <MESSAGE value="changed font" />
@@ -685,7 +684,8 @@
     <MESSAGE value="modified input fields" />
     <MESSAGE value="created preview smypc" />
     <MESSAGE value="added smypc widget" />
-    <option name="LAST_COMMIT_MESSAGE" value="added smypc widget" />
+    <MESSAGE value="modified printing in sympc" />
+    <option name="LAST_COMMIT_MESSAGE" value="modified printing in sympc" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -712,17 +712,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1260</line>
+          <line>1280</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1272</line>
+          <line>1292</line>
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1196</line>
+          <line>1216</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
       </breakpoints>

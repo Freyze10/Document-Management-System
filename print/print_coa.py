@@ -181,10 +181,11 @@ class FileCOA(QWidget):
                 except ValueError:
                     formatted_dates.append(d)
             production_date_str = ", ".join(formatted_dates)
-        content.append(Paragraph(
-            f"Production Date: {production_date_str}",
-            styles['NormalText']))
-        content.append(Spacer(1, 10))
+        if "techno-trade" in field_result[1].lower():
+            pass
+        else:
+            content.append(Paragraph(f"Production Date: {production_date_str}", styles['NormalText']))
+            content.append(Spacer(1, 10))
 
         if field_result[18]:
             content.append(Paragraph(

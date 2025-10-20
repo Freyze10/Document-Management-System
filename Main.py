@@ -819,9 +819,29 @@ class MainWindow(QMainWindow):
 
         # Check if any required field is empty
         for field, value in required_fields.items():
-            if not value:  # empty string
-                window_alert.show_message(self, "Missing Input", f"Please fill in:  {field}", icon_type="warning")
-                return  # stop processing
+            # Special handling for Production Date
+            if field == "Production Date" and not value:
+                confirm = window_alert.show_message(
+                    self,
+                    "Confirm Missing Field",
+                    "Production Date is empty.\n\nDo you want to continue without it?",
+                    icon_type="question",
+                    is_confirmation=True
+                )
+                if not confirm:  # user clicked No
+                    return  # stop process
+                else:
+                    continue  # proceed even if empty
+
+            # Handle other missing fields normally
+            if not value:
+                window_alert.show_message(
+                    self,
+                    "Missing Input",
+                    f"Please fill in: {field}",
+                    icon_type="warning"
+                )
+                return
 
         # Check summary of analysis if no empty row
         if not any(any(cell for cell in row) for row in summary_of_analysis.values()):
