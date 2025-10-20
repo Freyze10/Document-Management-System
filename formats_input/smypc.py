@@ -675,7 +675,7 @@ class SmypcWidget(QWidget):
                 self.smypc_widget.close()
                 self.smypc_widget.deleteLater()  # Good practice
             self.smypc_widget = FilePVC()
-            self.smypc_widget.show_pdf_preview(coa_id, filename)
+            self.smypc_widget.show_pdf_preview(coa_id, filename, smypc=True)
             self.smypc_widget.resize(900, 800)
             self.smypc_widget.show()
             self.smypc_widget.activateWindow()

@@ -112,7 +112,7 @@ class FilePVC(QWidget):
         self.print_action.triggered.connect(self.print_pdf)
         self.addAction(self.print_action)
 
-    def generate_pdf(self, coa_id, is_rrf=False, dynamiccaps=False):
+    def generate_pdf(self, coa_id, is_rrf=False, dynamiccaps=False, smypc=False):
         """Generate PDF from Rowell inspection data (precisely aligned with COI PDF layout)"""
         field_result = db_con.get_single_coa_data(coa_id)
         properties_table_result = db_con.get_pvc_free_properties(coa_id)
@@ -244,6 +244,14 @@ class FilePVC(QWidget):
             add_field_row("Delivery Date:", field_result[7].strftime('%B %d, %Y'))
             add_field_row("Manufacturing Date:", mfg_date_str)
             add_field_row("Delivery Receipt:", field_result[5])
+        elif smypc:
+            add_field_row("Customer:", customer_name)
+            add_field_row("Product Name:", properties_table_result[0][0])
+            add_field_row("Code:", field_result[2])
+            add_field_row("Lot Number:", field_result[3])
+            add_field_row("Total Quantity:", filtered_quantity)
+            add_field_row("Delivery Date:", field_result[7].strftime('%B %d, %Y'))
+            add_field_row("Manufacturing Date:", mfg_date_str)
         else:
             add_field_row("Customer:", customer_name)
             add_field_row("Product Name:", properties_table_result[0][0])
@@ -291,7 +299,10 @@ class FilePVC(QWidget):
                 ('GRID', (0, 0), (-1, -1), 0, colors.white),
             ]))
         content.append(info_table)
-        content.append(Spacer(1, 10))
+        if smypc:
+            content.append(Spacer(1, 6))
+        else:
+            content.append(Spacer(1, 10))
 
         # === SECTION HEADER ===
         content.append(Paragraph("<b><u>PHYSICAL / TYPICAL PROPERTIES</u></b>", styles["SectionHeader"]))
@@ -375,6 +386,24 @@ class FilePVC(QWidget):
                 ('FONTNAME', (0, 1), (-1, -1), 'Times-Roman'),
                 ('FONTSIZE', (0, 1), (-1, -1), 11),
             ]
+        elif smypc:
+            table_style = [
+                ('ALIGN', (0, 0), (3, -1), 'CENTER'),  # Center header row
+                ('GRID', (0, 0), (-1, -1), 0.75, colors.black),
+
+                # Vertical alignment
+                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                ('VALIGN', (1, 5), (2, 5), 'BOTTOM'),
+                ('VALIGN', (1, 5), (2, 5), 'BOTTOM'),
+
+                # Padding
+                ('TOPPADDING', (0, 0), (-1, -1), 2),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+
+                # Font setup
+                ('FONTNAME', (0, 1), (-1, -1), 'Times-Roman'),
+                ('FONTSIZE', (0, 1), (-1, -1), 11),
+            ]
         else:
             table_style = [
                 ('ALIGN', (0, 0), (3, -1), 'CENTER'),  # Center header row
@@ -440,9 +469,9 @@ class FilePVC(QWidget):
         buffer.seek(0)
         return buffer.getvalue()
 
-    def show_pdf_preview(self, coa_id, filename, dynamiccaps=False):
+    def show_pdf_preview(self, coa_id, filename, dynamiccaps=False, smypc=False):
         self.file_name = filename
-        pdf_bytes = self.generate_pdf(coa_id, dynamiccaps=dynamiccaps)
+        pdf_bytes = self.generate_pdf(coa_id, dynamiccaps=dynamiccaps, smypc=smypc)
         # Wrap the PDF bytes in a QBuffer
         self.buffer = QBuffer()  # keep it as an instance attribute so it's not garbage collected
         self.buffer.setData(pdf_bytes)
