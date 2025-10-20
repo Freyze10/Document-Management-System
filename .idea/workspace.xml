@@ -240,30 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00009" summary="added sync dr and position">
-      <option name="closed" value="true" />
-      <created>1760494537860</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1760494537860</updated>
-    </task>
-    <task id="LOCAL-00010" summary="added sync dr and position">
-      <option name="closed" value="true" />
-      <created>1760494544597</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1760494544597</updated>
-    </task>
-    <task id="LOCAL-00011" summary="seperated debounce method">
-      <option name="closed" value="true" />
-      <created>1760495929536</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1760495929536</updated>
-    </task>
     <task id="LOCAL-00012" summary="added default value func">
       <option name="closed" value="true" />
       <created>1760495954159</created>
@@ -632,7 +608,31 @@
       <option name="project" value="LOCAL" />
       <updated>1760929916910</updated>
     </task>
-    <option name="localTasksCounter" value="58" />
+    <task id="LOCAL-00058" summary="updated">
+      <option name="closed" value="true" />
+      <created>1760929997218</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1760929997218</updated>
+    </task>
+    <task id="LOCAL-00059" summary="revert to server conn">
+      <option name="closed" value="true" />
+      <created>1760930145169</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1760930145169</updated>
+    </task>
+    <task id="LOCAL-00060" summary="updated db and exe">
+      <option name="closed" value="true" />
+      <created>1760930425826</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1760930425826</updated>
+    </task>
+    <option name="localTasksCounter" value="61" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,9 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="changed font" />
-    <MESSAGE value="adjust spacing" />
-    <MESSAGE value="added kg format" />
     <MESSAGE value="added save and print" />
     <MESSAGE value="fixed print var passing" />
     <MESSAGE value="fixed duplicate object" />
@@ -685,7 +682,10 @@
     <MESSAGE value="modified printing in sympc" />
     <MESSAGE value="added format for techno_trade" />
     <MESSAGE value="changed position footer coa" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed position footer coa" />
+    <MESSAGE value="updated" />
+    <MESSAGE value="revert to server conn" />
+    <MESSAGE value="updated db and exe" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated db and exe" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -702,12 +702,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/db/db_con.py</url>
-          <line>372</line>
+          <line>373</line>
           <option name="timeStamp" value="14" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/db/db_con.py</url>
-          <line>281</line>
+          <line>282</line>
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
