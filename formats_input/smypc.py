@@ -260,8 +260,8 @@ class SmypcWidget(QWidget):
         general_info_layout.addWidget(self.manufacturing_date_input, 3, 3)
 
         # row 4
-        general_info_layout.addWidget(QLabel("Shelf Life:"), 4, 2, Qt.AlignmentFlag.AlignRight)
-        general_info_layout.addWidget(self.shelf_life_input, 4, 3)
+        general_info_layout.addWidget(QLabel("Shelf Life:"), 4, 0, Qt.AlignmentFlag.AlignRight)
+        general_info_layout.addWidget(self.shelf_life_input, 4, 1, 1, 3)
 
         main_v_layout.addWidget(general_info_group)
 

@@ -300,7 +300,7 @@ class FilePVC(QWidget):
             ]))
         content.append(info_table)
         if smypc:
-            content.append(Spacer(1, 6))
+            content.append(Spacer(1, 2))
         else:
             content.append(Spacer(1, 10))
 
@@ -379,7 +379,7 @@ class FilePVC(QWidget):
                 ('TOPPADDING', (0, 0), (-1, 0), 2),
                 ('BOTTOMPADDING', (0, 0), (-1, 0), 3),
 
-                ('TOPPADDING', (0, 1), (-1, -1), 5.5),
+                ('TOPPADDING', (0, 1), (-1, -1), 6),
                 ('BOTTOMPADDING', (0, 1), (-1, -1), 6),
 
                 # Font setup
@@ -397,7 +397,7 @@ class FilePVC(QWidget):
                 ('VALIGN', (1, 5), (2, 5), 'BOTTOM'),
 
                 # Padding
-                ('TOPPADDING', (0, 0), (-1, -1), 2),
+                ('TOPPADDING', (0, 0), (-1, -1), 3),
                 ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
 
                 # Font setup
@@ -415,7 +415,7 @@ class FilePVC(QWidget):
                 ('VALIGN', (1, 4), (2, 4), 'BOTTOM'),
 
                 # Padding
-                ('TOPPADDING', (0, 0), (-1, -1), 2),
+                ('TOPPADDING', (0, 0), (-1, -1), 3),
                 ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
 
                 # Font setup
