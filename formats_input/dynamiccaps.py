@@ -8,7 +8,8 @@ from PyQt6.QtWidgets import (
 )
 from alert import window_alert
 from db import db_dr, db_con
-from utils import abs_path, lot_format, multiple_dates, prod_date_format  # Assuming utils is available with abs_path
+from utils import abs_path, lot_format, multiple_dates, prod_date_format, \
+    calendar_design  # Assuming utils is available with abs_path
 from utils.loading import LoadingDialog
 from utils.debounce import setup_finished_typing
 from print.print_pvc_free import FilePVC
@@ -164,7 +165,10 @@ class DynamiccapsWidget(QWidget):
         self.quantity_input = QLineEdit()
         self.manufacturing_date_input = multiple_dates.MultiDateInput()
         self.delivery_date = QDateEdit()
+        self.delivery_date.setCalendarPopup(True)
         self.delivery_date.setDate(QDate.currentDate())
+        self.delivery_date.calendarWidget().setMinimumSize(370, 230)
+        self.delivery_date.calendarWidget().setStyleSheet(calendar_design.STYLESHEET)
         self.shelf_life_input = QLineEdit()
         self.delivery_receipt_input = QLineEdit()
         self.delivery_receipt_timer = setup_finished_typing(
@@ -245,7 +249,7 @@ class DynamiccapsWidget(QWidget):
 
         # Row 2:
         general_info_layout.addWidget(QLabel("Delivery Date:"), 2, 0, Qt.AlignmentFlag.AlignRight)
-        general_info_layout.addWidget(self.delivery_receipt_input, 2, 1)
+        general_info_layout.addWidget(self.delivery_date, 2, 1)
 
         general_info_layout.addWidget(QLabel("Quantity Delivered:"), 2, 2, Qt.AlignmentFlag.AlignRight)
         general_info_layout.addWidget(self.quantity_input, 2, 3)
@@ -566,7 +570,7 @@ class DynamiccapsWidget(QWidget):
 
         if print_after:
             returning_coa_id = db_con.save_pvc_free_coi(data, properties_data)
-            self.open_packageworld_preview(returning_coa_id, "temp")
+            self.open_dynamiccaps_preview(returning_coa_id, "temp")
             self.scroll_area.verticalScrollBar().setValue(0)
 
             return
@@ -658,18 +662,18 @@ class DynamiccapsWidget(QWidget):
         self.worker.finished.connect(self.loading.accept)
         self.worker.start()
 
-    def open_packageworld_preview(self, coa_id, filename):
+    def open_dynamiccaps_preview(self, coa_id, filename):
         # If the widget already exists, close it first to avoid multiple instances
 
         try:
-            if self.packageworld_widget is not None:
-                self.packageworld_widget.close()
-                self.packageworld_widget.deleteLater()  # Good practice
-            self.packageworld_widget = FilePVC()
-            self.packageworld_widget.show_pdf_preview(coa_id, filename)
-            self.packageworld_widget.resize(900, 800)
-            self.packageworld_widget.show()
-            self.packageworld_widget.activateWindow()
-            self.packageworld_widget.raise_()
+            if self.dynamiccaps_widget is not None:
+                self.dynamiccaps_widget.close()
+                self.dynamiccaps_widget.deleteLater()  # Good practice
+            self.dynamiccaps_widget = FilePVC()
+            self.dynamiccaps_widget.show_pdf_preview(coa_id, filename)
+            self.dynamiccaps_widget.resize(900, 800)
+            self.dynamiccaps_widget.show()
+            self.dynamiccaps_widget.activateWindow()
+            self.dynamiccaps_widget.raise_()
         except Exception as e:
             print(e)
