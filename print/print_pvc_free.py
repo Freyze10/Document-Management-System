@@ -112,7 +112,7 @@ class FilePVC(QWidget):
         self.print_action.triggered.connect(self.print_pdf)
         self.addAction(self.print_action)
 
-    def generate_pdf(self, coa_id, is_rrf=False):
+    def generate_pdf(self, coa_id, is_rrf=False, dynamiccaps=False):
         """Generate PDF from Rowell inspection data (precisely aligned with COI PDF layout)"""
         field_result = db_con.get_single_coa_data(coa_id)
         properties_table_result = db_con.get_pvc_free_properties(coa_id)
@@ -236,12 +236,21 @@ class FilePVC(QWidget):
 
         customer_name = "<b>" + str(field_result[1]) + "</b>"
         # 🧾 Add field rows
-        add_field_row("Customer:", customer_name)
-        add_field_row("Product Name:", properties_table_result[0][0])
-        add_field_row("Code:", field_result[2])
-        add_field_row("Lot Number:", field_result[3])
-        add_field_row("Total Quantity:", filtered_quantity)
-        add_field_row("Manufacturing Date:", mfg_date_str)
+        if dynamiccaps:
+            add_field_row("Customer:", customer_name)
+            add_field_row("Code:", field_result[2])
+            add_field_row("Lot Number:", field_result[3])
+            add_field_row("Quantity Delivered:", filtered_quantity)
+            add_field_row("Delivery Date:", field_result[7].strftime('%B %d, %Y'))
+            add_field_row("Manufacturing Date:", mfg_date_str)
+            add_field_row("Delivery Receipt:", field_result[5])
+        else:
+            add_field_row("Customer:", customer_name)
+            add_field_row("Product Name:", properties_table_result[0][0])
+            add_field_row("Code:", field_result[2])
+            add_field_row("Lot Number:", field_result[3])
+            add_field_row("Total Quantity:", filtered_quantity)
+            add_field_row("Manufacturing Date:", mfg_date_str)
 
         # Shelf Life formatting
         shelf_life_value = str(field_result[12]).strip()
@@ -257,17 +266,30 @@ class FilePVC(QWidget):
             add_field_row("Shelf Life:", shelf_life_value)
 
         info_table = Table(field_rows, colWidths=[page_width * 0.25, page_width * 0.75])
-        info_table.setStyle(TableStyle([
-            ('FONTNAME', (0, 0), (-1, -1), 'Times-Roman'),
-            ('FONTSIZE', (0, 0), (-1, -1), 11),
-            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-            ('ALIGN', (0, 0), (0, -1), 'RIGHT'),
-            ('LEFTPADDING', (0, 0), (-1, -1), 2),
-            ('RIGHTPADDING', (0, 0), (-1, -1), 0),
-            ('TOPPADDING', (0, 0), (-1, -1), 1.5),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 7),
-            ('GRID', (0, 0), (-1, -1), 0, colors.white),
-        ]))
+        if dynamiccaps:
+            info_table.setStyle(TableStyle([
+                ('FONTNAME', (0, 0), (-1, -1), 'Times-Roman'),
+                ('FONTSIZE', (0, 0), (-1, -1), 11),
+                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                ('ALIGN', (0, 0), (0, -1), 'RIGHT'),
+                ('LEFTPADDING', (0, 0), (-1, -1), 2),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+                ('TOPPADDING', (0, 0), (-1, -1), 1.5),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 8),
+                ('GRID', (0, 0), (-1, -1), 0, colors.white),
+            ]))
+        else:
+            info_table.setStyle(TableStyle([
+                ('FONTNAME', (0, 0), (-1, -1), 'Times-Roman'),
+                ('FONTSIZE', (0, 0), (-1, -1), 11),
+                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                ('ALIGN', (0, 0), (0, -1), 'RIGHT'),
+                ('LEFTPADDING', (0, 0), (-1, -1), 2),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 0),
+                ('TOPPADDING', (0, 0), (-1, -1), 1.5),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 7),
+                ('GRID', (0, 0), (-1, -1), 0, colors.white),
+            ]))
         content.append(info_table)
         content.append(Spacer(1, 10))
 
@@ -332,23 +354,45 @@ class FilePVC(QWidget):
             colWidths=[page_width * 0.25, page_width * 0.25, page_width * 0.25, page_width * 0.25]
         )
 
-        table_style = [
-            ('ALIGN', (0, 0), (3, -1), 'CENTER'),  # Center header row
-            ('GRID', (0, 0), (-1, -1), 0.75, colors.black),
+        if dynamiccaps:
+            table_style = [
+                ('ALIGN', (0, 0), (3, -1), 'CENTER'),  # Center header row
+                ('GRID', (0, 0), (-1, -1), 0.75, colors.black),
 
-            # Vertical alignment
-            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
-            ('VALIGN', (1, 4), (2, 4), 'BOTTOM'),
-            ('VALIGN', (1, 4), (2, 4), 'BOTTOM'),
+                # Vertical alignment
+                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                ('VALIGN', (1, 3), (2, 3), 'BOTTOM'),
+                ('VALIGN', (1, 3), (2, 3), 'BOTTOM'),
 
-            # Padding
-            ('TOPPADDING', (0, 0), (-1, -1), 2),
-            ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+                # Padding
+                ('TOPPADDING', (0, 0), (-1, 0), 2),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 3),
 
-            # Font setup
-            ('FONTNAME', (0, 1), (-1, -1), 'Times-Roman'),
-            ('FONTSIZE', (0, 1), (-1, -1), 11),
-        ]
+                ('TOPPADDING', (0, 1), (-1, -1), 5.5),
+                ('BOTTOMPADDING', (0, 1), (-1, -1), 6),
+
+                # Font setup
+                ('FONTNAME', (0, 1), (-1, -1), 'Times-Roman'),
+                ('FONTSIZE', (0, 1), (-1, -1), 11),
+            ]
+        else:
+            table_style = [
+                ('ALIGN', (0, 0), (3, -1), 'CENTER'),  # Center header row
+                ('GRID', (0, 0), (-1, -1), 0.75, colors.black),
+
+                # Vertical alignment
+                ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+                ('VALIGN', (1, 4), (2, 4), 'BOTTOM'),
+                ('VALIGN', (1, 4), (2, 4), 'BOTTOM'),
+
+                # Padding
+                ('TOPPADDING', (0, 0), (-1, -1), 2),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+
+                # Font setup
+                ('FONTNAME', (0, 1), (-1, -1), 'Times-Roman'),
+                ('FONTSIZE', (0, 1), (-1, -1), 11),
+            ]
 
         properties_table.setStyle(TableStyle(table_style))
         content.append(properties_table)
@@ -396,9 +440,9 @@ class FilePVC(QWidget):
         buffer.seek(0)
         return buffer.getvalue()
 
-    def show_pdf_preview(self, coa_id, filename):
+    def show_pdf_preview(self, coa_id, filename, dynamiccaps=False):
         self.file_name = filename
-        pdf_bytes = self.generate_pdf(coa_id)
+        pdf_bytes = self.generate_pdf(coa_id, dynamiccaps=dynamiccaps)
         # Wrap the PDF bytes in a QBuffer
         self.buffer = QBuffer()  # keep it as an instance attribute so it's not garbage collected
         self.buffer.setData(pdf_bytes)

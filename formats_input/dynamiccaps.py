@@ -671,7 +671,7 @@ class DynamiccapsWidget(QWidget):
                 self.dynamiccaps_widget.close()
                 self.dynamiccaps_widget.deleteLater()  # Good practice
             self.dynamiccaps_widget = FilePVC()
-            self.dynamiccaps_widget.show_pdf_preview(coa_id, filename)
+            self.dynamiccaps_widget.show_pdf_preview(coa_id, filename, dynamiccaps=True)
             self.dynamiccaps_widget.resize(900, 800)
             self.dynamiccaps_widget.show()
             self.dynamiccaps_widget.activateWindow()
