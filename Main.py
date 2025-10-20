@@ -13,7 +13,7 @@ from print.print_pvc_free import FilePVC
 import Login
 from utils import abs_path, scroll_date, calendar_design, check_cx, multiple_dates, loading
 from utils.debounce import setup_finished_typing
-from formats_input import rowell_litho, packageworld, dynamiccaps
+from formats_input import rowell_litho, packageworld, dynamiccaps, smypc
 
 
 class MainWindow(QMainWindow):
@@ -372,12 +372,14 @@ class MainWindow(QMainWindow):
         self.coa_rowell_tab = rowell_litho.RowellWidget()
         self.coa_PackageWorld_tab = packageworld.PackageWorldWidget()
         self.coa_dynamiccaps_tab = dynamiccaps.DynamiccapsWidget()
+        self.coa_smypc_tab = smypc.SmypcWidget()
 
         self.coa_data_entry_sub_tabs.addTab(self.coa_default_tab, "COA")
         self.coa_data_entry_sub_tabs.addTab(self.coa_terumo_tab, "Terumo (COA)")
         self.coa_data_entry_sub_tabs.addTab(self.coa_rowell_tab, "Rowell (COI)")
         self.coa_data_entry_sub_tabs.addTab(self.coa_PackageWorld_tab, "Package World (COI)")
         self.coa_data_entry_sub_tabs.addTab(self.coa_dynamiccaps_tab, "Dynamiccaps (COI)")
+        self.coa_data_entry_sub_tabs.addTab(self.coa_smypc_tab, "Smypc (COI)")
 
         self.coa_data_entry_layout = QVBoxLayout(self.coa_data_entry_tab)
         self.coa_data_entry_layout.addWidget(self.coa_data_entry_sub_tabs)
@@ -1212,6 +1214,11 @@ class MainWindow(QMainWindow):
                 self.coa_dynamiccaps_tab, coa_id, display_text
             )
 
+        elif "smypc" in cus_name:
+            smypc.SmypcWidget.open_smypc_preview(
+                self.coa_smypc_tab, coa_id, display_text
+            )
+
     def check_edit_pvc(self, coa_id):
         cus_name = db_con.get_customer_name_data(coa_id)
         cus_name = cus_name[0]
@@ -1234,6 +1241,12 @@ class MainWindow(QMainWindow):
             self.coa_dynamiccaps_tab.load_coa_details(coa_id)
             self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
             self.coa_data_entry_sub_tabs.setCurrentIndex(4)
+
+        elif "smypc" in cus_name:
+            rowell_litho.current_coa_id = coa_id
+            self.coa_smypc_tab.load_coa_details(coa_id)
+            self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
+            self.coa_data_entry_sub_tabs.setCurrentIndex(5)
 
     def coa_cell_clicked(self, row, column):
         coa_id = self.coa_records_table.item(row, 0).data(Qt.ItemDataRole.UserRole)
