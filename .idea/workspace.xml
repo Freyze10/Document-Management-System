@@ -608,7 +608,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760921406234</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="addedd deliuvery date">
+      <option name="closed" value="true" />
+      <created>1760922292753</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1760922292753</updated>
+    </task>
+    <option name="localTasksCounter" value="48" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -636,7 +644,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fixed load function" />
     <MESSAGE value="clean and fix button" />
     <MESSAGE value="added save as new button" />
     <MESSAGE value="added update function" />
@@ -661,7 +668,8 @@
     <MESSAGE value="added packageworld widget" />
     <MESSAGE value="added dynamiccaps file" />
     <MESSAGE value="modified display input" />
-    <option name="LAST_COMMIT_MESSAGE" value="modified display input" />
+    <MESSAGE value="addedd deliuvery date" />
+    <option name="LAST_COMMIT_MESSAGE" value="addedd deliuvery date" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

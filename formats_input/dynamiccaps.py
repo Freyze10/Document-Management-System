@@ -460,6 +460,7 @@ class DynamiccapsWidget(QWidget):
             self.lot_number_input.clear()
             self.quantity_input.clear()
             self.manufacturing_date_input.clear_value()
+            self.delivery_date.setDate(QDate.currentDate())
             return
 
         # Find the first record that is NOT yet in your database

@@ -527,7 +527,7 @@ class PackageWorldWidget(QWidget):
             'shelf_life': self.shelf_life_input.text(),
             'certified_by': self.certified_by_name_input.text(),
             'certification_date': self.date_input.date().toString("yyyy-MM-dd"),
-            'product_name': self.product_name_input.text(),
+            'product_name': "",
             'position': self.position_input.text()
         }
         properties_data = self.get_properties_table_data()
@@ -536,7 +536,6 @@ class PackageWorldWidget(QWidget):
         required_fields = {
             "Customer Name": data['customer_name'],
             "Color Code": data['color_code'],
-            "Product Name": data['product_name'],
             "Manufacturing Date": data['manufacturing_date'],
             "Lot Number": data['lot_number'],
             "Delivery Receipt": data['delivery_receipt_number'],
