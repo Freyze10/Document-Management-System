@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00013" summary="modified clear and defaults">
-      <option name="closed" value="true" />
-      <created>1760496919369</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1760496919369</updated>
-    </task>
     <task id="LOCAL-00014" summary="added validation">
       <option name="closed" value="true" />
       <created>1760497514032</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1760930512084</updated>
     </task>
-    <option name="localTasksCounter" value="62" />
+    <task id="LOCAL-00062" summary="updated">
+      <option name="closed" value="true" />
+      <created>1760937431173</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1760937431173</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -682,10 +682,10 @@
     <MESSAGE value="modified printing in sympc" />
     <MESSAGE value="added format for techno_trade" />
     <MESSAGE value="changed position footer coa" />
-    <MESSAGE value="updated" />
     <MESSAGE value="revert to server conn" />
     <MESSAGE value="updated db and exe" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated db and exe" />
+    <MESSAGE value="updated" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

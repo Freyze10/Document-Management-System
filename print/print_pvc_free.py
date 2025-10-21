@@ -44,11 +44,11 @@ class FilePVC(QWidget):
         self.pdf_viewer.setFixedWidth(letter_width)
 
         self.file_name = None
-        self.field_result = None
+        self.coa_id = None
 
         btn_download = QPushButton("Download")
         btn_print = QPushButton("Print")
-        btn_download.clicked.connect(self.download_pdf)
+        btn_download.clicked.connect(lambda: self.download_pdf(self.coa_id, self.file_name))
         btn_print.clicked.connect(self.print_pdf)
 
         # Put them in a horizontal layout and center
@@ -471,6 +471,7 @@ class FilePVC(QWidget):
 
     def show_pdf_preview(self, coa_id, filename, dynamiccaps=False, smypc=False):
         self.file_name = filename
+        self.coa_id = coa_id
         pdf_bytes = self.generate_pdf(coa_id, dynamiccaps=dynamiccaps, smypc=smypc)
         # Wrap the PDF bytes in a QBuffer
         self.buffer = QBuffer()  # keep it as an instance attribute so it's not garbage collected
