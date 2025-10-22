@@ -151,7 +151,7 @@ class MultiDateInput(QWidget):
         dialog = MultiDateCalendar(self, preselected_dates=self.selected_dates)
         if dialog.exec():
             self.selected_dates = dialog.get_selected_dates()
-            text = ", ".join(d.toString("dd/MM/yyyy") for d in self.selected_dates)
+            text = ", ".join(d.toString("MM/dd/yyyy") for d in self.selected_dates)
             self.multi_date_input.setText(text)
 
     def get_selected_dates(self):

@@ -11,7 +11,7 @@ from print.print_coa import FileCOA
 from print.print_terumo import FileTerumo
 from print.print_pvc_free import FilePVC
 import Login
-from utils import abs_path, scroll_date, calendar_design, check_cx, multiple_dates, loading
+from utils import abs_path, scroll_date, calendar_design, check_cx, multiple_dates, loading, prod_date_format
 from utils.debounce import setup_finished_typing
 from formats_input import rowell_litho, packageworld, dynamiccaps, smypc
 
@@ -157,6 +157,7 @@ class MainWindow(QMainWindow):
         self.delivery_date_input = QDateEdit()
         self.delivery_date_input.setCalendarPopup(True)
         self.delivery_date_input.setDate(QDate.currentDate())
+        self.delivery_date_input.setDisplayFormat("MM/dd/yyyy")
         self.delivery_date_input.calendarWidget().setMinimumSize(370, 230)
         self.delivery_date_input.calendarWidget().setStyleSheet(calendar_design.STYLESHEET)
         # Disable scroll for delivery_date_input
@@ -220,6 +221,7 @@ class MainWindow(QMainWindow):
         self.creation_date_input = QDateEdit()
         self.creation_date_input.setCalendarPopup(True)
         self.creation_date_input.setDate(QDate.currentDate())
+        self.creation_date_input.setDisplayFormat("MM/dd/yyyy")
         self.creation_date_input.calendarWidget().setMinimumSize(370, 230)
         self.creation_date_input.calendarWidget().setStyleSheet(calendar_design.STYLESHEET)
         self.creation_date_input.installEventFilter(self.wheel_filter)
@@ -242,6 +244,7 @@ class MainWindow(QMainWindow):
         self.date_evaluated_label = QLabel("Date Evaluated:")
         self.date_evaluated_input.setCalendarPopup(True)
         self.creation_date_input.setDate(QDate.currentDate())
+        self.creation_date_input.setDisplayFormat("MM/dd/yyyy")
         self.date_evaluated_input.calendarWidget().setMinimumSize(370, 230)
         self.date_evaluated_input.calendarWidget().setStyleSheet(calendar_design.STYLESHEET)
         self.date_evaluated_input.installEventFilter(self.wheel_filter)
@@ -255,6 +258,7 @@ class MainWindow(QMainWindow):
         self.plastimer_expiry_input = QDateEdit()
         self.plastimer_expiry_label = QLabel("Expiration Date:")
         self.plastimer_expiry_input.setCalendarPopup(True)
+        self.plastimer_expiry_input.setDisplayFormat("MM/dd/yyyy")
         self.plastimer_expiry_input.calendarWidget().setMinimumSize(370, 230)
         self.plastimer_expiry_input.calendarWidget().setStyleSheet(calendar_design.STYLESHEET)
         self.plastimer_expiry_input.installEventFilter(self.wheel_filter)
@@ -294,6 +298,7 @@ class MainWindow(QMainWindow):
         self.terumo_delivery_date = QDateEdit()
         self.terumo_delivery_date.setCalendarPopup(True)
         self.terumo_delivery_date.setDate(QDate.currentDate())
+        self.terumo_delivery_date.setDisplayFormat("MM/dd/yyyy")
         self.terumo_delivery_date.calendarWidget().setMinimumSize(370, 230)
         self.terumo_delivery_date.calendarWidget().setStyleSheet(calendar_design.STYLESHEET)
         self.terumo_delivery_date.installEventFilter(self.wheel_filter)
@@ -791,7 +796,7 @@ class MainWindow(QMainWindow):
         quantity_delivered = self.quantity_delivered_input.text()
         delivery_date = self.delivery_date_input.date().toString("yyyy-MM-dd")
         lot_number = self.lot_number_input.text()
-        production_date = self.production_date_input.get_selected_dates()
+        production_date = prod_date_format.dates_for_db(self.production_date_input.get_selected_dates())
         delivery_receipt = self.delivery_receipt_input.text()
         po_number = self.po_number_input.text()
         summary_of_analysis = self.get_coa_summary_analysis_table_data()
