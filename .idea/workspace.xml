@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00017" summary="added save function in dbs">
-      <option name="closed" value="true" />
-      <created>1760500612658</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1760500612658</updated>
-    </task>
     <task id="LOCAL-00018" summary="testing of save">
       <option name="closed" value="true" />
       <created>1760500951610</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761036849697</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="modified date entry">
+      <option name="closed" value="true" />
+      <created>1761121019249</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1761121019249</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fixed print var passing" />
     <MESSAGE value="fixed duplicate object" />
     <MESSAGE value="changed naming" />
     <MESSAGE value="refactored files and class" />
@@ -685,7 +684,8 @@
     <MESSAGE value="updated db and exe" />
     <MESSAGE value="updated" />
     <MESSAGE value="updated download" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated download" />
+    <MESSAGE value="modified date entry" />
+    <option name="LAST_COMMIT_MESSAGE" value="modified date entry" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
