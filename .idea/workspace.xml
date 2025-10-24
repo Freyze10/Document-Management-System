@@ -240,22 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00018" summary="testing of save">
-      <option name="closed" value="true" />
-      <created>1760500951610</created>
-      <option name="number" value="00018" />
-      <option name="presentableId" value="LOCAL-00018" />
-      <option name="project" value="LOCAL" />
-      <updated>1760500951610</updated>
-    </task>
-    <task id="LOCAL-00019" summary="updated the save function">
-      <option name="closed" value="true" />
-      <created>1760512374949</created>
-      <option name="number" value="00019" />
-      <option name="presentableId" value="LOCAL-00019" />
-      <option name="project" value="LOCAL" />
-      <updated>1760512374949</updated>
-    </task>
     <task id="LOCAL-00020" summary="creating load function'">
       <option name="closed" value="true" />
       <created>1760514073871</created>
@@ -632,7 +616,23 @@
       <option name="project" value="LOCAL" />
       <updated>1761121019249</updated>
     </task>
-    <option name="localTasksCounter" value="67" />
+    <task id="LOCAL-00067" summary="modified date entry">
+      <option name="closed" value="true" />
+      <created>1761121811443</created>
+      <option name="number" value="00067" />
+      <option name="presentableId" value="LOCAL-00067" />
+      <option name="project" value="LOCAL" />
+      <updated>1761121811443</updated>
+    </task>
+    <task id="LOCAL-00068" summary="updated exe">
+      <option name="closed" value="true" />
+      <created>1761121838512</created>
+      <option name="number" value="00068" />
+      <option name="presentableId" value="LOCAL-00068" />
+      <option name="project" value="LOCAL" />
+      <updated>1761121838512</updated>
+    </task>
+    <option name="localTasksCounter" value="69" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fixed duplicate object" />
     <MESSAGE value="changed naming" />
     <MESSAGE value="refactored files and class" />
     <MESSAGE value="fixed return error" />
@@ -685,7 +684,8 @@
     <MESSAGE value="updated" />
     <MESSAGE value="updated download" />
     <MESSAGE value="modified date entry" />
-    <option name="LAST_COMMIT_MESSAGE" value="modified date entry" />
+    <MESSAGE value="updated exe" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated exe" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -712,17 +712,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1285</line>
+          <line>1297</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1297</line>
+          <line>1309</line>
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1221</line>
+          <line>1233</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
       </breakpoints>

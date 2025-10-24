@@ -1151,6 +1151,12 @@ class MainWindow(QMainWindow):
         self.msds_records_table.verticalHeader().setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
         self.msds_records_table.horizontalHeader().setFixedHeight(44)  # Match row height
         self.msds_records_table.setShowGrid(False)
+        self.msds_records_table.cellDoubleClicked.connect(self.on_msds_row_double_clicked)
+
+    def on_msds_row_double_clicked(self, row, column):
+        # Simulate a click on the 'view' column (column 1)
+        self.msds_records_table.selectRow(row)
+        self.msds_cell_clicked(row, 1)
 
     def coa_table_records_init(self):
         self.coa_records_table.setColumnCount(4)
@@ -1165,6 +1171,12 @@ class MainWindow(QMainWindow):
         self.coa_records_table.verticalHeader().setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
         self.coa_records_table.horizontalHeader().setFixedHeight(44)  # Match row height
         self.coa_records_table.setShowGrid(False)
+        self.coa_records_table.cellDoubleClicked.connect(self.on_coa_row_double_clicked)
+
+    def on_coa_row_double_clicked(self, row, column):
+        # Simulate a click on the 'view' column (column 1)
+        self.coa_records_table.selectRow(row)
+        self.coa_cell_clicked(row, 1)
 
     def on_cell_hover(self, row, column):
         table = self.sender()
