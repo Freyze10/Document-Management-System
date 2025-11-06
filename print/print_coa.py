@@ -14,6 +14,7 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 from reportlab.lib.pagesizes import letter
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
+import html
 
 from alert import window_alert
 from db import db_con
@@ -110,6 +111,10 @@ class FileCOA(QWidget):
         self.print_action.triggered.connect(self.print_pdf)
         self.addAction(self.print_action)
 
+    def safe_paragraph(text, style):
+        import html
+        return Paragraph(html.escape(str(text)), style)
+
     def generate_pdf(self, coa_id, is_rrf=False):
         if is_rrf:
             field_result = db_con.get_single_coa_data_rrf(coa_id)
@@ -132,12 +137,13 @@ class FileCOA(QWidget):
         content = []
         page_width = letter[0] - 50 - 50
         content.append(Spacer(1, 70))
+        customer_name = html.escape(str(field_result[1]))
         content.append(
-            Paragraph(f"Customer: <font name='Times-Bold'>{field_result[1]}</font> ", styles['NormalText']))
+            Paragraph(f"Customer: <font name='Times-Bold'>{customer_name}</font> ", styles['NormalText']))
         content.append(Spacer(1, 10))  # Small spacer between lines
-
+        color_code = html.escape(str(field_result[2]))
         content.append(
-            Paragraph(f"Color Code: {field_result[2]}", styles['NormalText']))
+            Paragraph(f"Color Code: {color_code}", styles['NormalText']))
         content.append(Spacer(1, 10))
 
         if field_result[16]:

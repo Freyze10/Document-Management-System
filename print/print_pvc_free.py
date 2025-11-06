@@ -1,3 +1,4 @@
+import html
 import io
 import re
 from datetime import datetime
@@ -234,7 +235,8 @@ class FilePVC(QWidget):
         if not re.search(r'(kg\.?$|KG\.?$)', quantity.strip(), re.IGNORECASE):
             filtered_quantity = quantity.strip() + " Kg."
 
-        customer_name = "<b>" + str(field_result[1]) + "</b>"
+        filter_customer_name = html.escape(str(field_result[1]))
+        customer_name = "<b>" + filter_customer_name + "</b>"
         # 🧾 Add field rows
         if dynamiccaps:
             add_field_row("Customer:", customer_name)
