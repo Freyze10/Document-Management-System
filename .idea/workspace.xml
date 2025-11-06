@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00023" summary="added save as new button">
-      <option name="closed" value="true" />
-      <created>1760574244751</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1760574244751</updated>
-    </task>
     <task id="LOCAL-00024" summary="added update function">
       <option name="closed" value="true" />
       <created>1760575083393</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761265962624</updated>
     </task>
-    <option name="localTasksCounter" value="72" />
+    <task id="LOCAL-00072" summary="updated text format esc html">
+      <option name="closed" value="true" />
+      <created>1762408912610</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1762408912610</updated>
+    </task>
+    <option name="localTasksCounter" value="73" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fixed return error" />
     <MESSAGE value="fixed print spaces" />
     <MESSAGE value="added package world entry" />
     <MESSAGE value="added packageworld widget" />
@@ -685,7 +684,8 @@
     <MESSAGE value="added double click func" />
     <MESSAGE value="created new exe" />
     <MESSAGE value="updated exe" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated exe" />
+    <MESSAGE value="updated text format esc html" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated text format esc html" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -712,17 +712,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1297</line>
+          <line>1296</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1309</line>
+          <line>1308</line>
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1233</line>
+          <line>1232</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
       </breakpoints>

@@ -1167,7 +1167,6 @@ class MainWindow(QMainWindow):
         # Override resize event
         self.coa_records_table.resizeEvent = lambda event: table.resize_columns(self, self.coa_records_table, event)
         self.coa_records_table.verticalHeader().setDefaultSectionSize(44)  # Increased row height
-        self.coa_records_table.verticalHeader().setFixedWidth(40)
         self.coa_records_table.verticalHeader().setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
         self.coa_records_table.horizontalHeader().setFixedHeight(44)  # Match row height
         self.coa_records_table.setShowGrid(False)
