@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00024" summary="added update function">
-      <option name="closed" value="true" />
-      <created>1760575083393</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1760575083393</updated>
-    </task>
     <task id="LOCAL-00025" summary="added print preview file">
       <option name="closed" value="true" />
       <created>1760575836149</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762408912610</updated>
     </task>
-    <option name="localTasksCounter" value="73" />
+    <task id="LOCAL-00073" summary="adjusted table width">
+      <option name="closed" value="true" />
+      <created>1762409345898</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1762409345898</updated>
+    </task>
+    <option name="localTasksCounter" value="74" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="fixed print spaces" />
     <MESSAGE value="added package world entry" />
     <MESSAGE value="added packageworld widget" />
     <MESSAGE value="added dynamiccaps file" />
@@ -685,7 +684,8 @@
     <MESSAGE value="created new exe" />
     <MESSAGE value="updated exe" />
     <MESSAGE value="updated text format esc html" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated text format esc html" />
+    <MESSAGE value="adjusted table width" />
+    <option name="LAST_COMMIT_MESSAGE" value="adjusted table width" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
