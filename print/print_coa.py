@@ -450,4 +450,4 @@ class FileCOA(QWidget):
                         painter.drawImage(QPointF(x, y), scaled_image)
                 painter.end()
         except Exception as e:
-            print(f"An error occurred during printing: {e}")
+            window_alert.show_message(self, "Error", f"An error occurred during printing: {e}", icon_type="critical")
