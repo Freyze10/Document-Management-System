@@ -174,24 +174,30 @@ class FileCOA(QWidget):
             Paragraph(f"Lot Number: {field_result[3]}", styles['NormalText']))
         content.append(Spacer(1, 10))
 
-        production_date = field_result[8]
-        if isinstance(production_date, datetime):
-            production_date_str = production_date.strftime("%B %d, %Y")
-        else:
-            formatted_dates = []
-            for d in str(production_date).split(","):
-                d = d.strip()
-                try:
-                    parsed = datetime.strptime(d, "%Y-%m-%d")
-                    formatted_dates.append(parsed.strftime("%B %d, %Y"))
-                except ValueError:
-                    formatted_dates.append(d)
-            production_date_str = ", ".join(formatted_dates)
-        if "techno-trade" in field_result[1].lower():
-            pass
-        else:
-            content.append(Paragraph(f"Production Date: {production_date_str}", styles['NormalText']))
-            content.append(Spacer(1, 10))
+        try:
+            production_date = field_result[8]
+            if isinstance(production_date, datetime):
+                production_date_str = production_date.strftime("%B %d, %Y")
+            else:
+                formatted_dates = []
+                for d in str(production_date).split(","):
+                    d = d.strip()
+                    try:
+                        parsed = datetime.strptime(d, "%Y-%m-%d")
+                        formatted_dates.append(parsed.strftime("%B %d, %Y"))
+                    except ValueError:
+                        formatted_dates.append(d)
+                production_date_str = ", ".join(formatted_dates)
+
+            if "techno-trade" in field_result[1].lower():
+                pass
+            else:
+                content.append(Paragraph(f"Production Date: {production_date_str}", styles['NormalText']))
+                content.append(Spacer(1, 10))
+            print(production_date)
+            print(production_date_str)
+        except Exception as e:
+            print(e)
 
         if field_result[18]:
             content.append(Paragraph(

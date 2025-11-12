@@ -54,37 +54,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Python.Login.executor": "Run",
-    "Python.Main.executor": "Debug",
-    "Python.coa_data_entry.executor": "Run",
-    "Python.db_con.executor": "Run",
-    "Python.db_dr.executor": "Run",
-    "Python.db_rrf.executor": "Run",
-    "Python.msds_data_entry.executor": "Debug",
-    "Python.multiple_dates.executor": "Run",
-    "Python.prac.executor": "Run",
-    "Python.print_coa.executor": "Run",
-    "Python.print_msds.executor": "Run",
-    "Python.table.executor": "Run",
-    "Python.table_func.executor": "Run",
-    "Python.test.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/Brant/PycharmProjects/File",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Python.Login.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.coa_data_entry.executor&quot;: &quot;Run&quot;,
+    &quot;Python.db_con.executor&quot;: &quot;Run&quot;,
+    &quot;Python.db_dr.executor&quot;: &quot;Run&quot;,
+    &quot;Python.db_rrf.executor&quot;: &quot;Run&quot;,
+    &quot;Python.msds_data_entry.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.multiple_dates.executor&quot;: &quot;Run&quot;,
+    &quot;Python.prac.executor&quot;: &quot;Run&quot;,
+    &quot;Python.print_coa.executor&quot;: &quot;Run&quot;,
+    &quot;Python.print_msds.executor&quot;: &quot;Run&quot;,
+    &quot;Python.table.executor&quot;: &quot;Run&quot;,
+    &quot;Python.table_func.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Brant/PycharmProjects/File&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   },
-  "keyToStringList": {
-    "GitStage.ChangesTree.GroupingKeys": [
-      "directory",
-      "module",
-      "repository"
+  &quot;keyToStringList&quot;: {
+    &quot;GitStage.ChangesTree.GroupingKeys&quot;: [
+      &quot;directory&quot;,
+      &quot;module&quot;,
+      &quot;repository&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Brant\PycharmProjects\File" />
@@ -239,14 +239,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
-    </task>
-    <task id="LOCAL-00027" summary="fixed the formats">
-      <option name="closed" value="true" />
-      <created>1760578652993</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1760578652993</updated>
     </task>
     <task id="LOCAL-00028" summary="fixing print preview">
       <option name="closed" value="true" />
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762413496030</updated>
     </task>
-    <option name="localTasksCounter" value="76" />
+    <task id="LOCAL-00076" summary="change error display">
+      <option name="closed" value="true" />
+      <created>1762829293055</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1762829293055</updated>
+    </task>
+    <option name="localTasksCounter" value="77" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added packageworld widget" />
     <MESSAGE value="added dynamiccaps file" />
     <MESSAGE value="modified display input" />
     <MESSAGE value="addedd deliuvery date" />
@@ -685,7 +684,8 @@
     <MESSAGE value="updated text format esc html" />
     <MESSAGE value="adjusted table width" />
     <MESSAGE value="updaated exe" />
-    <option name="LAST_COMMIT_MESSAGE" value="updaated exe" />
+    <MESSAGE value="change error display" />
+    <option name="LAST_COMMIT_MESSAGE" value="change error display" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
