@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00028" summary="fixing print preview">
-      <option name="closed" value="true" />
-      <created>1760583182630</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1760583182630</updated>
-    </task>
     <task id="LOCAL-00029" summary="fixing table display in print">
       <option name="closed" value="true" />
       <created>1760587691857</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762829293055</updated>
     </task>
-    <option name="localTasksCounter" value="77" />
+    <task id="LOCAL-00077" summary="debugging prod date">
+      <option name="closed" value="true" />
+      <created>1762928320458</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1762928320458</updated>
+    </task>
+    <option name="localTasksCounter" value="78" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added dynamiccaps file" />
     <MESSAGE value="modified display input" />
     <MESSAGE value="addedd deliuvery date" />
     <MESSAGE value="fixed save func" />
@@ -685,7 +684,8 @@
     <MESSAGE value="adjusted table width" />
     <MESSAGE value="updaated exe" />
     <MESSAGE value="change error display" />
-    <option name="LAST_COMMIT_MESSAGE" value="change error display" />
+    <MESSAGE value="debugging prod date" />
+    <option name="LAST_COMMIT_MESSAGE" value="debugging prod date" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

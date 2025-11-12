@@ -119,7 +119,7 @@ def create_tables():
             delivery_receipt_number VARCHAR(100),
             quantity_delivered TEXT,
             delivery_date DATE,
-            production_date DATE,
+            production_date TEXT,
             certification_date DATE,
             certified_by VARCHAR(255),
             storage_instructions TEXT,
