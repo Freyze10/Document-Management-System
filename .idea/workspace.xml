@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00030" summary="fixed table and auto center">
-      <option name="closed" value="true" />
-      <created>1760594753233</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1760594753233</updated>
-    </task>
     <task id="LOCAL-00031" summary="changed format function of date">
       <option name="closed" value="true" />
       <created>1760595075211</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762928928588</updated>
     </task>
-    <option name="localTasksCounter" value="79" />
+    <task id="LOCAL-00079" summary="updated production_date datatype">
+      <option name="closed" value="true" />
+      <created>1762929142777</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1762929142777</updated>
+    </task>
+    <option name="localTasksCounter" value="80" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">

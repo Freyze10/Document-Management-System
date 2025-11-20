@@ -120,6 +120,150 @@ class SyncDeliveryWorker(QObject):
             except (ValueError, TypeError):
                 return default
 
+    def _verify_and_update_customer_names(self):
+        """
+        Verifies customer names between PostgreSQL and legacy DBF.
+        Updates PostgreSQL records where customer names don't match.
+        Returns count of updated records.
+        """
+        print("\n--- Step 4: Verifying Customer Names ---")
+        updated_count = 0
+        mismatch_count = 0
+
+        try:
+            # Get all DR_NO and customer_name from PostgreSQL
+            with engine.connect() as conn:
+                result = conn.execute(text("""
+                    SELECT dr_no, customer_name 
+                    FROM product_delivery_primary 
+                    WHERE dr_no ~ '^[0-9]+$'
+                    ORDER BY CAST(dr_no AS INTEGER)
+                """))
+                pg_records = {row[0]: row[1] for row in result}
+
+            print(f"-> Found {len(pg_records)} records in PostgreSQL to verify")
+
+            # Build dictionary from legacy DBF
+            legacy_records = {}
+            with dbfread.DBF(DELIVERY_DBF_PATH, load=True, encoding='latin1') as dbf_primary:
+                for r in dbf_primary:
+                    dr_num = self._get_safe_dr_num(r.get('T_DRNUM'))
+                    if dr_num and dr_num.isdigit():
+                        customer_name = str(r.get('T_CUSTOMER', '')).strip()
+                        address = (str(r.get('T_ADD1', '')).strip() + ' ' +
+                                   str(r.get('T_ADD2', '')).strip()).strip()
+
+                        legacy_records[dr_num] = {
+                            "dr_no": dr_num,
+                            "delivery_date": r.get('T_DRDATE'),
+                            "customer_name": customer_name,
+                            "deliver_to": str(r.get('T_DELTO', '')).strip(),
+                            "address": address,
+                            "po_no": str(r.get('T_CPONUM', '')).strip(),
+                            "order_form_no": str(r.get('T_ORDERNUM', '')).strip(),
+                            "terms": str(r.get('T_REMARKS', '')).strip(),
+                            "prepared_by": str(r.get('T_USERID', '')).strip(),
+                            "encoded_on": r.get('T_DENCODED'),
+                            "is_deleted": bool(r.get('T_DELETED', False))
+                        }
+
+            # Compare and collect mismatches
+            records_to_update = []
+            for dr_no, pg_customer in pg_records.items():
+                if dr_no in legacy_records:
+                    legacy_customer = legacy_records[dr_no]["customer_name"]
+
+                    # Check if customer names match (case-insensitive comparison)
+                    if pg_customer.upper().strip() != legacy_customer.upper().strip():
+                        mismatch_count += 1
+                        print(f"-> Mismatch found for DR_NO {dr_no}:")
+                        print(f"   PostgreSQL: '{pg_customer}'")
+                        print(f"   Legacy DBF: '{legacy_customer}'")
+                        records_to_update.append(legacy_records[dr_no])
+
+            # Update mismatched records
+            if records_to_update:
+                print(f"\n-> Updating {len(records_to_update)} mismatched records...")
+
+                # Also need to update items for these DR_NOs
+                dr_nos_to_update = {rec['dr_no'] for rec in records_to_update}
+                items_by_dr = {}
+
+                # Fetch items from legacy DBF for the mismatched DR_NOs
+                with dbfread.DBF(DELIVERY_ITEMS_DBF_PATH, load=True, encoding='latin1') as dbf_items:
+                    for item_rec in dbf_items:
+                        dr_num = self._get_safe_dr_num(item_rec.get('T_DRNUM'))
+                        if dr_num in dr_nos_to_update:
+                            attachments = "\n".join(
+                                filter(None, [str(item_rec.get(f'T_DESC{i}', '')).strip() for i in range(1, 5)]))
+
+                            if dr_num not in items_by_dr:
+                                items_by_dr[dr_num] = []
+                            items_by_dr[dr_num].append({
+                                "dr_no": dr_num,
+                                "quantity": self._to_float(item_rec.get('T_TOTALWT')),
+                                "unit": str(item_rec.get('T_TOTALWTU', '')).strip(),
+                                "product_code": str(item_rec.get('T_PRODCODE', '')).strip(),
+                                "product_color": str(item_rec.get('T_PRODCOLO', '')).strip(),
+                                "no_of_packing": self._to_float(item_rec.get('T_NUMPACKI')),
+                                "weight_per_pack": self._to_float(item_rec.get('T_WTPERPAC')),
+                                "lot_numbers": "",
+                                "attachments": attachments
+                            })
+
+                # Perform updates in a transaction
+                with engine.connect() as conn:
+                    with conn.begin():
+                        # Update primary records
+                        for rec in records_to_update:
+                            conn.execute(text("""
+                                UPDATE product_delivery_primary SET
+                                    delivery_date = :delivery_date,
+                                    customer_name = :customer_name,
+                                    deliver_to = :deliver_to,
+                                    address = :address,
+                                    po_no = :po_no,
+                                    order_form_no = :order_form_no,
+                                    terms = :terms,
+                                    prepared_by = :prepared_by,
+                                    encoded_on = :encoded_on,
+                                    is_deleted = :is_deleted,
+                                    edited_by = 'DBF_VERIFY_UPDATE',
+                                    edited_on = NOW()
+                                WHERE dr_no = :dr_no
+                            """), rec)
+                            updated_count += 1
+
+                        # Delete old items and insert fresh ones
+                        for dr_no in dr_nos_to_update:
+                            conn.execute(text("""
+                                DELETE FROM product_delivery_items 
+                                WHERE dr_no = :dr_no
+                            """), {"dr_no": dr_no})
+
+                            # Insert updated items
+                            if dr_no in items_by_dr:
+                                conn.execute(text("""
+                                    INSERT INTO product_delivery_items (
+                                        dr_no, quantity, unit, product_code, product_color,
+                                        no_of_packing, weight_per_pack, lot_numbers, attachments
+                                    ) VALUES (
+                                        :dr_no, :quantity, :unit, :product_code, :product_color,
+                                        :no_of_packing, :weight_per_pack, :lot_numbers, :attachments
+                                    )
+                                """), items_by_dr[dr_no])
+
+                print(f"-> Successfully updated {updated_count} records")
+            else:
+                print("-> No mismatches found. All customer names are in sync.")
+
+            return updated_count
+
+        except Exception as e:
+            trace_info = traceback.format_exc()
+            print(f"ERROR during customer name verification: {e}\n{trace_info}")
+            raise
+
     def run(self):
         """Main execution method for the sync process (incremental)."""
         print("\n--- Starting Legacy Delivery Sync ---")
@@ -137,7 +281,7 @@ class SyncDeliveryWorker(QObject):
 
             # --- Step 1: Process Primary Delivery Headers (tbl_del01.dbf) ---
             primary_recs = []
-            print(f"Step 1: Reading headers from '{os.path.basename(DELIVERY_DBF_PATH)}'")
+            print(f"\nStep 1: Reading headers from '{os.path.basename(DELIVERY_DBF_PATH)}'")
 
             with dbfread.DBF(DELIVERY_DBF_PATH, load=True, encoding='latin1') as dbf_primary:
                 for r in dbf_primary:
@@ -174,90 +318,103 @@ class SyncDeliveryWorker(QObject):
 
             print(f"-> Found {len(primary_recs)} new primary records to sync.")
 
-            if not primary_recs:
-                self.finished.emit(True, f"Sync Info: No new delivery records (DR_NO > {max_synced_dr_no}) found.")
-                return
+            new_records_synced = len(primary_recs) > 0
 
             # --- Step 2: Process Delivery Items (tbl_del02.dbf) ---
-            new_dr_numbers = {rec['dr_no'] for rec in primary_recs}
-            items_by_dr = {}
-            item_count = 0
-            print(f"Step 2: Reading items from '{os.path.basename(DELIVERY_ITEMS_DBF_PATH)}'")
+            if new_records_synced:
+                new_dr_numbers = {rec['dr_no'] for rec in primary_recs}
+                items_by_dr = {}
+                item_count = 0
+                print(f"\nStep 2: Reading items from '{os.path.basename(DELIVERY_ITEMS_DBF_PATH)}'")
 
-            with dbfread.DBF(DELIVERY_ITEMS_DBF_PATH, load=True, encoding='latin1') as dbf_items:
-                for item_rec in dbf_items:
-                    dr_num = self._get_safe_dr_num(item_rec.get('T_DRNUM'))
-                    if dr_num in new_dr_numbers:  # Only pick items for the newly identified DR_NOs
-                        item_count += 1
-                        attachments = "\n".join(
-                            filter(None, [str(item_rec.get(f'T_DESC{i}', '')).strip() for i in range(1, 5)]))
+                with dbfread.DBF(DELIVERY_ITEMS_DBF_PATH, load=True, encoding='latin1') as dbf_items:
+                    for item_rec in dbf_items:
+                        dr_num = self._get_safe_dr_num(item_rec.get('T_DRNUM'))
+                        if dr_num in new_dr_numbers:  # Only pick items for the newly identified DR_NOs
+                            item_count += 1
+                            attachments = "\n".join(
+                                filter(None, [str(item_rec.get(f'T_DESC{i}', '')).strip() for i in range(1, 5)]))
 
-                        if dr_num not in items_by_dr:
-                            items_by_dr[dr_num] = []
-                        items_by_dr[dr_num].append({
-                            "dr_no": dr_num,
-                            "quantity": self._to_float(item_rec.get('T_TOTALWT')),
-                            "unit": str(item_rec.get('T_TOTALWTU', '')).strip(),
-                            "product_code": str(item_rec.get('T_PRODCODE', '')).strip(),
-                            "product_color": str(item_rec.get('T_PRODCOLO', '')).strip(),
-                            "no_of_packing": self._to_float(item_rec.get('T_NUMPACKI')),
-                            "weight_per_pack": self._to_float(item_rec.get('T_WTPERPAC')),
-                            "lot_numbers": "",
-                            "attachments": attachments
-                        })
+                            if dr_num not in items_by_dr:
+                                items_by_dr[dr_num] = []
+                            items_by_dr[dr_num].append({
+                                "dr_no": dr_num,
+                                "quantity": self._to_float(item_rec.get('T_TOTALWT')),
+                                "unit": str(item_rec.get('T_TOTALWTU', '')).strip(),
+                                "product_code": str(item_rec.get('T_PRODCODE', '')).strip(),
+                                "product_color": str(item_rec.get('T_PRODCOLO', '')).strip(),
+                                "no_of_packing": self._to_float(item_rec.get('T_NUMPACKI')),
+                                "weight_per_pack": self._to_float(item_rec.get('T_WTPERPAC')),
+                                "lot_numbers": "",
+                                "attachments": attachments
+                            })
 
-            print(f"-> Found {item_count} new item records for the new deliveries.")
+                print(f"-> Found {item_count} new item records for the new deliveries.")
 
-            # --- Step 3: Insert New Records ---
-            print("Step 3: Writing new data to PostgreSQL...")
-            with engine.connect() as conn:
-                with conn.begin():
-                    # Insert/Update headers
-                    # Keep ON CONFLICT for robustness, even though we filter by MAX(DR_NO),
-                    # it handles any edge cases or non-sequential DR_NOs
-                    conn.execute(text("""
-                        INSERT INTO product_delivery_primary (
-                            dr_no, delivery_date, customer_name, deliver_to, address, po_no,
-                            order_form_no, terms, prepared_by, encoded_on, is_deleted,
-                            edited_by, edited_on, encoded_by
-                        ) VALUES (
-                            :dr_no, :delivery_date, :customer_name, :deliver_to, :address, :po_no,
-                            :order_form_no, :terms, :prepared_by, :encoded_on, :is_deleted,
-                            'DBF_SYNC', NOW(), :prepared_by
-                        ) ON CONFLICT (dr_no) DO UPDATE SET
-                            delivery_date = EXCLUDED.delivery_date,
-                            customer_name = EXCLUDED.customer_name,
-                            deliver_to = EXCLUDED.deliver_to,
-                            address = EXCLUDED.address,
-                            po_no = EXCLUDED.po_no,
-                            order_form_no = EXCLUDED.order_form_no,
-                            terms = EXCLUDED.terms,
-                            prepared_by = EXCLUDED.prepared_by,
-                            encoded_on = EXCLUDED.encoded_on,
-                            is_deleted = EXCLUDED.is_deleted,
-                            edited_by = 'DBF_SYNC',
-                            edited_on = NOW()
-                    """), primary_recs)
-
-                    # Insert items
-                    all_items_to_insert = [
-                        item for dr_num in new_dr_numbers for item in items_by_dr.get(dr_num, [])
-                    ]
-                    if all_items_to_insert:
+                # --- Step 3: Insert New Records ---
+                print("\nStep 3: Writing new data to PostgreSQL...")
+                with engine.connect() as conn:
+                    with conn.begin():
+                        # Insert/Update headers
                         conn.execute(text("""
-                            INSERT INTO product_delivery_items (
-                                dr_no, quantity, unit, product_code, product_color,
-                                no_of_packing, weight_per_pack, lot_numbers, attachments
+                            INSERT INTO product_delivery_primary (
+                                dr_no, delivery_date, customer_name, deliver_to, address, po_no,
+                                order_form_no, terms, prepared_by, encoded_on, is_deleted,
+                                edited_by, edited_on, encoded_by
                             ) VALUES (
-                                :dr_no, :quantity, :unit, :product_code, :product_color,
-                                :no_of_packing, :weight_per_pack, :lot_numbers, :attachments
-                            )
-                        """), all_items_to_insert)
+                                :dr_no, :delivery_date, :customer_name, :deliver_to, :address, :po_no,
+                                :order_form_no, :terms, :prepared_by, :encoded_on, :is_deleted,
+                                'DBF_SYNC', NOW(), :prepared_by
+                            ) ON CONFLICT (dr_no) DO UPDATE SET
+                                delivery_date = EXCLUDED.delivery_date,
+                                customer_name = EXCLUDED.customer_name,
+                                deliver_to = EXCLUDED.deliver_to,
+                                address = EXCLUDED.address,
+                                po_no = EXCLUDED.po_no,
+                                order_form_no = EXCLUDED.order_form_no,
+                                terms = EXCLUDED.terms,
+                                prepared_by = EXCLUDED.prepared_by,
+                                encoded_on = EXCLUDED.encoded_on,
+                                is_deleted = EXCLUDED.is_deleted,
+                                edited_by = 'DBF_SYNC',
+                                edited_on = NOW()
+                        """), primary_recs)
 
-            print("-> Database transaction committed successfully.")
-            msg = (f"Delivery sync complete.\n"
-                   f"{len(primary_recs)} new primary records and "
-                   f"{item_count} new items processed.")
+                        # Insert items
+                        all_items_to_insert = [
+                            item for dr_num in new_dr_numbers for item in items_by_dr.get(dr_num, [])
+                        ]
+                        if all_items_to_insert:
+                            conn.execute(text("""
+                                INSERT INTO product_delivery_items (
+                                    dr_no, quantity, unit, product_code, product_color,
+                                    no_of_packing, weight_per_pack, lot_numbers, attachments
+                                ) VALUES (
+                                    :dr_no, :quantity, :unit, :product_code, :product_color,
+                                    :no_of_packing, :weight_per_pack, :lot_numbers, :attachments
+                                )
+                            """), all_items_to_insert)
+
+                print("-> Database transaction committed successfully.")
+            else:
+                print(f"\nSync Info: No new delivery records (DR_NO > {max_synced_dr_no}) found.")
+                item_count = 0
+
+            # --- Step 4: Verify and Update Customer Names ---
+            updated_count = self._verify_and_update_customer_names()
+
+            # --- Final Summary ---
+            print("\n--- Sync Complete ---")
+            if new_records_synced:
+                msg = (f"Delivery sync complete.\n"
+                       f"• {len(primary_recs)} new primary records synced\n"
+                       f"• {item_count} new items synced\n"
+                       f"• {updated_count} records updated due to customer name mismatch")
+            else:
+                msg = (f"Delivery sync complete.\n"
+                       f"• No new records to sync\n"
+                       f"• {updated_count} records updated due to customer name mismatch")
+
             self.finished.emit(True, msg)
 
         except dbfread.DBFNotFound as e:
