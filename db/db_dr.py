@@ -228,7 +228,7 @@ class SyncDeliveryWorker(QObject):
                                     prepared_by = :prepared_by,
                                     encoded_on = :encoded_on,
                                     is_deleted = :is_deleted,
-                                    edited_by = 'DBF_VERIFY_UPDATE',
+                                    edited_by = 'DBF_UPDATE',
                                     edited_on = NOW()
                                 WHERE dr_no = :dr_no
                             """), rec)

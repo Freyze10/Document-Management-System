@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00031" summary="changed format function of date">
-      <option name="closed" value="true" />
-      <created>1760595075211</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1760595075211</updated>
-    </task>
     <task id="LOCAL-00032" summary="changed font">
       <option name="closed" value="true" />
       <created>1760595989823</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1762929142777</updated>
     </task>
-    <option name="localTasksCounter" value="80" />
+    <task id="LOCAL-00080" summary="updated sync dr">
+      <option name="closed" value="true" />
+      <created>1763607019818</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1763607019818</updated>
+    </task>
+    <option name="localTasksCounter" value="81" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="addedd deliuvery date" />
     <MESSAGE value="fixed save func" />
     <MESSAGE value="added print dynamiccaaps" />
     <MESSAGE value="modified save function" />
@@ -685,7 +684,8 @@
     <MESSAGE value="change error display" />
     <MESSAGE value="debugging prod date" />
     <MESSAGE value="updated production_date datatype" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated production_date datatype" />
+    <MESSAGE value="updated sync dr" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated sync dr" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
