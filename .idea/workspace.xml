@@ -240,22 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00033" summary="adjust spacing">
-      <option name="closed" value="true" />
-      <created>1760596305913</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1760596305913</updated>
-    </task>
-    <task id="LOCAL-00034" summary="added kg format">
-      <option name="closed" value="true" />
-      <created>1760596430688</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1760596430688</updated>
-    </task>
     <task id="LOCAL-00035" summary="added save and print">
       <option name="closed" value="true" />
       <created>1760597057711</created>
@@ -632,7 +616,23 @@
       <option name="project" value="LOCAL" />
       <updated>1763607316988</updated>
     </task>
-    <option name="localTasksCounter" value="82" />
+    <task id="LOCAL-00082" summary="updated exe">
+      <option name="closed" value="true" />
+      <created>1763609141849</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1763609141849</updated>
+    </task>
+    <task id="LOCAL-00083" summary="updated exe">
+      <option name="closed" value="true" />
+      <created>1763609150781</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1763609150781</updated>
+    </task>
+    <option name="localTasksCounter" value="84" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -676,7 +676,6 @@
     <MESSAGE value="modified date entry" />
     <MESSAGE value="added double click func" />
     <MESSAGE value="created new exe" />
-    <MESSAGE value="updated exe" />
     <MESSAGE value="updated text format esc html" />
     <MESSAGE value="adjusted table width" />
     <MESSAGE value="updaated exe" />
@@ -685,7 +684,8 @@
     <MESSAGE value="updated production_date datatype" />
     <MESSAGE value="updated sync dr" />
     <MESSAGE value="updated sync dr editedby" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated sync dr editedby" />
+    <MESSAGE value="updated exe" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated exe" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
