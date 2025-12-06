@@ -240,30 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00046" summary="modified display input">
-      <option name="closed" value="true" />
-      <created>1760921406234</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1760921406234</updated>
-    </task>
-    <task id="LOCAL-00047" summary="addedd deliuvery date">
-      <option name="closed" value="true" />
-      <created>1760922292753</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1760922292753</updated>
-    </task>
-    <task id="LOCAL-00048" summary="fixed save func">
-      <option name="closed" value="true" />
-      <created>1760922736518</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1760922736518</updated>
-    </task>
     <task id="LOCAL-00049" summary="added print dynamiccaaps">
       <option name="closed" value="true" />
       <created>1760924221333</created>
@@ -632,7 +608,31 @@
       <option name="project" value="LOCAL" />
       <updated>1765007110423</updated>
     </task>
-    <option name="localTasksCounter" value="95" />
+    <task id="LOCAL-00095" summary="updating the color update sync">
+      <option name="closed" value="true" />
+      <created>1765007197387</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1765007197387</updated>
+    </task>
+    <task id="LOCAL-00096" summary="updated  colors of btn update sync">
+      <option name="closed" value="true" />
+      <created>1765007218790</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1765007218790</updated>
+    </task>
+    <task id="LOCAL-00097" summary="conected style to  sync uupdate button">
+      <option name="closed" value="true" />
+      <created>1765007247504</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1765007247504</updated>
+    </task>
+    <option name="localTasksCounter" value="98" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,9 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="changed position footer coa" />
-    <MESSAGE value="revert to server conn" />
-    <MESSAGE value="updated db and exe" />
     <MESSAGE value="updated" />
     <MESSAGE value="updated download" />
     <MESSAGE value="modified date entry" />
@@ -685,7 +682,10 @@
     <MESSAGE value="comment out the clicked fuunction" />
     <MESSAGE value="change buttton name" />
     <MESSAGE value="added style for sync  update" />
-    <option name="LAST_COMMIT_MESSAGE" value="added style for sync  update" />
+    <MESSAGE value="updating the color update sync" />
+    <MESSAGE value="updated  colors of btn update sync" />
+    <MESSAGE value="conected style to  sync uupdate button" />
+    <option name="LAST_COMMIT_MESSAGE" value="conected style to  sync uupdate button" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

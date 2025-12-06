@@ -240,6 +240,7 @@ def coa_data_entry_form(self, is_rrf=False):
         self.terumo_sync_button.setStyleSheet(sync_style)
         self.sync_update_button.setStyleSheet(sync_update_style)
         receipt_input_layout.addWidget(self.sync_button, alignment=Qt.AlignmentFlag.AlignVCenter)
+        receipt_input_layout.addWidget(self.sync_update_button, alignment=Qt.AlignmentFlag.AlignVCenter)
         general_info_layout.addLayout(receipt_input_layout, 2, 1)
 
         general_info_layout.addWidget(QLabel("P.O Number:"), 2, 2, Qt.AlignmentFlag.AlignRight)
