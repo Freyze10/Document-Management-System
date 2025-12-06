@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00045" summary="added dynamiccaps file">
-      <option name="closed" value="true" />
-      <created>1760920480142</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1760920480142</updated>
-    </task>
     <task id="LOCAL-00046" summary="modified display input">
       <option name="closed" value="true" />
       <created>1760921406234</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765006818555</updated>
     </task>
-    <option name="localTasksCounter" value="94" />
+    <task id="LOCAL-00094" summary="added style for sync  update">
+      <option name="closed" value="true" />
+      <created>1765007110423</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1765007110423</updated>
+    </task>
+    <option name="localTasksCounter" value="95" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added format for techno_trade" />
     <MESSAGE value="changed position footer coa" />
     <MESSAGE value="revert to server conn" />
     <MESSAGE value="updated db and exe" />
@@ -685,7 +684,8 @@
     <MESSAGE value="added sync update button" />
     <MESSAGE value="comment out the clicked fuunction" />
     <MESSAGE value="change buttton name" />
-    <option name="LAST_COMMIT_MESSAGE" value="change buttton name" />
+    <MESSAGE value="added style for sync  update" />
+    <option name="LAST_COMMIT_MESSAGE" value="added style for sync  update" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -729,6 +729,11 @@
           <url>file://$PROJECT_DIR$/print/print_coa.py</url>
           <line>431</line>
           <option name="timeStamp" value="31" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/table/coa_data_entry.py</url>
+          <line>205</line>
+          <option name="timeStamp" value="33" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

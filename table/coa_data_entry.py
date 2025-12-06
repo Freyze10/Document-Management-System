@@ -221,7 +221,7 @@ def coa_data_entry_form(self, is_rrf=False):
         """
         sync_update_style = """
             QPushButton {
-                background-color: #28a745; /* Green sync button */
+                background-color: #1976D2; /* same as rrf button */
                 color: white;
                 font-size: 13px; /* Slightly smaller font */
                 font-weight: 500;
