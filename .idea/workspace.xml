@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00036" summary="fixed print var passing">
-      <option name="closed" value="true" />
-      <created>1760599612848</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1760599612848</updated>
-    </task>
     <task id="LOCAL-00037" summary="fixed duplicate object">
       <option name="closed" value="true" />
       <created>1760603721094</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763714615545</updated>
     </task>
-    <option name="localTasksCounter" value="85" />
+    <task id="LOCAL-00085" summary="comment out checking plastimer expiry input">
+      <option name="closed" value="true" />
+      <created>1764982946557</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1764982946558</updated>
+    </task>
+    <option name="localTasksCounter" value="86" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added print dynamiccaaps" />
     <MESSAGE value="modified save function" />
     <MESSAGE value="changed variable naming" />
     <MESSAGE value="modified input fields" />
@@ -685,7 +684,8 @@
     <MESSAGE value="updated sync dr" />
     <MESSAGE value="updated sync dr editedby" />
     <MESSAGE value="updated exe" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated exe" />
+    <MESSAGE value="comment out checking plastimer expiry input" />
+    <option name="LAST_COMMIT_MESSAGE" value="comment out checking plastimer expiry input" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
