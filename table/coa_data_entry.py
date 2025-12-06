@@ -225,6 +225,7 @@ def coa_data_entry_form(self, is_rrf=False):
                 color: white;
                 font-size: 13px; /* Slightly smaller font */
                 font-weight: 500;
+                margin-left: 4px;
                 padding: 6px 8px; /* Adjusted padding */
                 border: none;
                 border-radius: 6px;

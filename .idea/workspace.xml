@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00049" summary="added print dynamiccaaps">
-      <option name="closed" value="true" />
-      <created>1760924221333</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1760924221333</updated>
-    </task>
     <task id="LOCAL-00050" summary="modified save function">
       <option name="closed" value="true" />
       <created>1760924639973</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765007247504</updated>
     </task>
-    <option name="localTasksCounter" value="98" />
+    <task id="LOCAL-00098" summary="added sync update to display">
+      <option name="closed" value="true" />
+      <created>1765007282545</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1765007282545</updated>
+    </task>
+    <option name="localTasksCounter" value="99" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="updated" />
     <MESSAGE value="updated download" />
     <MESSAGE value="modified date entry" />
     <MESSAGE value="added double click func" />
@@ -685,7 +684,8 @@
     <MESSAGE value="updating the color update sync" />
     <MESSAGE value="updated  colors of btn update sync" />
     <MESSAGE value="conected style to  sync uupdate button" />
-    <option name="LAST_COMMIT_MESSAGE" value="conected style to  sync uupdate button" />
+    <MESSAGE value="added sync update to display" />
+    <option name="LAST_COMMIT_MESSAGE" value="added sync update to display" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
