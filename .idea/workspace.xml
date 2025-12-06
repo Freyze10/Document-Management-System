@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00054" summary="added smypc widget">
-      <option name="closed" value="true" />
-      <created>1760928138236</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1760928138236</updated>
-    </task>
     <task id="LOCAL-00055" summary="modified printing in sympc">
       <option name="closed" value="true" />
       <created>1760928793619</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765008352770</updated>
     </task>
-    <option name="localTasksCounter" value="103" />
+    <task id="LOCAL-00103" summary="updated the new function with fullreset">
+      <option name="closed" value="true" />
+      <created>1765008462112</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1765008462112</updated>
+    </task>
+    <option name="localTasksCounter" value="104" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="updated text format esc html" />
     <MESSAGE value="adjusted table width" />
     <MESSAGE value="updaated exe" />
     <MESSAGE value="change error display" />
@@ -685,7 +684,8 @@
     <MESSAGE value="added new sync function in the db" />
     <MESSAGE value="clean some comment" />
     <MESSAGE value="create new function for the update sync" />
-    <option name="LAST_COMMIT_MESSAGE" value="create new function for the update sync" />
+    <MESSAGE value="updated the new function with fullreset" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated the new function with fullreset" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -734,11 +734,6 @@
           <url>file://$PROJECT_DIR$/table/coa_data_entry.py</url>
           <line>205</line>
           <option name="timeStamp" value="33" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1451</line>
-          <option name="timeStamp" value="34" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
