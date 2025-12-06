@@ -232,8 +232,8 @@ def coa_data_entry_form(self, is_rrf=False):
                 max-width: 65px; /* Adjusted max-width */
                 min-height: 28px; /* Slightly smaller height */
             }
-            QPushButton:hover { background-color: #218838; }
-            QPushButton:pressed { background-color: #1e7e34; }
+            QPushButton:hover { background-color: #1565C0; }
+            QPushButton:pressed { background-color: #0D47A1; }
         """
 
         self.sync_button.setStyleSheet(sync_style)
