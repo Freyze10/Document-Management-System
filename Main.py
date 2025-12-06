@@ -1450,7 +1450,21 @@ class MainWindow(QMainWindow):
         coa_data_entry.enable_auto_fill(self)
 
     def run_update_sync_script(self):
+        self.loading = loading.LoadingDialog(self)
+        self.loading.show()
 
+        # Run in a worker thread instead of subprocess
+        class Worker(QThread):
+            finished = pyqtSignal()
+
+            def run(self):
+                db_dr.FullResetDeliveryWorker().run()  # or whatever function starts sync
+                self.finished.emit()
+
+        self.worker = Worker()
+        self.worker.finished.connect(self.loading.accept)
+        self.worker.start()
+        coa_data_entry.enable_auto_fill(self)
 
     def run_sync_script_rrf(self):
         # Show loading dialog

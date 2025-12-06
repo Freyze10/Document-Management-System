@@ -240,30 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00051" summary="changed variable naming">
-      <option name="closed" value="true" />
-      <created>1760925116652</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1760925116652</updated>
-    </task>
-    <task id="LOCAL-00052" summary="modified input fields">
-      <option name="closed" value="true" />
-      <created>1760925397693</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1760925397693</updated>
-    </task>
-    <task id="LOCAL-00053" summary="created preview smypc">
-      <option name="closed" value="true" />
-      <created>1760925816450</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1760925816450</updated>
-    </task>
     <task id="LOCAL-00054" summary="added smypc widget">
       <option name="closed" value="true" />
       <created>1760928138236</created>
@@ -632,7 +608,31 @@
       <option name="project" value="LOCAL" />
       <updated>1765007340363</updated>
     </task>
-    <option name="localTasksCounter" value="100" />
+    <task id="LOCAL-00100" summary="added new sync function in the db">
+      <option name="closed" value="true" />
+      <created>1765008195071</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1765008195071</updated>
+    </task>
+    <task id="LOCAL-00101" summary="clean some comment">
+      <option name="closed" value="true" />
+      <created>1765008281931</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1765008281931</updated>
+    </task>
+    <task id="LOCAL-00102" summary="create new function for the update sync">
+      <option name="closed" value="true" />
+      <created>1765008352770</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1765008352770</updated>
+    </task>
+    <option name="localTasksCounter" value="103" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,9 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="modified date entry" />
-    <MESSAGE value="added double click func" />
-    <MESSAGE value="created new exe" />
     <MESSAGE value="updated text format esc html" />
     <MESSAGE value="adjusted table width" />
     <MESSAGE value="updaated exe" />
@@ -685,7 +682,10 @@
     <MESSAGE value="conected style to  sync uupdate button" />
     <MESSAGE value="added sync update to display" />
     <MESSAGE value="added margin between sync and uupdate" />
-    <option name="LAST_COMMIT_MESSAGE" value="added margin between sync and uupdate" />
+    <MESSAGE value="added new sync function in the db" />
+    <MESSAGE value="clean some comment" />
+    <MESSAGE value="create new function for the update sync" />
+    <option name="LAST_COMMIT_MESSAGE" value="create new function for the update sync" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -734,6 +734,11 @@
           <url>file://$PROJECT_DIR$/table/coa_data_entry.py</url>
           <line>205</line>
           <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/Main.py</url>
+          <line>1451</line>
+          <option name="timeStamp" value="34" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
