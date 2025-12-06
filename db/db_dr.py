@@ -267,6 +267,185 @@ class SyncDeliveryWorker(QObject):
             print(f"DELIVERY SYNC ERROR: {e}\n{trace_info}")
             self.finished.emit(False, f"Unexpected error:\n{e}\n\nCheck logs for details.")
 
+# delete existingg table then get all data from the legacy
+class FullResetDeliveryWorker(QObject):
+    """
+    DELETES all existing delivery data in PostgreSQL and re-imports EVERYTHING
+    from the legacy DBF files.
+    """
+    finished = pyqtSignal(bool, str)
+
+    def _get_safe_dr_num(self, dr_num_raw):
+        """Safely converts raw DR_NUM to string."""
+        if dr_num_raw is None:
+            return None
+        try:
+            return str(int(float(dr_num_raw)))
+        except (ValueError, TypeError):
+            s_dr_num = str(dr_num_raw).strip()
+            if s_dr_num.isdigit():
+                return s_dr_num
+            return None
+
+    def _to_float(self, value, default=0.0):
+        if value is None:
+            return default
+        try:
+            return float(value)
+        except (ValueError, TypeError):
+            try:
+                return float(str(value).strip()) if str(value).strip() else default
+            except (ValueError, TypeError):
+                return default
+
+    def run(self):
+        """Main execution method for the FULL RESET process."""
+        print("\n--- Starting FULL Delivery Database Reset ---")
+        try:
+            # --- Step 1: Wipe Existing Data ---
+            print("Step 1: Truncating existing tables...")
+            with engine.connect() as conn:
+                with conn.begin():
+                    # TRUNCATE removes all data. CASCADE ensures items are deleted too.
+                    # RESTART IDENTITY resets the auto-increment ID to 1.
+                    conn.execute(text("TRUNCATE TABLE product_delivery_primary RESTART IDENTITY CASCADE;"))
+            print("-> Tables truncated successfully.")
+
+            # --- Step 2: Process Primary Delivery Headers (tbl_del01.dbf) ---
+            primary_recs = []
+            valid_dr_numbers = set()
+            print(f"Step 2: Reading ALL headers from '{os.path.basename(DELIVERY_DBF_PATH)}'")
+
+            with dbfread.DBF(DELIVERY_DBF_PATH, load=True, encoding='latin1') as dbf_primary:
+                for r in dbf_primary:
+                    dr_num_raw = r.get('T_DRNUM')
+                    dr_num = self._get_safe_dr_num(dr_num_raw)
+
+                    # Restriction: Skip if DR_NUM is invalid or not purely numeric
+                    if not dr_num or not dr_num.isdigit():
+                        continue
+
+                    address = (str(r.get('T_ADD1', '')).strip() + ' ' +
+                               str(r.get('T_ADD2', '')).strip()).strip()
+
+                    # Store for DB insert
+                    primary_recs.append({
+                        "dr_no": dr_num,
+                        "delivery_date": r.get('T_DRDATE'),
+                        "customer_name": str(r.get('T_CUSTOMER', '')).strip(),
+                        "deliver_to": str(r.get('T_DELTO', '')).strip(),
+                        "address": address,
+                        "po_no": str(r.get('T_CPONUM', '')).strip(),
+                        "order_form_no": str(r.get('T_ORDERNUM', '')).strip(),
+                        "terms": str(r.get('T_REMARKS', '')).strip(),
+                        "prepared_by": str(r.get('T_USERID', '')).strip(),
+                        "encoded_on": r.get('T_DENCODED'),
+                        "is_deleted": bool(r.get('T_DELETED', False))
+                    })
+
+                    # Track valid DRs to filter items later
+                    valid_dr_numbers.add(dr_num)
+
+            print(f"-> Loaded {len(primary_recs)} primary records.")
+
+            if not primary_recs:
+                self.finished.emit(True, "Full Reset Info: No valid delivery records found in DBF.")
+                return
+
+            # --- Step 3: Process Delivery Items (tbl_del02.dbf) ---
+            items_by_dr = {}
+            item_count = 0
+            print(f"Step 3: Reading ALL items from '{os.path.basename(DELIVERY_ITEMS_DBF_PATH)}'")
+
+            with dbfread.DBF(DELIVERY_ITEMS_DBF_PATH, load=True, encoding='latin1') as dbf_items:
+                for item_rec in dbf_items:
+                    dr_num = self._get_safe_dr_num(item_rec.get('T_DRNUM'))
+
+                    # Only process items that belong to a valid header we just read
+                    if dr_num in valid_dr_numbers:
+                        item_count += 1
+                        attachments = "\n".join(
+                            filter(None, [str(item_rec.get(f'T_DESC{i}', '')).strip() for i in range(1, 5)]))
+
+                        if dr_num not in items_by_dr:
+                            items_by_dr[dr_num] = []
+
+                        items_by_dr[dr_num].append({
+                            "dr_no": dr_num,
+                            "quantity": self._to_float(item_rec.get('T_TOTALWT')),
+                            "unit": str(item_rec.get('T_TOTALWTU', '')).strip(),
+                            "product_code": str(item_rec.get('T_PRODCODE', '')).strip(),
+                            "product_color": str(item_rec.get('T_PRODCOLO', '')).strip(),
+                            "no_of_packing": self._to_float(item_rec.get('T_NUMPACKI')),
+                            "weight_per_pack": self._to_float(item_rec.get('T_WTPERPAC')),
+                            "lot_numbers": "",
+                            "attachments": attachments
+                        })
+
+            print(f"-> Loaded {item_count} item records.")
+
+            # --- Step 4: Bulk Insert ---
+            print("Step 4: Writing all data to PostgreSQL...")
+
+            # Use chunks if data is massive, but for typical DBF sizes, direct list is fine.
+            with engine.connect() as conn:
+                with conn.begin():
+                    # Insert Headers
+                    # We use ON CONFLICT DO UPDATE in case the DBF itself contains duplicate DR_NOs
+                    # (Legacy data often has dirty duplicates)
+                    conn.execute(text("""
+                        INSERT INTO product_delivery_primary (
+                            dr_no, delivery_date, customer_name, deliver_to, address, po_no,
+                            order_form_no, terms, prepared_by, encoded_on, is_deleted,
+                            encoded_by, edited_by, edited_on
+                        ) VALUES (
+                            :dr_no, :delivery_date, :customer_name, :deliver_to, :address, :po_no,
+                            :order_form_no, :terms, :prepared_by, :encoded_on, :is_deleted,
+                            :prepared_by, 'FULL_RESET', NOW()
+                        ) ON CONFLICT (dr_no) DO UPDATE SET
+                            delivery_date = EXCLUDED.delivery_date,
+                            customer_name = EXCLUDED.customer_name,
+                            deliver_to = EXCLUDED.deliver_to,
+                            address = EXCLUDED.address,
+                            po_no = EXCLUDED.po_no,
+                            order_form_no = EXCLUDED.order_form_no,
+                            terms = EXCLUDED.terms,
+                            prepared_by = EXCLUDED.prepared_by,
+                            encoded_on = EXCLUDED.encoded_on,
+                            is_deleted = EXCLUDED.is_deleted,
+                            edited_by = 'FULL_RESET_DUPLICATE',
+                            edited_on = NOW()
+                    """), primary_recs)
+
+                    # Insert Items
+                    all_items_to_insert = [
+                        item for dr_num in valid_dr_numbers for item in items_by_dr.get(dr_num, [])
+                    ]
+
+                    if all_items_to_insert:
+                        conn.execute(text("""
+                            INSERT INTO product_delivery_items (
+                                dr_no, quantity, unit, product_code, product_color,
+                                no_of_packing, weight_per_pack, lot_numbers, attachments
+                            ) VALUES (
+                                :dr_no, :quantity, :unit, :product_code, :product_color,
+                                :no_of_packing, :weight_per_pack, :lot_numbers, :attachments
+                            )
+                        """), all_items_to_insert)
+
+            print("-> Database transaction committed successfully.")
+            msg = (f"Full Reset Complete.\n"
+                   f"Wiped old data.\n"
+                   f"Imported {len(primary_recs)} headers and {item_count} items.")
+            self.finished.emit(True, msg)
+
+        except dbfread.DBFNotFound as e:
+            self.finished.emit(False, f"File Not Found: Missing DBF file.\nDetails: {e}")
+        except Exception as e:
+            trace_info = traceback.format_exc()
+            print(f"FULL RESET ERROR: {e}\n{trace_info}")
+            self.finished.emit(False, f"Unexpected error during reset:\n{e}")
+
 
 def handle_sync_finish(success, message):
     print("\n--- Sync Process Finished ---")
