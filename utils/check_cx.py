@@ -42,8 +42,8 @@ def match_customer(self, cx_name):
         populate_coa_summary(self)
     elif "plastimer" in cx_name.lower():
         self.coa_others_input.setPlainText("RoHS Compliant and Food Contact Approved.")
-        expiry_date = self.production_date_input.date().addYears(1)
-        self.plastimer_expiry_input.setDate(expiry_date)
+        # expiry_date = self.production_date_input.date().addYears(1)
+        # self.plastimer_expiry_input.setDate(expiry_date)
         self.plastimer_expiry_input.setStyleSheet("min-width: 150px;")
     elif "zeller" in cx_name.lower():
         zeller_item_code = db_con.get_zeller_item_code(self.color_code_input.text())

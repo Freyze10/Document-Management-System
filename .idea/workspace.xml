@@ -54,37 +54,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;Python.Login.executor&quot;: &quot;Run&quot;,
-    &quot;Python.Main.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.coa_data_entry.executor&quot;: &quot;Run&quot;,
-    &quot;Python.db_con.executor&quot;: &quot;Run&quot;,
-    &quot;Python.db_dr.executor&quot;: &quot;Run&quot;,
-    &quot;Python.db_rrf.executor&quot;: &quot;Run&quot;,
-    &quot;Python.msds_data_entry.executor&quot;: &quot;Debug&quot;,
-    &quot;Python.multiple_dates.executor&quot;: &quot;Run&quot;,
-    &quot;Python.prac.executor&quot;: &quot;Run&quot;,
-    &quot;Python.print_coa.executor&quot;: &quot;Run&quot;,
-    &quot;Python.print_msds.executor&quot;: &quot;Run&quot;,
-    &quot;Python.table.executor&quot;: &quot;Run&quot;,
-    &quot;Python.table_func.executor&quot;: &quot;Run&quot;,
-    &quot;Python.test.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Brant/PycharmProjects/File&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "Python.Login.executor": "Run",
+    "Python.Main.executor": "Run",
+    "Python.coa_data_entry.executor": "Run",
+    "Python.db_con.executor": "Run",
+    "Python.db_dr.executor": "Run",
+    "Python.db_rrf.executor": "Run",
+    "Python.msds_data_entry.executor": "Debug",
+    "Python.multiple_dates.executor": "Run",
+    "Python.prac.executor": "Run",
+    "Python.print_coa.executor": "Run",
+    "Python.print_msds.executor": "Run",
+    "Python.table.executor": "Run",
+    "Python.table_func.executor": "Run",
+    "Python.test.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/Brant/PycharmProjects/File",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;GitStage.ChangesTree.GroupingKeys&quot;: [
-      &quot;directory&quot;,
-      &quot;module&quot;,
-      &quot;repository&quot;
+  "keyToStringList": {
+    "GitStage.ChangesTree.GroupingKeys": [
+      "directory",
+      "module",
+      "repository"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Brant\PycharmProjects\File" />
@@ -148,7 +148,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="db_rrf" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="coa_data_entry" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="LAB-DMS" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -157,11 +157,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/db" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/table" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/db/db_rrf.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/table/coa_data_entry.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -217,10 +217,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.Login" />
-        <item itemvalue="Python.msds_data_entry" />
         <item itemvalue="Python.Main" />
+        <item itemvalue="Python.coa_data_entry" />
+        <item itemvalue="Python.msds_data_entry" />
         <item itemvalue="Python.multiple_dates" />
-        <item itemvalue="Python.db_rrf" />
       </list>
     </recent_temporary>
   </component>
@@ -239,14 +239,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
-    </task>
-    <task id="LOCAL-00035" summary="added save and print">
-      <option name="closed" value="true" />
-      <created>1760597057711</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1760597057711</updated>
     </task>
     <task id="LOCAL-00036" summary="fixed print var passing">
       <option name="closed" value="true" />
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1763609150781</updated>
     </task>
-    <option name="localTasksCounter" value="84" />
+    <task id="LOCAL-00084" summary="updated exe">
+      <option name="closed" value="true" />
+      <created>1763714615545</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1763714615545</updated>
+    </task>
+    <option name="localTasksCounter" value="85" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -724,6 +724,11 @@
           <url>file://$PROJECT_DIR$/Main.py</url>
           <line>1232</line>
           <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/print/print_coa.py</url>
+          <line>431</line>
+          <option name="timeStamp" value="31" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
