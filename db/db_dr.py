@@ -267,7 +267,8 @@ class SyncDeliveryWorker(QObject):
             print(f"DELIVERY SYNC ERROR: {e}\n{trace_info}")
             self.finished.emit(False, f"Unexpected error:\n{e}\n\nCheck logs for details.")
 
-# delete existingg table then get all data from the legacy
+
+
 class FullResetDeliveryWorker(QObject):
     """
     DELETES all existing delivery data in PostgreSQL and re-imports EVERYTHING
