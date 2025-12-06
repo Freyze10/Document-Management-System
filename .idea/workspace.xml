@@ -54,37 +54,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Python.Login.executor": "Run",
-    "Python.Main.executor": "Run",
-    "Python.coa_data_entry.executor": "Run",
-    "Python.db_con.executor": "Run",
-    "Python.db_dr.executor": "Run",
-    "Python.db_rrf.executor": "Run",
-    "Python.msds_data_entry.executor": "Debug",
-    "Python.multiple_dates.executor": "Run",
-    "Python.prac.executor": "Run",
-    "Python.print_coa.executor": "Run",
-    "Python.print_msds.executor": "Run",
-    "Python.table.executor": "Run",
-    "Python.table_func.executor": "Run",
-    "Python.test.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/Brant/PycharmProjects/File",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Python.Login.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.coa_data_entry.executor&quot;: &quot;Run&quot;,
+    &quot;Python.db_con.executor&quot;: &quot;Run&quot;,
+    &quot;Python.db_dr.executor&quot;: &quot;Run&quot;,
+    &quot;Python.db_rrf.executor&quot;: &quot;Run&quot;,
+    &quot;Python.msds_data_entry.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.multiple_dates.executor&quot;: &quot;Run&quot;,
+    &quot;Python.prac.executor&quot;: &quot;Run&quot;,
+    &quot;Python.print_coa.executor&quot;: &quot;Run&quot;,
+    &quot;Python.print_msds.executor&quot;: &quot;Run&quot;,
+    &quot;Python.table.executor&quot;: &quot;Run&quot;,
+    &quot;Python.table_func.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Brant/PycharmProjects/File&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   },
-  "keyToStringList": {
-    "GitStage.ChangesTree.GroupingKeys": [
-      "directory",
-      "module",
-      "repository"
+  &quot;keyToStringList&quot;: {
+    &quot;GitStage.ChangesTree.GroupingKeys&quot;: [
+      &quot;directory&quot;,
+      &quot;module&quot;,
+      &quot;repository&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Brant\PycharmProjects\File" />
@@ -239,30 +239,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
-    </task>
-    <task id="LOCAL-00037" summary="fixed duplicate object">
-      <option name="closed" value="true" />
-      <created>1760603721094</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1760603721094</updated>
-    </task>
-    <task id="LOCAL-00038" summary="changed naming">
-      <option name="closed" value="true" />
-      <created>1760604750442</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1760604750442</updated>
-    </task>
-    <task id="LOCAL-00039" summary="refactored files and class">
-      <option name="closed" value="true" />
-      <created>1760604880539</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1760604880539</updated>
     </task>
     <task id="LOCAL-00040" summary="refactored files and class">
       <option name="closed" value="true" />
@@ -632,7 +608,31 @@
       <option name="project" value="LOCAL" />
       <updated>1764982946558</updated>
     </task>
-    <option name="localTasksCounter" value="86" />
+    <task id="LOCAL-00086" summary="set current date for plastimer expiration">
+      <option name="closed" value="true" />
+      <created>1764983755004</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1764983755004</updated>
+    </task>
+    <task id="LOCAL-00087" summary="added v3 output">
+      <option name="closed" value="true" />
+      <created>1764984718393</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1764984718393</updated>
+    </task>
+    <task id="LOCAL-00088" summary="added v3 output">
+      <option name="closed" value="true" />
+      <created>1764984742589</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1764984742589</updated>
+    </task>
+    <option name="localTasksCounter" value="89" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,8 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="modified save function" />
-    <MESSAGE value="changed variable naming" />
     <MESSAGE value="modified input fields" />
     <MESSAGE value="created preview smypc" />
     <MESSAGE value="added smypc widget" />
@@ -685,7 +683,9 @@
     <MESSAGE value="updated sync dr editedby" />
     <MESSAGE value="updated exe" />
     <MESSAGE value="comment out checking plastimer expiry input" />
-    <option name="LAST_COMMIT_MESSAGE" value="comment out checking plastimer expiry input" />
+    <MESSAGE value="set current date for plastimer expiration" />
+    <MESSAGE value="added v3 output" />
+    <option name="LAST_COMMIT_MESSAGE" value="added v3 output" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
