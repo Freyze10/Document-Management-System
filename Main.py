@@ -1449,6 +1449,9 @@ class MainWindow(QMainWindow):
         self.worker.start()
         coa_data_entry.enable_auto_fill(self)
 
+    def run_update_sync_script(self):
+
+
     def run_sync_script_rrf(self):
         # Show loading dialog
         self.rrf_loading_dialog = loading.LoadingDialog(self)
