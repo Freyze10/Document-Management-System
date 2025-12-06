@@ -219,6 +219,23 @@ def coa_data_entry_form(self, is_rrf=False):
             QPushButton:hover { background-color: #218838; }
             QPushButton:pressed { background-color: #1e7e34; }
         """
+        sync_update_style = """
+            QPushButton {
+                background-color: #28a745; /* Green sync button */
+                color: white;
+                font-size: 13px; /* Slightly smaller font */
+                font-weight: 500;
+                padding: 6px 8px; /* Adjusted padding */
+                border: none;
+                border-radius: 6px;
+                min-width: 50px; /* Adjusted min-width */
+                max-width: 65px; /* Adjusted max-width */
+                min-height: 28px; /* Slightly smaller height */
+            }
+            QPushButton:hover { background-color: #218838; }
+            QPushButton:pressed { background-color: #1e7e34; }
+        """
+
         self.sync_button.setStyleSheet(sync_style)
         self.terumo_sync_button.setStyleSheet(sync_style)
         receipt_input_layout.addWidget(self.sync_button, alignment=Qt.AlignmentFlag.AlignVCenter)

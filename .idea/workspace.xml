@@ -240,38 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00041" summary="fixed return error">
-      <option name="closed" value="true" />
-      <created>1760605612421</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1760605612421</updated>
-    </task>
-    <task id="LOCAL-00042" summary="fixed print spaces">
-      <option name="closed" value="true" />
-      <created>1760767434185</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1760767434185</updated>
-    </task>
-    <task id="LOCAL-00043" summary="added package world entry">
-      <option name="closed" value="true" />
-      <created>1760768645181</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1760768645181</updated>
-    </task>
-    <task id="LOCAL-00044" summary="added packageworld widget">
-      <option name="closed" value="true" />
-      <created>1760772308953</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1760772308953</updated>
-    </task>
     <task id="LOCAL-00045" summary="added dynamiccaps file">
       <option name="closed" value="true" />
       <created>1760920480142</created>
@@ -632,7 +600,39 @@
       <option name="project" value="LOCAL" />
       <updated>1765005904511</updated>
     </task>
-    <option name="localTasksCounter" value="90" />
+    <task id="LOCAL-00090" summary="revert back the dr sync (update only">
+      <option name="closed" value="true" />
+      <created>1765006634429</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1765006634429</updated>
+    </task>
+    <task id="LOCAL-00091" summary="added sync update button">
+      <option name="closed" value="true" />
+      <created>1765006789709</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1765006789709</updated>
+    </task>
+    <task id="LOCAL-00092" summary="comment out the clicked fuunction">
+      <option name="closed" value="true" />
+      <created>1765006803311</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1765006803311</updated>
+    </task>
+    <task id="LOCAL-00093" summary="change buttton name">
+      <option name="closed" value="true" />
+      <created>1765006818555</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1765006818555</updated>
+    </task>
+    <option name="localTasksCounter" value="94" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,10 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="modified input fields" />
-    <MESSAGE value="created preview smypc" />
-    <MESSAGE value="added smypc widget" />
-    <MESSAGE value="modified printing in sympc" />
     <MESSAGE value="added format for techno_trade" />
     <MESSAGE value="changed position footer coa" />
     <MESSAGE value="revert to server conn" />
@@ -685,7 +681,11 @@
     <MESSAGE value="comment out checking plastimer expiry input" />
     <MESSAGE value="set current date for plastimer expiration" />
     <MESSAGE value="added v3 output" />
-    <option name="LAST_COMMIT_MESSAGE" value="added v3 output" />
+    <MESSAGE value="revert back the dr sync (update only" />
+    <MESSAGE value="added sync update button" />
+    <MESSAGE value="comment out the clicked fuunction" />
+    <MESSAGE value="change buttton name" />
+    <option name="LAST_COMMIT_MESSAGE" value="change buttton name" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -712,17 +712,17 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1296</line>
+          <line>1299</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1308</line>
+          <line>1311</line>
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1232</line>
+          <line>1235</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
