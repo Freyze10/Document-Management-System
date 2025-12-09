@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00067" summary="modified date entry">
-      <option name="closed" value="true" />
-      <created>1761121811443</created>
-      <option name="number" value="00067" />
-      <option name="presentableId" value="LOCAL-00067" />
-      <option name="project" value="LOCAL" />
-      <updated>1761121811443</updated>
-    </task>
     <task id="LOCAL-00068" summary="updated exe">
       <option name="closed" value="true" />
       <created>1761121838512</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765248753058</updated>
     </task>
-    <option name="localTasksCounter" value="116" />
+    <task id="LOCAL-00116" summary="connected to the server again">
+      <option name="closed" value="true" />
+      <created>1765248765284</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1765248765284</updated>
+    </task>
+    <option name="localTasksCounter" value="117" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added sync update button" />
     <MESSAGE value="comment out the clicked fuunction" />
     <MESSAGE value="change buttton name" />
     <MESSAGE value="added style for sync  update" />
@@ -685,7 +684,8 @@
     <MESSAGE value="skip deleted in delivery primary in sync" />
     <MESSAGE value="skip deleted in delivery items in sync" />
     <MESSAGE value="comment out the debug database" />
-    <option name="LAST_COMMIT_MESSAGE" value="comment out the debug database" />
+    <MESSAGE value="connected to the server again" />
+    <option name="LAST_COMMIT_MESSAGE" value="connected to the server again" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

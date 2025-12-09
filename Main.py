@@ -1357,7 +1357,10 @@ class MainWindow(QMainWindow):
     def toggle_coa_search_bar(self, index):
         try:
             if index == 0:  # Records tab
-                table.load_coa_table(self)
+                if self.is_rrf:
+                    table.load_rrf_table(self)
+                else:
+                    table.load_coa_table(self)
                 self.coa_search_bar.show()
                 self.coa_search_bar.setFocus()
                 coa_data_entry.clear_coa_form(self)
