@@ -240,22 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00065" summary="updated download">
-      <option name="closed" value="true" />
-      <created>1761036849697</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1761036849697</updated>
-    </task>
-    <task id="LOCAL-00066" summary="modified date entry">
-      <option name="closed" value="true" />
-      <created>1761121019249</created>
-      <option name="number" value="00066" />
-      <option name="presentableId" value="LOCAL-00066" />
-      <option name="project" value="LOCAL" />
-      <updated>1761121019249</updated>
-    </task>
     <task id="LOCAL-00067" summary="modified date entry">
       <option name="closed" value="true" />
       <created>1761121811443</created>
@@ -632,7 +616,23 @@
       <option name="project" value="LOCAL" />
       <updated>1765248435897</updated>
     </task>
-    <option name="localTasksCounter" value="114" />
+    <task id="LOCAL-00114" summary="skip deleted in delivery items in sync">
+      <option name="closed" value="true" />
+      <created>1765248471361</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1765248471361</updated>
+    </task>
+    <task id="LOCAL-00115" summary="comment out the debug database">
+      <option name="closed" value="true" />
+      <created>1765248753058</created>
+      <option name="number" value="00115" />
+      <option name="presentableId" value="LOCAL-00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1765248753058</updated>
+    </task>
+    <option name="localTasksCounter" value="116" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,8 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added v3 output" />
-    <MESSAGE value="revert back the dr sync (update only" />
     <MESSAGE value="added sync update button" />
     <MESSAGE value="comment out the clicked fuunction" />
     <MESSAGE value="change buttton name" />
@@ -685,7 +683,9 @@
     <MESSAGE value="skip rows with deleted value in full reset dr" />
     <MESSAGE value="skip deleted in delivery items" />
     <MESSAGE value="skip deleted in delivery primary in sync" />
-    <option name="LAST_COMMIT_MESSAGE" value="skip deleted in delivery primary in sync" />
+    <MESSAGE value="skip deleted in delivery items in sync" />
+    <MESSAGE value="comment out the debug database" />
+    <option name="LAST_COMMIT_MESSAGE" value="comment out the debug database" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

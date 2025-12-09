@@ -2,14 +2,14 @@
 import psycopg2
 
 # server
-# def get_connection():
-#     return psycopg2.connect(
-#         host="192.168.1.13",
-#         dbname="db_msds",
-#         user="postgres",
-#         password="mbpi",
-#         port="5432"
-#     )
+def get_connection():
+    return psycopg2.connect(
+        host="192.168.1.13",
+        dbname="db_msds",
+        user="postgres",
+        password="mbpi",
+        port="5432"
+    )
 
 # uncomment this if you are running this in your local computer
 
