@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00070" summary="created new exe">
-      <option name="closed" value="true" />
-      <created>1761265867761</created>
-      <option name="number" value="00070" />
-      <option name="presentableId" value="LOCAL-00070" />
-      <option name="project" value="LOCAL" />
-      <updated>1761265867761</updated>
-    </task>
     <task id="LOCAL-00071" summary="updated exe">
       <option name="closed" value="true" />
       <created>1761265962624</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765250361681</updated>
     </task>
-    <option name="localTasksCounter" value="119" />
+    <task id="LOCAL-00119" summary="renamed new exe">
+      <option name="closed" value="true" />
+      <created>1765250527626</created>
+      <option name="number" value="00119" />
+      <option name="presentableId" value="LOCAL-00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1765250527626</updated>
+    </task>
+    <option name="localTasksCounter" value="120" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added style for sync  update" />
     <MESSAGE value="updating the color update sync" />
     <MESSAGE value="updated  colors of btn update sync" />
     <MESSAGE value="conected style to  sync uupdate button" />
@@ -685,7 +684,8 @@
     <MESSAGE value="connected to the server again" />
     <MESSAGE value="added condition in toggle tab for rrf" />
     <MESSAGE value="added new exe" />
-    <option name="LAST_COMMIT_MESSAGE" value="added new exe" />
+    <MESSAGE value="renamed new exe" />
+    <option name="LAST_COMMIT_MESSAGE" value="renamed new exe" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
