@@ -240,22 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00068" summary="updated exe">
-      <option name="closed" value="true" />
-      <created>1761121838512</created>
-      <option name="number" value="00068" />
-      <option name="presentableId" value="LOCAL-00068" />
-      <option name="project" value="LOCAL" />
-      <updated>1761121838512</updated>
-    </task>
-    <task id="LOCAL-00069" summary="added double click func">
-      <option name="closed" value="true" />
-      <created>1761265747637</created>
-      <option name="number" value="00069" />
-      <option name="presentableId" value="LOCAL-00069" />
-      <option name="project" value="LOCAL" />
-      <updated>1761265747637</updated>
-    </task>
     <task id="LOCAL-00070" summary="created new exe">
       <option name="closed" value="true" />
       <created>1761265867761</created>
@@ -632,7 +616,23 @@
       <option name="project" value="LOCAL" />
       <updated>1765248765284</updated>
     </task>
-    <option name="localTasksCounter" value="117" />
+    <task id="LOCAL-00117" summary="added condition in toggle tab for rrf">
+      <option name="closed" value="true" />
+      <created>1765250161374</created>
+      <option name="number" value="00117" />
+      <option name="presentableId" value="LOCAL-00117" />
+      <option name="project" value="LOCAL" />
+      <updated>1765250161374</updated>
+    </task>
+    <task id="LOCAL-00118" summary="added new exe">
+      <option name="closed" value="true" />
+      <created>1765250361681</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1765250361681</updated>
+    </task>
+    <option name="localTasksCounter" value="119" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,8 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="comment out the clicked fuunction" />
-    <MESSAGE value="change buttton name" />
     <MESSAGE value="added style for sync  update" />
     <MESSAGE value="updating the color update sync" />
     <MESSAGE value="updated  colors of btn update sync" />
@@ -685,7 +683,9 @@
     <MESSAGE value="skip deleted in delivery items in sync" />
     <MESSAGE value="comment out the debug database" />
     <MESSAGE value="connected to the server again" />
-    <option name="LAST_COMMIT_MESSAGE" value="connected to the server again" />
+    <MESSAGE value="added condition in toggle tab for rrf" />
+    <MESSAGE value="added new exe" />
+    <option name="LAST_COMMIT_MESSAGE" value="added new exe" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
