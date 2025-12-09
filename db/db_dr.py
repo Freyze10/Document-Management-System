@@ -145,6 +145,8 @@ class SyncDeliveryWorker(QObject):
 
             with dbfread.DBF(DELIVERY_DBF_PATH, load=True, encoding='latin1') as dbf_primary:
                 for r in dbf_primary:
+                    if bool(r.get('T_DELETED', False)):
+                        continue
 
                     dr_num_raw = r.get('T_DRNUM')
                     dr_num = self._get_safe_dr_num(dr_num_raw)
