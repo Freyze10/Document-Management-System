@@ -240,22 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00063" summary="updated download">
-      <option name="closed" value="true" />
-      <created>1761029937628</created>
-      <option name="number" value="00063" />
-      <option name="presentableId" value="LOCAL-00063" />
-      <option name="project" value="LOCAL" />
-      <updated>1761029937628</updated>
-    </task>
-    <task id="LOCAL-00064" summary="updated download">
-      <option name="closed" value="true" />
-      <created>1761029964658</created>
-      <option name="number" value="00064" />
-      <option name="presentableId" value="LOCAL-00064" />
-      <option name="project" value="LOCAL" />
-      <updated>1761029964658</updated>
-    </task>
     <task id="LOCAL-00065" summary="updated download">
       <option name="closed" value="true" />
       <created>1761036849697</created>
@@ -632,7 +616,23 @@
       <option name="project" value="LOCAL" />
       <updated>1765244018565</updated>
     </task>
-    <option name="localTasksCounter" value="112" />
+    <task id="LOCAL-00112" summary="skip deleted in delivery items">
+      <option name="closed" value="true" />
+      <created>1765248346536</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1765248346536</updated>
+    </task>
+    <task id="LOCAL-00113" summary="skip deleted in delivery primary in sync">
+      <option name="closed" value="true" />
+      <created>1765248435897</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1765248435897</updated>
+    </task>
+    <option name="localTasksCounter" value="114" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,8 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="comment out checking plastimer expiry input" />
-    <MESSAGE value="set current date for plastimer expiration" />
     <MESSAGE value="added v3 output" />
     <MESSAGE value="revert back the dr sync (update only" />
     <MESSAGE value="added sync update button" />
@@ -685,7 +683,9 @@
     <MESSAGE value="import the db dr" />
     <MESSAGE value="removed the import dr from the db coon" />
     <MESSAGE value="skip rows with deleted value in full reset dr" />
-    <option name="LAST_COMMIT_MESSAGE" value="skip rows with deleted value in full reset dr" />
+    <MESSAGE value="skip deleted in delivery items" />
+    <MESSAGE value="skip deleted in delivery primary in sync" />
+    <option name="LAST_COMMIT_MESSAGE" value="skip deleted in delivery primary in sync" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -732,7 +732,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/db/db_dr.py</url>
-          <line>467</line>
+          <line>473</line>
           <option name="timeStamp" value="35" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">

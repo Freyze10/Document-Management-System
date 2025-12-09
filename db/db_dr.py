@@ -193,6 +193,9 @@ class SyncDeliveryWorker(QObject):
 
             with dbfread.DBF(DELIVERY_ITEMS_DBF_PATH, load=True, encoding='latin1') as dbf_items:
                 for item_rec in dbf_items:
+                    if bool(item_rec.get('T_DELETED', False)):
+                        continue
+
                     dr_num = self._get_safe_dr_num(item_rec.get('T_DRNUM'))
                     if dr_num in new_dr_numbers:  # Only pick items for the newly identified DR_NOs
                         item_count += 1
