@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00061" summary="updated db and exe">
-      <option name="closed" value="true" />
-      <created>1760930512084</created>
-      <option name="number" value="00061" />
-      <option name="presentableId" value="LOCAL-00061" />
-      <option name="project" value="LOCAL" />
-      <updated>1760930512084</updated>
-    </task>
     <task id="LOCAL-00062" summary="updated">
       <option name="closed" value="true" />
       <created>1760937431173</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765243282250</updated>
     </task>
-    <option name="localTasksCounter" value="110" />
+    <task id="LOCAL-00110" summary="removed the import dr from the db coon">
+      <option name="closed" value="true" />
+      <created>1765243307327</created>
+      <option name="number" value="00110" />
+      <option name="presentableId" value="LOCAL-00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1765243307327</updated>
+    </task>
+    <option name="localTasksCounter" value="111" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="updated sync dr editedby" />
     <MESSAGE value="updated exe" />
     <MESSAGE value="comment out checking plastimer expiry input" />
     <MESSAGE value="set current date for plastimer expiration" />
@@ -685,7 +684,8 @@
     <MESSAGE value="closed the temp connection" />
     <MESSAGE value="moved the  creation of legacy to Login" />
     <MESSAGE value="import the db dr" />
-    <option name="LAST_COMMIT_MESSAGE" value="import the db dr" />
+    <MESSAGE value="removed the import dr from the db coon" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed the import dr from the db coon" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -732,7 +732,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/db/db_dr.py</url>
-          <line>462</line>
+          <line>465</line>
           <option name="timeStamp" value="35" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
