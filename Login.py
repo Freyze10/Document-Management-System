@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout,
     QPushButton, QLabel, QFormLayout, QStackedWidget
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon
-from db import db_con
+from db import db_con, db_dr
 from alert import window_alert
 import Main
 from utils import abs_path
