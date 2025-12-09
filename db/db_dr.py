@@ -145,6 +145,7 @@ class SyncDeliveryWorker(QObject):
 
             with dbfread.DBF(DELIVERY_DBF_PATH, load=True, encoding='latin1') as dbf_primary:
                 for r in dbf_primary:
+
                     dr_num_raw = r.get('T_DRNUM')
                     dr_num = self._get_safe_dr_num(dr_num_raw)
 
@@ -367,6 +368,8 @@ class FullResetDeliveryWorker(QObject):
 
             with dbfread.DBF(DELIVERY_ITEMS_DBF_PATH, load=True, encoding='latin1') as dbf_items:
                 for item_rec in dbf_items:
+                    if bool(item_rec.get('T_DELETED', False)):
+                        continue
                     dr_num = self._get_safe_dr_num(item_rec.get('T_DRNUM'))
 
                     # Only process items that belong to a valid header we just read
