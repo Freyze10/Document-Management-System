@@ -103,7 +103,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Python.db_dr">
+  <component name="RunManager" selected="Python.Login">
     <configuration name="Login" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="LAB-DMS" />
       <option name="ENV_FILES" value="" />
@@ -216,9 +216,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.db_dr" />
         <item itemvalue="Python.Login" />
         <item itemvalue="Python.Main" />
+        <item itemvalue="Python.db_dr" />
         <item itemvalue="Python.coa_data_entry" />
         <item itemvalue="Python.msds_data_entry" />
       </list>
@@ -239,14 +239,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
-    </task>
-    <task id="LOCAL-00055" summary="modified printing in sympc">
-      <option name="closed" value="true" />
-      <created>1760928793619</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1760928793619</updated>
     </task>
     <task id="LOCAL-00056" summary="added format for techno_trade">
       <option name="closed" value="true" />
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765008462112</updated>
     </task>
-    <option name="localTasksCounter" value="104" />
+    <task id="LOCAL-00104" summary="connected the function to sync update button">
+      <option name="closed" value="true" />
+      <created>1765008529070</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1765008529070</updated>
+    </task>
+    <option name="localTasksCounter" value="105" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="adjusted table width" />
     <MESSAGE value="updaated exe" />
     <MESSAGE value="change error display" />
     <MESSAGE value="debugging prod date" />
@@ -685,7 +684,8 @@
     <MESSAGE value="clean some comment" />
     <MESSAGE value="create new function for the update sync" />
     <MESSAGE value="updated the new function with fullreset" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated the new function with fullreset" />
+    <MESSAGE value="connected the function to sync update button" />
+    <option name="LAST_COMMIT_MESSAGE" value="connected the function to sync update button" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -734,6 +734,11 @@
           <url>file://$PROJECT_DIR$/table/coa_data_entry.py</url>
           <line>205</line>
           <option name="timeStamp" value="33" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/db/db_dr.py</url>
+          <line>458</line>
+          <option name="timeStamp" value="35" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
