@@ -4,15 +4,19 @@ import traceback
 import dbfread
 from sqlalchemy import create_engine, text
 from PyQt6.QtCore import QObject, pyqtSignal, QCoreApplication
+from db.db_con import get_connection
 
 # --- CONFIGURATION ---
+temp_conn = get_connection()
 DB_CONFIG = {
-    "host": "192.168.1.13",
-    "port": 5432,
-    "dbname": "db_msds",
-    "user": "postgres",
-    "password": "mbpi"
+    "host": temp_conn.info.host,
+    "port": temp_conn.info.port,
+    "dbname": temp_conn.info.dbname,
+    "user": temp_conn.info.user,
+    "password": temp_conn.info.password
 }
+
+
 DBF_BASE_PATH = r'\\system-server\SYSTEM-NEW-OLD'
 DELIVERY_DBF_PATH = os.path.join(DBF_BASE_PATH, 'tbl_del01.dbf')
 DELIVERY_ITEMS_DBF_PATH = os.path.join(DBF_BASE_PATH, 'tbl_del02.dbf')

@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00056" summary="added format for techno_trade">
-      <option name="closed" value="true" />
-      <created>1760929715637</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1760929715637</updated>
-    </task>
     <task id="LOCAL-00057" summary="changed position footer coa">
       <option name="closed" value="true" />
       <created>1760929916910</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765008529070</updated>
     </task>
-    <option name="localTasksCounter" value="105" />
+    <task id="LOCAL-00105" summary="chenged connection to debug databse">
+      <option name="closed" value="true" />
+      <created>1765241292664</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1765241292664</updated>
+    </task>
+    <option name="localTasksCounter" value="106" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="updaated exe" />
     <MESSAGE value="change error display" />
     <MESSAGE value="debugging prod date" />
     <MESSAGE value="updated production_date datatype" />
@@ -685,7 +684,8 @@
     <MESSAGE value="create new function for the update sync" />
     <MESSAGE value="updated the new function with fullreset" />
     <MESSAGE value="connected the function to sync update button" />
-    <option name="LAST_COMMIT_MESSAGE" value="connected the function to sync update button" />
+    <MESSAGE value="chenged connection to debug databse" />
+    <option name="LAST_COMMIT_MESSAGE" value="chenged connection to debug databse" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -737,7 +737,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/db/db_dr.py</url>
-          <line>458</line>
+          <line>462</line>
           <option name="timeStamp" value="35" />
         </line-breakpoint>
       </breakpoints>
