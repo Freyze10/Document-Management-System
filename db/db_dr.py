@@ -15,7 +15,7 @@ DB_CONFIG = {
     "user": temp_conn.info.user,
     "password": temp_conn.info.password
 }
-
+temp_conn.close()
 
 DBF_BASE_PATH = r'\\system-server\SYSTEM-NEW-OLD'
 DELIVERY_DBF_PATH = os.path.join(DBF_BASE_PATH, 'tbl_del01.dbf')
