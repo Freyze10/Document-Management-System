@@ -542,7 +542,7 @@ class MainWindow(QMainWindow):
                 background-color: #e9f3ff;  /* Match coa_data_entry hover */
             }
             QTableWidget[class="records_table"] QHeaderView::section {
-                font-size: 16px;  /* Larger header font */
+                font-size: 14px;  /* Larger header font */
                 font-weight: 600;
                 padding: 12px;
                 background-color: #f0f4f8;  /* Slightly lighter header */

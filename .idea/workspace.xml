@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00071" summary="updated exe">
-      <option name="closed" value="true" />
-      <created>1761265962624</created>
-      <option name="number" value="00071" />
-      <option name="presentableId" value="LOCAL-00071" />
-      <option name="project" value="LOCAL" />
-      <updated>1761265962624</updated>
-    </task>
     <task id="LOCAL-00072" summary="updated text format esc html">
       <option name="closed" value="true" />
       <created>1762408912610</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765250527626</updated>
     </task>
-    <option name="localTasksCounter" value="120" />
+    <task id="LOCAL-00120" summary="renamed new exe">
+      <option name="closed" value="true" />
+      <created>1765250893303</created>
+      <option name="number" value="00120" />
+      <option name="presentableId" value="LOCAL-00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1765250893303</updated>
+    </task>
+    <option name="localTasksCounter" value="121" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
