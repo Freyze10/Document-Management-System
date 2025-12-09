@@ -1,8 +1,6 @@
 
 import psycopg2
 
-from db import db_dr
-
 # server
 # def get_connection():
 #     return psycopg2.connect(
