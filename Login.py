@@ -17,6 +17,8 @@ class AuthWindow(QMainWindow):
         self.resize(600, 450)
         self.setWindowIcon(QIcon(abs_path.resource("img/icon.ico")))
         db_con.create_tables()
+        db_dr.create_delivery_legacy_tables()
+
         # Main layout
         self.main_layout = QVBoxLayout()
         self.main_layout.setSpacing(20)

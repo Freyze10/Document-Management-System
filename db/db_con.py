@@ -371,8 +371,6 @@ def create_tables():
     $do$;
     """)
 
-    db_dr.create_delivery_legacy_tables()
-
     conn.commit()
     cur.close()
     conn.close()
