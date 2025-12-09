@@ -550,6 +550,7 @@ class MainWindow(QMainWindow):
                 color: #1a3c6c;
             }
             QTableWidget[class="records_table"] QHeaderView::section:horizontal {
+                font-size: 16px;
                 border-right: none;
                 border-bottom: 3px solid #4a90e2;  /* Blue underline */
             }
