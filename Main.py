@@ -15,7 +15,7 @@ import Login
 from utils import abs_path, scroll_date, calendar_design, check_cx, multiple_dates, loading, prod_date_format
 from utils.debounce import setup_finished_typing
 from formats_input import rowell_litho, packageworld, dynamiccaps, smypc
-
+from PyQt6.QtGui import QTextCharFormat, QFont
 
 class MainWindow(QMainWindow):
     def __init__(self, username=None):

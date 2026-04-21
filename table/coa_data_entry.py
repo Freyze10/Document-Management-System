@@ -1,6 +1,7 @@
 import re
 
 from PyQt6.QtCore import QDate, Qt
+from PyQt6.QtGui import QTextCharFormat, QFont
 from PyQt6.QtWidgets import (
     QLabel, QHBoxLayout, QHeaderView, QPushButton, QTableWidgetItem,
     QAbstractItemView, QWidget, QVBoxLayout, QGroupBox, QGridLayout  # Import QGridLayout
@@ -419,6 +420,56 @@ def coa_data_entry_form(self, is_rrf=False):
         self.coa_others_input.setStyleSheet("""
                 min-height: 72px;
             """)
+        format_tools_container = QWidget()
+        format_tools_layout = QVBoxLayout(format_tools_container)
+        format_tools_layout.setContentsMargins(0, 0, 5, 0)
+        format_tools_layout.setSpacing(2)
+        format_tools_layout.addStretch()  # Push buttons to the middle/top
+
+        # Define Tool Buttons
+        btn_bold = QPushButton("B")
+        btn_italic = QPushButton("I")
+        btn_underline = QPushButton("U")
+
+        format_btn_style = """
+                    QPushButton {
+                        font-size: 13px;
+                        font-weight: bold;
+                        background-color: #ffffff;
+                        border: 1px solid #ced4da;
+                        border-radius: 4px;
+                        min-width: 28px;
+                        max-width: 28px;
+                        min-height: 28px;
+                        color: #495057;
+                    }
+                    QPushButton:hover { background-color: #e9ecef; }
+                    QPushButton:checked { 
+                        background-color: #007bff; 
+                        color: white; 
+                        border: 1px solid #0056b3;
+                    }
+                """
+
+        btn_bold.setStyleSheet(format_btn_style)
+        btn_italic.setStyleSheet(format_btn_style + "font-style: italic; font-weight: normal;")
+        btn_underline.setStyleSheet(format_btn_style + "text-decoration: underline; font-weight: normal;")
+
+        # Make them checkable to reflect current state
+        btn_bold.setCheckable(True)
+        btn_italic.setCheckable(True)
+        btn_underline.setCheckable(True)
+
+        # Connect formatting logic
+        btn_bold.clicked.connect(lambda: toggle_text_format(self.coa_others_input, "bold", btn_bold))
+        btn_italic.clicked.connect(lambda: toggle_text_format(self.coa_others_input, "italic", btn_italic))
+        btn_underline.clicked.connect(
+            lambda: toggle_text_format(self.coa_others_input, "underline", btn_underline))
+
+        format_tools_layout.addWidget(btn_bold)
+        format_tools_layout.addWidget(btn_italic)
+        format_tools_layout.addWidget(btn_underline)
+        format_tools_layout.addStretch()
 
         # Certified by and Creation Date
         certification_layout.addWidget(QLabel("Certified by:"), 0, 0, Qt.AlignmentFlag.AlignRight)
@@ -435,7 +486,7 @@ def coa_data_entry_form(self, is_rrf=False):
         # Suitability
         certification_layout.addWidget(QLabel("Shelf Life:"), 2, 0, Qt.AlignmentFlag.AlignRight)
         certification_layout.addWidget(self.coa_shelf_life_input, 2, 1, 1, 3)  # Span across remaining columns
-        certification_layout.addWidget(QLabel(""), 3, 0, Qt.AlignmentFlag.AlignRight)
+        certification_layout.addWidget(format_tools_container, 3, 0, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight)
         certification_layout.addWidget(self.coa_others_input, 3, 1, 1, 3)  # Span across remaining columns
 
         main_v_layout.addWidget(certification_group)
@@ -477,6 +528,33 @@ def coa_data_entry_form(self, is_rrf=False):
         clear_coa_form(self)
     except Exception as e:
         print(f"Error loading COA form: {e}")
+
+
+def toggle_text_format(editor, fmt_type, button):
+    """Toggles bold, italic, or underline on the selected text of a QTextEdit."""
+    cursor = editor.textCursor()
+
+    # Create a format object to hold the changes
+    fmt = QTextCharFormat()
+
+    if fmt_type == "bold":
+        # Use QFont.Weight for better compatibility
+        weight = QFont.Weight.Bold if button.isChecked() else QFont.Weight.Normal
+        fmt.setFontWeight(weight.value)
+    elif fmt_type == "italic":
+        fmt.setFontItalic(button.isChecked())
+    elif fmt_type == "underline":
+        fmt.setFontUnderline(button.isChecked())
+
+    # Merge this format into the current selection
+    cursor.mergeCharFormat(fmt)
+
+    # Also set the current char format so if nothing is selected,
+    # the next typed text will have this format.
+    editor.mergeCurrentCharFormat(fmt)
+
+    # Return focus to the editor so the user can keep typing immediately
+    editor.setFocus()
 
 
 def adjust_table_height(self):
