@@ -2,7 +2,7 @@ from PyQt6.QtCore import Qt, QDate, QRegularExpression, QTimer, pyqtSignal, QThr
 from PyQt6.QtGui import QIcon, QRegularExpressionValidator, QFont, QAction, QKeySequence, QShortcut
 from PyQt6.QtWidgets import QMainWindow, QVBoxLayout, QHBoxLayout, QWidget, QTabWidget, \
     QTableWidget, QLineEdit, QHeaderView, QTableWidgetItem, QScrollArea, QTextEdit, QPushButton, QDateEdit, \
-    QMessageBox, QAbstractItemView, QGroupBox, QCompleter, QDialog, QLabel, QProgressBar, QStackedLayout
+    QMessageBox, QAbstractItemView, QGroupBox, QCompleter, QDialog, QLabel, QProgressBar, QStackedLayout, QTableView
 from db import db_con, db_dr, db_rrf
 from alert import window_alert
 from table import msds_data_entry, coa_data_entry, table, terumo
@@ -520,30 +520,30 @@ class MainWindow(QMainWindow):
             }
         """
         self.setStyleSheet("""
-            QTableWidget[class="records_table"] {
+            .records_table  {
                 font-size: 15px;  /* Larger cell font */
                 background-color: #ffffff;
                 border: 1px solid #d1d5db;
                 border-radius: 8px;  /* Rounded corners */
                 box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);  /* Subtle shadow */
             }
-            QTableWidget[class="records_table"]::item {
+            .records_table::item {
                 padding: 12px;  /* Increased padding */
                 border-bottom: 1px solid #e0e0e0;
                 background-color: #ffffff;
             }
-            QTableWidget[class="records_table"]::item:alternate {
+            .records_table::item:alternate {
                 background-color: #f9fafb;  /* Alternating row color */
             }
-            QTableWidget[class="records_table"]::item:selected {
+            .records_table::item:selected {
                 background-color: #e3f2fd;  /* Match coa_data_entry selection */
                 color: #000000;
                 border: 2px solid #0078d7;
             }
-            QTableWidget[class="records_table"]::item:hover {
+            .records_table::item:hover {
                 background-color: #e9f3ff;  /* Match coa_data_entry hover */
             }
-            QTableWidget[class="records_table"] QHeaderView::section {
+            .records_table QHeaderView::section {
                 font-size: 14px;  /* Larger header font */
                 font-weight: 600;
                 padding: 12px;
@@ -551,7 +551,7 @@ class MainWindow(QMainWindow):
                 border: 1px solid #d1d5db;
                 color: #1a3c6c;
             }
-            QTableWidget[class="records_table"] QHeaderView::section:horizontal {
+            .records_table QHeaderView::section:horizontal {
                 font-size: 16px;
                 border-right: none;
                 border-bottom: 3px solid #4a90e2;  /* Blue underline */
@@ -657,8 +657,8 @@ class MainWindow(QMainWindow):
         )
         self.coa_records_table.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
         self.coa_records_table.setMouseTracking(True)
-        self.coa_records_table.cellEntered.connect(self.on_cell_hover)
-        self.coa_records_table.cellClicked.connect(self.coa_cell_clicked)
+        self.coa_records_table.entered.connect(self.on_coa_hover)
+        self.coa_records_table.clicked.connect(self.coa_cell_clicked)
         self.coa_label_timer = setup_finished_typing(
             self,
             self.coa_search_bar,
@@ -1165,13 +1165,11 @@ class MainWindow(QMainWindow):
         self.msds_cell_clicked(row, 1)
 
     def coa_table_records_init(self):
-        # 2. Set the Model (Assuming 4 columns as per your requirement)
-        # The headers list here replaces setColumnCount and setHorizontalHeaderLabels
         self.coa_headers = ["Name", "", "", ""]
+        self._coa_data = []  # Local storage for data if needed
         self.coa_model = TableModel(self.coa_rows, self.coa_headers)
         self.coa_records_table.setModel(self.coa_model)
 
-        # 3. Apply the attributes from your old code
         header = self.coa_records_table.horizontalHeader()
         header.setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
         header.setMinimumSectionSize(40)
@@ -1180,28 +1178,39 @@ class MainWindow(QMainWindow):
         self.coa_records_table.setFocusPolicy(Qt.FocusPolicy.NoFocus)
         self.coa_records_table.setShowGrid(False)
         self.coa_records_table.setAlternatingRowColors(True)
-
-        # 4. Vertical Header (Row Height)
-        v_header = self.coa_records_table.verticalHeader()
-        v_header.setDefaultSectionSize(44)
-        v_header.setVisible(False)  # Usually hidden for "records" look
-
-        # 5. Handle Double Click (Note: QTableView uses 'doubleClicked', not 'cellDoubleClicked')
         self.coa_records_table.doubleClicked.connect(self.on_coa_row_double_clicked)
 
-        # 6. Maintenance of your custom resize logic
-        # Make sure 'table.resize_columns' is updated to work with QTableView
+        # Critical for the 'entered' signal to work without clicking
+        self.coa_records_table.setMouseTracking(True)
+
+        # Note: Connections moved to __init__, or you can keep them here.
+        # If keeping here, ensure they are connected to clicked/entered.
+
+        # Vertical header setup
+        v_header = self.coa_records_table.verticalHeader()
+        v_header.setDefaultSectionSize(44)
+        v_header.setVisible(False)
+
         self.coa_records_table.resizeEvent = lambda event: table.resize_columns(self, self.coa_records_table, event)
+        self.coa_records_table.setMouseTracking(True)
+
+    def on_coa_hover(self, index):
+        if index.isValid():
+            self.coa_model.update_hover(index.row(), index.column())
 
     def on_coa_row_double_clicked(self, index):
+        """
+        When a user double-clicks any part of a row,
+        this forces the logic for the 'View' button (Column 1).
+        """
         if not index.isValid():
             return
 
-        row = index.row()
-        col = index.column()
-        # Simulate a click on the 'view' column (column 1)
-        self.coa_records_table.selectRow(row)
-        self.coa_cell_clicked(row, 1)
+        # We create a new index pointing to the same row but specifically Column 1
+        view_column_index = self.coa_model.index(index.row(), 1)
+
+        # We then pass that index to your existing click handler
+        self.coa_cell_clicked(view_column_index)
 
     def on_cell_hover(self, row, column):
         table = self.sender()
@@ -1310,13 +1319,28 @@ class MainWindow(QMainWindow):
             self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
             self.coa_data_entry_sub_tabs.setCurrentIndex(5)
 
-    def coa_cell_clicked(self, row, column):
-        coa_id = self.coa_records_table.item(row, 0).data(Qt.ItemDataRole.UserRole)
+    def coa_cell_clicked(self, index):
+        """Update to handle QModelIndex from QTableView"""
+        if not index.isValid():
+            return
+
+        # Extract row and column from the index
+        row = index.row()
+        column = index.column()
+
+        # GET THE ID: Use the model and the UserRole we set up earlier
+        # We look at column 0 of the current row to find the ID
+        id_index = self.coa_model.index(row, 0)
+        coa_id = self.coa_model.data(id_index, Qt.ItemDataRole.UserRole)
+
         self.all_terumo_id = db_con.get_all_terumo_id()
         self.all_pvc_id = db_con.get_all_pvc_free_id()
-        if column == 1:  # view column
+
+        if column == 1:  # VIEW column
             try:
-                display_text = self.coa_records_table.item(row, 0).text()
+                # GET THE TEXT: Use DisplayRole from the model
+                display_text = self.coa_model.data(id_index, Qt.ItemDataRole.DisplayRole)
+
                 if coa_id in self.all_terumo_id:
                     self.open_terumo_preview(coa_id, display_text)
                 elif coa_id in self.all_pvc_id:
@@ -1324,44 +1348,39 @@ class MainWindow(QMainWindow):
                 else:
                     self.open_coa_preview(coa_id, display_text)
             except Exception as e:
-                print(e)
-        if column == 2:  # edit column
+                print(f"View error: {e}")
+
+        elif column == 2:  # EDIT column
             try:
                 if coa_id in self.all_terumo_id:
-                    terumo.current_coa_id = coa_id  # Store the selected COA ID
+                    terumo.current_coa_id = coa_id
                     terumo.load_coa_details(self, coa_id)
                     self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
                     self.coa_data_entry_sub_tabs.setCurrentIndex(1)
                 elif coa_id in self.all_pvc_id:
                     self.check_edit_pvc(coa_id)
-
                 else:
                     coa_data_entry.current_coa_id = coa_id
                     coa_data_entry.load_coa_details(self, coa_id, self.is_rrf)
-                    # Switch to the COA tab
                     self.coa_sub_tabs.setCurrentWidget(self.coa_data_entry_tab)
                     self.coa_data_entry_sub_tabs.setCurrentIndex(0)
             except Exception as e:
-                print(f"coa cell clicked {e}")
-        if column == 3:  # delete column
+                print(f"Edit error: {e}")
+
+        elif column == 3:  # DELETE column
             msg = " - RRF" if self.is_rrf else ""
             confirm = window_alert.show_message(self, "Confirm Deletion",
-                                                f"Are you sure you want to delete this Certificate of Analysis{msg} record?",
+                                                f"Are you sure you want to delete this record{msg}?",
                                                 icon_type="question", is_confirmation=True)
             if confirm:
                 try:
                     if self.is_rrf:
                         db_con.delete_certificate_of_analysis_rrf(coa_id)
-                        window_alert.show_message(self, "Deleted",
-                                                  "Certificate of Analysis - RRF record deleted successfully.",
-                                                  icon_type="info")
                         table.load_rrf_table(self)
                     else:
                         db_con.delete_certificate_of_analysis(coa_id)
-                        window_alert.show_message(self, "Deleted",
-                                                  "Certificate of Analysis record deleted successfully.",
-                                                  icon_type="info")
                         table.load_coa_table(self)
+                    window_alert.show_message(self, "Deleted", "Record deleted successfully.", icon_type="info")
                 except Exception as e:
                     window_alert.show_message(self, "Error", str(e), icon_type="critical")
 

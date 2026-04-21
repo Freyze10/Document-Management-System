@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00077" summary="debugging prod date">
-      <option name="closed" value="true" />
-      <created>1762928320458</created>
-      <option name="number" value="00077" />
-      <option name="presentableId" value="LOCAL-00077" />
-      <option name="project" value="LOCAL" />
-      <updated>1762928320458</updated>
-    </task>
     <task id="LOCAL-00078" summary="updated production_date datatype">
       <option name="closed" value="true" />
       <created>1762928928587</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1776750499399</updated>
     </task>
-    <option name="localTasksCounter" value="126" />
+    <task id="LOCAL-00126" summary="updated table model">
+      <option name="closed" value="true" />
+      <created>1776750843459</created>
+      <option name="number" value="00126" />
+      <option name="presentableId" value="LOCAL-00126" />
+      <option name="project" value="LOCAL" />
+      <updated>1776750843459</updated>
+    </task>
+    <option name="localTasksCounter" value="127" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added new sync function in the db" />
     <MESSAGE value="clean some comment" />
     <MESSAGE value="create new function for the update sync" />
     <MESSAGE value="updated the new function with fullreset" />
@@ -685,7 +684,8 @@
     <MESSAGE value="added a row count on audit trail" />
     <MESSAGE value="modify" />
     <MESSAGE value="addeed table model for table view" />
-    <option name="LAST_COMMIT_MESSAGE" value="addeed table model for table view" />
+    <MESSAGE value="updated table model" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated table model" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -707,17 +707,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1322</line>
-          <option name="timeStamp" value="26" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1334</line>
-          <option name="timeStamp" value="27" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1258</line>
+          <line>1267</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
