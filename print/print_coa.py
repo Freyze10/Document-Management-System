@@ -343,23 +343,25 @@ class FileCOA(QWidget):
         if field_result[13]:
             content.append(Paragraph("Suitability: " + str(field_result[13]), BoldSerif))
 
+        # --- NEW UPDATED CODE ---
+        # --- Find this section in your generate_pdf ---
         if field_result[15]:
+            # Use the NEW cleaner that handles <p> tags
+            note_html = self.clean_qt_html_for_reportlab(str(field_result[15]))
+
             if "everest plastic" in field_result[1].lower():
                 hanging_indent = ParagraphStyle(
                     "HangingIndentNote",
-                    parent=BoldSerif,  # Inherit from your BoldSerif style
-                    leftIndent=23,  # Indent all lines by 40pt (adjust as needed)
-                    firstLineIndent=-23,  # Pull first line left by same amount
-                    spaceAfter=10  # Any extra space after the note
+                    parent=BoldSerif,
+                    leftIndent=23,
+                    firstLineIndent=-23,
+                    spaceAfter=10
                 )
-
-                note_content = field_result[15]                # Convert \n to <br/> in ReportLab paragraphs for line breaks
-                note_content_html = note_content.replace("\n", "<br/>")
-                note_param = Paragraph(f"Note: {note_content_html}", hanging_indent)
-
+                # ReportLab will now see <br/> where the Enter key was pressed
+                note_param = Paragraph(f"Note: {note_html}", hanging_indent)
                 content.append(note_param)
             else:
-                content.append(Paragraph(str(field_result[15].replace("\n", "<br/>")), BoldSerif))
+                content.append(Paragraph(note_html, BoldSerif))
 
         content.append(Spacer(1, 14))  # Space before footer note
 
@@ -457,3 +459,55 @@ class FileCOA(QWidget):
                 painter.end()
         except Exception as e:
             window_alert.show_message(self, "Error", f"An error occurred during printing: {e}", icon_type="critical")
+
+    def clean_qt_html_for_reportlab(self, html_str):
+        if not html_str or not isinstance(html_str, str):
+            return ""
+
+        # 1. Extract content from <body>
+        body_match = re.search(r'<body.*?>(.*?)</body>', html_str, re.DOTALL | re.IGNORECASE)
+        content = body_match.group(1) if body_match else html_str
+
+        # 2. Convert Paragraphs to Line Breaks
+        # Qt uses <p>...</p> for every line.
+        # We replace </p> with <br/> so ReportLab knows to start a new line.
+        content = content.replace('</p>', '<br/>')
+
+        # Remove all opening <p> tags (including those with styles)
+        content = re.sub(r'<p.*?>', '', content)
+
+        # 3. Handle Spans (Bold, Italic, Underline)
+        def style_replacer(match):
+            style_block = match.group(1)
+            inner_text = match.group(2)
+
+            result = inner_text
+            if 'font-weight:700' in style_block or 'font-weight:bold' in style_block:
+                result = f"<b>{result}</b>"
+            if 'font-style:italic' in style_block:
+                result = f"<i>{result}</i>"
+            if 'text-decoration: underline' in style_block:
+                result = f"<u>{result}</u>"
+            return result
+
+        # Convert spans to tags
+        content = re.sub(r'<span\s+style="([^"]*?)">(.*?)</span>', style_replacer, content)
+
+        # 4. Final Cleanup
+        # Remove any remaining tags that are NOT b, i, u, or br
+        allowed = ['b', 'i', 'u', 'br']
+
+        def strip_unsupported(match):
+            tag = match.group(0)
+            tag_name = re.sub(r'[<>/]', '', tag).split()[0].lower()
+            if tag_name in allowed:
+                return tag
+            return ""
+
+        content = re.sub(r'<[^>]+>', strip_unsupported, content)
+
+        # Remove extra <br/> at the very end if it exists
+        if content.endswith('<br/>'):
+            content = content[:-5]
+
+        return content.strip()

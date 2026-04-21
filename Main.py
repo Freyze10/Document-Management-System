@@ -811,7 +811,7 @@ class MainWindow(QMainWindow):
         storage = self.coa_storage_input.text()
         shelf_life = self.coa_shelf_life_input.text()
         suitability = self.suitability_input.text()
-        coa_others = self.coa_others_input.toPlainText()
+        coa_others = self.coa_others_input.toHtml()
         zeller_code = self.zp_code_input.text() if self.is_zeller else None
         zeller_eval_date = self.date_evaluated_input.date().toString("yyyy-MM-dd") if self.is_zeller else None
         plastimer_expiry_date = self.plastimer_expiry_input.date().toString("yyyy-MM-dd") if self.is_plastimer else None

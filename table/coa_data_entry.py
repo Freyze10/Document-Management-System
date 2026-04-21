@@ -45,7 +45,7 @@ def load_coa_details(self, coa_id, is_rrf):
     self.coa_shelf_life_input.setText(str(field_result[12]))
     self.suitability_input.setText(str(field_result[13]))
     if field_result[15]:
-        self.coa_others_input.setText(str(field_result[15]))
+        self.coa_others_input.setHtml(str(field_result[15]))
     if field_result[16]:
         match_customer(self, self.coa_customer_input.text())
         self.zp_code_input.setText(str(field_result[16]))
