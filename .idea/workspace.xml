@@ -240,22 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00075" summary="updaated exe">
-      <option name="closed" value="true" />
-      <created>1762413496030</created>
-      <option name="number" value="00075" />
-      <option name="presentableId" value="LOCAL-00075" />
-      <option name="project" value="LOCAL" />
-      <updated>1762413496030</updated>
-    </task>
-    <task id="LOCAL-00076" summary="change error display">
-      <option name="closed" value="true" />
-      <created>1762829293055</created>
-      <option name="number" value="00076" />
-      <option name="presentableId" value="LOCAL-00076" />
-      <option name="project" value="LOCAL" />
-      <updated>1762829293055</updated>
-    </task>
     <task id="LOCAL-00077" summary="debugging prod date">
       <option name="closed" value="true" />
       <created>1762928320458</created>
@@ -632,7 +616,23 @@
       <option name="project" value="LOCAL" />
       <updated>1776388934777</updated>
     </task>
-    <option name="localTasksCounter" value="124" />
+    <task id="LOCAL-00124" summary="modify">
+      <option name="closed" value="true" />
+      <created>1776750471822</created>
+      <option name="number" value="00124" />
+      <option name="presentableId" value="LOCAL-00124" />
+      <option name="project" value="LOCAL" />
+      <updated>1776750471822</updated>
+    </task>
+    <task id="LOCAL-00125" summary="addeed table model for table view">
+      <option name="closed" value="true" />
+      <created>1776750499399</created>
+      <option name="number" value="00125" />
+      <option name="presentableId" value="LOCAL-00125" />
+      <option name="project" value="LOCAL" />
+      <updated>1776750499399</updated>
+    </task>
+    <option name="localTasksCounter" value="126" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,8 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added sync update to display" />
-    <MESSAGE value="added margin between sync and uupdate" />
     <MESSAGE value="added new sync function in the db" />
     <MESSAGE value="clean some comment" />
     <MESSAGE value="create new function for the update sync" />
@@ -685,7 +683,9 @@
     <MESSAGE value="changed the records header font size" />
     <MESSAGE value="used 16px font in horizontal header records" />
     <MESSAGE value="added a row count on audit trail" />
-    <option name="LAST_COMMIT_MESSAGE" value="added a row count on audit trail" />
+    <MESSAGE value="modify" />
+    <MESSAGE value="addeed table model for table view" />
+    <option name="LAST_COMMIT_MESSAGE" value="addeed table model for table view" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
