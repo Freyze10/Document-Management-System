@@ -22,7 +22,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="v2" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -73,7 +73,7 @@
     &quot;Python.test.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;new-table-version&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Brant/PycharmProjects/File&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   },
@@ -239,30 +239,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
-    </task>
-    <task id="LOCAL-00072" summary="updated text format esc html">
-      <option name="closed" value="true" />
-      <created>1762408912610</created>
-      <option name="number" value="00072" />
-      <option name="presentableId" value="LOCAL-00072" />
-      <option name="project" value="LOCAL" />
-      <updated>1762408912610</updated>
-    </task>
-    <task id="LOCAL-00073" summary="adjusted table width">
-      <option name="closed" value="true" />
-      <created>1762409345898</created>
-      <option name="number" value="00073" />
-      <option name="presentableId" value="LOCAL-00073" />
-      <option name="project" value="LOCAL" />
-      <updated>1762409345898</updated>
-    </task>
-    <task id="LOCAL-00074" summary="updaated exe">
-      <option name="closed" value="true" />
-      <created>1762413489246</created>
-      <option name="number" value="00074" />
-      <option name="presentableId" value="LOCAL-00074" />
-      <option name="project" value="LOCAL" />
-      <updated>1762413489246</updated>
     </task>
     <task id="LOCAL-00075" summary="updaated exe">
       <option name="closed" value="true" />
@@ -632,7 +608,31 @@
       <option name="project" value="LOCAL" />
       <updated>1765250893303</updated>
     </task>
-    <option name="localTasksCounter" value="121" />
+    <task id="LOCAL-00121" summary="changed the records header font size">
+      <option name="closed" value="true" />
+      <created>1765251645489</created>
+      <option name="number" value="00121" />
+      <option name="presentableId" value="LOCAL-00121" />
+      <option name="project" value="LOCAL" />
+      <updated>1765251645489</updated>
+    </task>
+    <task id="LOCAL-00122" summary="used 16px font in horizontal header records">
+      <option name="closed" value="true" />
+      <created>1765251694049</created>
+      <option name="number" value="00122" />
+      <option name="presentableId" value="LOCAL-00122" />
+      <option name="project" value="LOCAL" />
+      <updated>1765251694049</updated>
+    </task>
+    <task id="LOCAL-00123" summary="added a row count on audit trail">
+      <option name="closed" value="true" />
+      <created>1776388934777</created>
+      <option name="number" value="00123" />
+      <option name="presentableId" value="LOCAL-00123" />
+      <option name="project" value="LOCAL" />
+      <updated>1776388934777</updated>
+    </task>
+    <option name="localTasksCounter" value="124" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -646,7 +646,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="main" />
+                        <option value="new-table-version" />
                       </list>
                     </value>
                   </entry>
@@ -660,9 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="updating the color update sync" />
-    <MESSAGE value="updated  colors of btn update sync" />
-    <MESSAGE value="conected style to  sync uupdate button" />
     <MESSAGE value="added sync update to display" />
     <MESSAGE value="added margin between sync and uupdate" />
     <MESSAGE value="added new sync function in the db" />
@@ -685,7 +682,10 @@
     <MESSAGE value="added condition in toggle tab for rrf" />
     <MESSAGE value="added new exe" />
     <MESSAGE value="renamed new exe" />
-    <option name="LAST_COMMIT_MESSAGE" value="renamed new exe" />
+    <MESSAGE value="changed the records header font size" />
+    <MESSAGE value="used 16px font in horizontal header records" />
+    <MESSAGE value="added a row count on audit trail" />
+    <option name="LAST_COMMIT_MESSAGE" value="added a row count on audit trail" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -707,23 +707,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1299</line>
+          <line>1322</line>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1311</line>
+          <line>1334</line>
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1235</line>
+          <line>1258</line>
           <option name="timeStamp" value="30" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/print/print_coa.py</url>
-          <line>431</line>
-          <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/table/coa_data_entry.py</url>

@@ -9,6 +9,7 @@ from table import msds_data_entry, coa_data_entry, table, terumo
 from print.print_msds import FileMSDS
 from print.print_coa import FileCOA
 from print.print_terumo import FileTerumo
+from table.table_model import TableModel
 from print.print_pvc_free import FilePVC
 import Login
 from utils import abs_path, scroll_date, calendar_design, check_cx, multiple_dates, loading, prod_date_format
@@ -492,7 +493,8 @@ class MainWindow(QMainWindow):
         self.msds_data_entry_layout.addWidget(self.msds_scroll_area)
 
         #Inside COA Records Tab
-        self.coa_records_table = QTableWidget()
+        self.coa_rows = []
+        self.coa_records_table = QTableView()
         self.coa_records_table.setProperty("class", "records_table")
 
         self.coa_records_layout = QVBoxLayout(self.coa_records_tab)  # inside COA sub-tab Records
@@ -1163,20 +1165,40 @@ class MainWindow(QMainWindow):
         self.msds_cell_clicked(row, 1)
 
     def coa_table_records_init(self):
-        self.coa_records_table.setColumnCount(4)
-        self.coa_records_table.setHorizontalHeaderLabels(["Name", "", "", ""])
-        self.coa_records_table.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
-        self.coa_records_table.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self.coa_records_table.horizontalHeader().setMinimumSectionSize(40)  # Minimum width for icon columns
-        # Override resize event
-        self.coa_records_table.resizeEvent = lambda event: table.resize_columns(self, self.coa_records_table, event)
-        self.coa_records_table.verticalHeader().setDefaultSectionSize(44)  # Increased row height
-        self.coa_records_table.verticalHeader().setDefaultAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.coa_records_table.horizontalHeader().setFixedHeight(44)  # Match row height
-        self.coa_records_table.setShowGrid(False)
-        self.coa_records_table.cellDoubleClicked.connect(self.on_coa_row_double_clicked)
+        # 2. Set the Model (Assuming 4 columns as per your requirement)
+        # The headers list here replaces setColumnCount and setHorizontalHeaderLabels
+        self.coa_headers = ["Name", "", "", ""]
+        self.coa_model = TableModel(self.coa_rows, self.coa_headers)
+        self.coa_records_table.setModel(self.coa_model)
 
-    def on_coa_row_double_clicked(self, row, column):
+        # 3. Apply the attributes from your old code
+        header = self.coa_records_table.horizontalHeader()
+        header.setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
+        header.setMinimumSectionSize(40)
+        header.setFixedHeight(44)
+
+        self.coa_records_table.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.coa_records_table.setShowGrid(False)
+        self.coa_records_table.setAlternatingRowColors(True)
+
+        # 4. Vertical Header (Row Height)
+        v_header = self.coa_records_table.verticalHeader()
+        v_header.setDefaultSectionSize(44)
+        v_header.setVisible(False)  # Usually hidden for "records" look
+
+        # 5. Handle Double Click (Note: QTableView uses 'doubleClicked', not 'cellDoubleClicked')
+        self.coa_records_table.doubleClicked.connect(self.on_coa_row_double_clicked)
+
+        # 6. Maintenance of your custom resize logic
+        # Make sure 'table.resize_columns' is updated to work with QTableView
+        self.coa_records_table.resizeEvent = lambda event: table.resize_columns(self, self.coa_records_table, event)
+
+    def on_coa_row_double_clicked(self, index):
+        if not index.isValid():
+            return
+
+        row = index.row()
+        col = index.column()
         # Simulate a click on the 'view' column (column 1)
         self.coa_records_table.selectRow(row)
         self.coa_cell_clicked(row, 1)
