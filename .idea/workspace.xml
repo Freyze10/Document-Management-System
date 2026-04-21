@@ -240,38 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00081" summary="updated sync dr editedby">
-      <option name="closed" value="true" />
-      <created>1763607316988</created>
-      <option name="number" value="00081" />
-      <option name="presentableId" value="LOCAL-00081" />
-      <option name="project" value="LOCAL" />
-      <updated>1763607316988</updated>
-    </task>
-    <task id="LOCAL-00082" summary="updated exe">
-      <option name="closed" value="true" />
-      <created>1763609141849</created>
-      <option name="number" value="00082" />
-      <option name="presentableId" value="LOCAL-00082" />
-      <option name="project" value="LOCAL" />
-      <updated>1763609141849</updated>
-    </task>
-    <task id="LOCAL-00083" summary="updated exe">
-      <option name="closed" value="true" />
-      <created>1763609150781</created>
-      <option name="number" value="00083" />
-      <option name="presentableId" value="LOCAL-00083" />
-      <option name="project" value="LOCAL" />
-      <updated>1763609150781</updated>
-    </task>
-    <task id="LOCAL-00084" summary="updated exe">
-      <option name="closed" value="true" />
-      <created>1763714615545</created>
-      <option name="number" value="00084" />
-      <option name="presentableId" value="LOCAL-00084" />
-      <option name="project" value="LOCAL" />
-      <updated>1763714615545</updated>
-    </task>
     <task id="LOCAL-00085" summary="comment out checking plastimer expiry input">
       <option name="closed" value="true" />
       <created>1764982946557</created>
@@ -632,7 +600,39 @@
       <option name="project" value="LOCAL" />
       <updated>1776757883891</updated>
     </task>
-    <option name="localTasksCounter" value="130" />
+    <task id="LOCAL-00130" summary="enable the server connection on the database">
+      <option name="closed" value="true" />
+      <created>1776758179904</created>
+      <option name="number" value="00130" />
+      <option name="presentableId" value="LOCAL-00130" />
+      <option name="project" value="LOCAL" />
+      <updated>1776758179904</updated>
+    </task>
+    <task id="LOCAL-00131" summary="updated the output apk/exe">
+      <option name="closed" value="true" />
+      <created>1776758458204</created>
+      <option name="number" value="00131" />
+      <option name="presentableId" value="LOCAL-00131" />
+      <option name="project" value="LOCAL" />
+      <updated>1776758458204</updated>
+    </task>
+    <task id="LOCAL-00132" summary="updated the output apk/exe">
+      <option name="closed" value="true" />
+      <created>1776758488165</created>
+      <option name="number" value="00132" />
+      <option name="presentableId" value="LOCAL-00132" />
+      <option name="project" value="LOCAL" />
+      <updated>1776758488165</updated>
+    </task>
+    <task id="LOCAL-00133" summary="updated the output apk/exe">
+      <option name="closed" value="true" />
+      <created>1776758506123</created>
+      <option name="number" value="00133" />
+      <option name="presentableId" value="LOCAL-00133" />
+      <option name="project" value="LOCAL" />
+      <updated>1776758506123</updated>
+    </task>
+    <option name="localTasksCounter" value="134" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,8 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="connected the function to sync update button" />
-    <MESSAGE value="chenged connection to debug databse" />
     <MESSAGE value="reuse the connection from the get_connection()" />
     <MESSAGE value="closed the temp connection" />
     <MESSAGE value="moved the  creation of legacy to Login" />
@@ -685,7 +683,9 @@
     <MESSAGE value="changed  the table to table view with a model" />
     <MESSAGE value="added bold italic and underline option in the last part of coa entry field" />
     <MESSAGE value="updated the print output to be able to take the text format" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated the print output to be able to take the text format" />
+    <MESSAGE value="enable the server connection on the database" />
+    <MESSAGE value="updated the output apk/exe" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated the output apk/exe" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
