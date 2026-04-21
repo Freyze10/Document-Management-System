@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00080" summary="updated sync dr">
-      <option name="closed" value="true" />
-      <created>1763607019818</created>
-      <option name="number" value="00080" />
-      <option name="presentableId" value="LOCAL-00080" />
-      <option name="project" value="LOCAL" />
-      <updated>1763607019818</updated>
-    </task>
     <task id="LOCAL-00081" summary="updated sync dr editedby">
       <option name="closed" value="true" />
       <created>1763607316988</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1776754045269</updated>
     </task>
-    <option name="localTasksCounter" value="129" />
+    <task id="LOCAL-00129" summary="updated the print output to be able to take the text format">
+      <option name="closed" value="true" />
+      <created>1776757883890</created>
+      <option name="number" value="00129" />
+      <option name="presentableId" value="LOCAL-00129" />
+      <option name="project" value="LOCAL" />
+      <updated>1776757883891</updated>
+    </task>
+    <option name="localTasksCounter" value="130" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="updated the new function with fullreset" />
     <MESSAGE value="connected the function to sync update button" />
     <MESSAGE value="chenged connection to debug databse" />
     <MESSAGE value="reuse the connection from the get_connection()" />
@@ -685,7 +684,8 @@
     <MESSAGE value="updated table model" />
     <MESSAGE value="changed  the table to table view with a model" />
     <MESSAGE value="added bold italic and underline option in the last part of coa entry field" />
-    <option name="LAST_COMMIT_MESSAGE" value="added bold italic and underline option in the last part of coa entry field" />
+    <MESSAGE value="updated the print output to be able to take the text format" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated the print output to be able to take the text format" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -702,7 +702,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/db/db_con.py</url>
-          <line>280</line>
+          <line>281</line>
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
