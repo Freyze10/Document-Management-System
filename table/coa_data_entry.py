@@ -642,7 +642,8 @@ def populate_coa_fields(self, dr_no):
         for record in records:
             dr_no_val = record[0]
             product_code_val = record[1]
-            if not db_con.record_exists(dr_no_val, product_code_val):
+            quantity = record[6]
+            if not db_con.record_exists(dr_no_val, product_code_val, quantity):
                 selected_record = record
                 break
 

@@ -1356,14 +1356,19 @@ def get_dr_details(dr_no):
     return records or []
 
 
-def record_exists(dr_no, product_code):
+def record_exists(dr_no, product_code, quantity):
     conn = get_connection()
     cur = conn.cursor()
 
-    cur.execute(
-        "SELECT 1 FROM certificates_of_analysis WHERE delivery_receipt_number = %s AND color_code = %s LIMIT 1",
-        (dr_no, product_code)
-    )
+    cur.execute("""
+        SELECT 1 
+        FROM certificates_of_analysis 
+        WHERE delivery_receipt_number = %s 
+          AND color_code = %s 
+          AND quantity_delivered = %s
+        LIMIT 1
+    """, (dr_no, product_code, quantity))
+
     exists = cur.fetchone() is not None
 
     cur.close()
