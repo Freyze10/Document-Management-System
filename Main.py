@@ -437,11 +437,14 @@ class MainWindow(QMainWindow):
         self.coa_corner_h = QHBoxLayout(self.coa_corner)
         self.coa_corner_h.setContentsMargins(0, 0, 0, 0)
         self.coa_corner_h.setSpacing(12)
+        self.coa_row_count = QLabel("0 rows")
+        self.coa_row_count.setStyleSheet("color: #64748B;")
         self.btn_switch_rrf = QPushButton()
         self.btn_switch_rrf.setCheckable(True)
         self.btn_switch_rrf.setText("Switch to RRF")
         self.btn_switch_rrf.toggled.connect(self.toggle_rrf)
 
+        self.coa_corner_h.addWidget(self.coa_row_count)
         self.coa_corner_h.addWidget(self.btn_switch_rrf)
         self.coa_corner_h.addWidget(self.coa_search_bar)
 

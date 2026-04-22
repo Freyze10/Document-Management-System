@@ -60,7 +60,8 @@ def load_coa_table(self):
 
     # Send the whole list to the model at once
     self.coa_model.set_data(processed_data)
-
+    count = len(processed_data)
+    self.coa_row_count.setText(f"{count} rows")
 
 def load_rrf_table(self):
     """Refactored for QTableView and TableModel"""

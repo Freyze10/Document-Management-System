@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00088" summary="added v3 output">
-      <option name="closed" value="true" />
-      <created>1764984742589</created>
-      <option name="number" value="00088" />
-      <option name="presentableId" value="LOCAL-00088" />
-      <option name="project" value="LOCAL" />
-      <updated>1764984742589</updated>
-    </task>
     <task id="LOCAL-00089" summary="added v3 output">
       <option name="closed" value="true" />
       <created>1765005904511</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1776823657832</updated>
     </task>
-    <option name="localTasksCounter" value="137" />
+    <task id="LOCAL-00137" summary="upodated the database condition to check the quantity delivered output more accurate">
+      <option name="closed" value="true" />
+      <created>1776824048607</created>
+      <option name="number" value="00137" />
+      <option name="presentableId" value="LOCAL-00137" />
+      <option name="project" value="LOCAL" />
+      <updated>1776824048607</updated>
+    </task>
+    <option name="localTasksCounter" value="138" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="closed the temp connection" />
     <MESSAGE value="moved the  creation of legacy to Login" />
     <MESSAGE value="import the db dr" />
     <MESSAGE value="removed the import dr from the db coon" />
@@ -685,7 +684,8 @@
     <MESSAGE value="enable the server connection on the database" />
     <MESSAGE value="updated the output apk/exe" />
     <MESSAGE value="added the quality in the checking if the current record already exists in the coa database" />
-    <option name="LAST_COMMIT_MESSAGE" value="added the quality in the checking if the current record already exists in the coa database" />
+    <MESSAGE value="upodated the database condition to check the quantity delivered output more accurate" />
+    <option name="LAST_COMMIT_MESSAGE" value="upodated the database condition to check the quantity delivered output more accurate" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -707,7 +707,7 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1267</line>
+          <line>1270</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
