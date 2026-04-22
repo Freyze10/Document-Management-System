@@ -240,22 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00085" summary="comment out checking plastimer expiry input">
-      <option name="closed" value="true" />
-      <created>1764982946557</created>
-      <option name="number" value="00085" />
-      <option name="presentableId" value="LOCAL-00085" />
-      <option name="project" value="LOCAL" />
-      <updated>1764982946558</updated>
-    </task>
-    <task id="LOCAL-00086" summary="set current date for plastimer expiration">
-      <option name="closed" value="true" />
-      <created>1764983755004</created>
-      <option name="number" value="00086" />
-      <option name="presentableId" value="LOCAL-00086" />
-      <option name="project" value="LOCAL" />
-      <updated>1764983755004</updated>
-    </task>
     <task id="LOCAL-00087" summary="added v3 output">
       <option name="closed" value="true" />
       <created>1764984718393</created>
@@ -632,7 +616,23 @@
       <option name="project" value="LOCAL" />
       <updated>1776758506123</updated>
     </task>
-    <option name="localTasksCounter" value="134" />
+    <task id="LOCAL-00134" summary="updated the output apk/exe">
+      <option name="closed" value="true" />
+      <created>1776758539315</created>
+      <option name="number" value="00134" />
+      <option name="presentableId" value="LOCAL-00134" />
+      <option name="project" value="LOCAL" />
+      <updated>1776758539315</updated>
+    </task>
+    <task id="LOCAL-00135" summary="updated the output apk/exe">
+      <option name="closed" value="true" />
+      <created>1776758594798</created>
+      <option name="number" value="00135" />
+      <option name="presentableId" value="LOCAL-00135" />
+      <option name="project" value="LOCAL" />
+      <updated>1776758594798</updated>
+    </task>
+    <option name="localTasksCounter" value="136" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
