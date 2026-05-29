@@ -8,10 +8,11 @@ from utils import abs_path
 class TableModel(QAbstractTableModel):
     def __init__(self, data, headers):
         super().__init__()
-        self._all_data = data or []
-        self._data = data or []
+        # self._all_data is the master "source of truth"
+        self._all_data = data if data is not None else []
+        # self._data is what is currently visible (filtered or sorted)
+        self._data = self._all_data[:]
         self._headers = headers
-        # Track hover state for icons
         self.hovered_row = -1
         self.hovered_col = -1
 
@@ -20,6 +21,23 @@ class TableModel(QAbstractTableModel):
 
     def columnCount(self, parent=None):
         return len(self._headers)
+
+    # --- ADD THIS METHOD FOR SEARCHING ---
+    def filter_data(self, query, col_index=0):
+        """Filters the table based on the search query."""
+        self.beginResetModel()
+        query = query.strip().lower()
+
+        if not query:
+            # If search is empty, restore all data
+            self._data = self._all_data[:]
+        else:
+            # Filter the master list into the display list
+            self._data = [
+                row for row in self._all_data
+                if query in str(row[col_index]).lower()
+            ]
+        self.endResetModel()
 
     def data(self, index, role=Qt.ItemDataRole.DisplayRole):
         if not index.isValid():
@@ -37,75 +55,45 @@ class TableModel(QAbstractTableModel):
 
         # Display Text
         if role == Qt.ItemDataRole.DisplayRole:
-            # We only show text in column 0 (The Name)
             if col == 0:
                 return str(self._data[row][0])
             return None
 
-        # UserRole: Return the ID (stored in the hidden part of the row list, e.g., index 0)
+        # UserRole: Return the ID (index 4 in your processed_data)
         if role == Qt.ItemDataRole.UserRole:
-            # Assuming coa_id is stored in the data list for that row
-            # Usually, row data looks like [id, name, ...] or similar
             return self._data[row][4] if len(self._data[row]) > 4 else None
 
-        # DecorationRole: This is how we show ICONS in QTableView
+        # DecorationRole: Icons
         if role == Qt.ItemDataRole.DecorationRole:
             is_hovered = (row == self.hovered_row and col == self.hovered_col)
-
-            if col == 1:  # View
+            if col == 1:
                 path = "img/hover_view_icon.png" if is_hovered else "img/view_icon.png"
                 return QIcon(abs_path.resource(path))
-            elif col == 2:  # Edit
+            elif col == 2:
                 path = "img/hover_edit_icon.png" if is_hovered else "img/edit_icon.png"
                 return QIcon(abs_path.resource(path))
-            elif col == 3:  # Delete
+            elif col == 3:
                 path = "img/hover_delete_icon.png" if is_hovered else "img/delete_icon.png"
                 return QIcon(abs_path.resource(path))
 
-        # Alignment
         if role == Qt.ItemDataRole.TextAlignmentRole:
             return Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft
 
         return None
 
     def headerData(self, section, orientation, role=Qt.ItemDataRole.DisplayRole):
-        if role == Qt.ItemDataRole.DisplayRole:
-            if orientation == Qt.Orientation.Horizontal:
-                return self._headers[section]
+        if role == Qt.ItemDataRole.DisplayRole and orientation == Qt.Orientation.Horizontal:
+            return self._headers[section]
         return None
 
-    def sort(self, column, order):
-        self.layoutAboutToBeChanged.emit()
-
-        def smart_sort_key(row):
-            val = str(row[column])
-            try:
-                return datetime.strptime(val, '%m/%d/%Y %H:%M:%S')
-            except:
-                pass
-            try:
-                return datetime.strptime(val, '%m/%d/%Y')
-            except:
-                pass
-            try:
-                clean_val = val.replace(',', '').replace('$', '')
-                return float(clean_val)
-            except:
-                pass
-            return val.lower()
-
-        self._data.sort(key=smart_sort_key, reverse=(order == Qt.SortOrder.DescendingOrder))
-        self.layoutChanged.emit()
-
     def set_data(self, data):
+        """Updates the master data and the viewable data."""
         self.beginResetModel()
         self._all_data = data if data is not None else []
-        self._data = self._all_data[:]
+        self._data = self._all_data[:]  # Reset display data to match new master data
         self.endResetModel()
 
     def update_hover(self, row, col):
-        """Custom method to trigger icon updates on hover"""
         self.hovered_row = row
         self.hovered_col = col
-        # Notify view that the data in these columns changed to redraw icons
         self.dataChanged.emit(self.index(row, 1), self.index(row, 3))

@@ -240,30 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00089" summary="added v3 output">
-      <option name="closed" value="true" />
-      <created>1765005904511</created>
-      <option name="number" value="00089" />
-      <option name="presentableId" value="LOCAL-00089" />
-      <option name="project" value="LOCAL" />
-      <updated>1765005904511</updated>
-    </task>
-    <task id="LOCAL-00090" summary="revert back the dr sync (update only">
-      <option name="closed" value="true" />
-      <created>1765006634429</created>
-      <option name="number" value="00090" />
-      <option name="presentableId" value="LOCAL-00090" />
-      <option name="project" value="LOCAL" />
-      <updated>1765006634429</updated>
-    </task>
-    <task id="LOCAL-00091" summary="added sync update button">
-      <option name="closed" value="true" />
-      <created>1765006789709</created>
-      <option name="number" value="00091" />
-      <option name="presentableId" value="LOCAL-00091" />
-      <option name="project" value="LOCAL" />
-      <updated>1765006789709</updated>
-    </task>
     <task id="LOCAL-00092" summary="comment out the clicked fuunction">
       <option name="closed" value="true" />
       <created>1765006803311</created>
@@ -632,7 +608,31 @@
       <option name="project" value="LOCAL" />
       <updated>1776824048607</updated>
     </task>
-    <option name="localTasksCounter" value="138" />
+    <task id="LOCAL-00138" summary="removed the vertical header and add a row count for coa table">
+      <option name="closed" value="true" />
+      <created>1776826055641</created>
+      <option name="number" value="00138" />
+      <option name="presentableId" value="LOCAL-00138" />
+      <option name="project" value="LOCAL" />
+      <updated>1776826055641</updated>
+    </task>
+    <task id="LOCAL-00139" summary="removed the vertical header and add a row count for coa table">
+      <option name="closed" value="true" />
+      <created>1776826069289</created>
+      <option name="number" value="00139" />
+      <option name="presentableId" value="LOCAL-00139" />
+      <option name="project" value="LOCAL" />
+      <updated>1776826069289</updated>
+    </task>
+    <task id="LOCAL-00140" summary="updated exe">
+      <option name="closed" value="true" />
+      <created>1776826432070</created>
+      <option name="number" value="00140" />
+      <option name="presentableId" value="LOCAL-00140" />
+      <option name="project" value="LOCAL" />
+      <updated>1776826432070</updated>
+    </task>
+    <option name="localTasksCounter" value="141" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,8 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="moved the  creation of legacy to Login" />
-    <MESSAGE value="import the db dr" />
     <MESSAGE value="removed the import dr from the db coon" />
     <MESSAGE value="skip rows with deleted value in full reset dr" />
     <MESSAGE value="skip deleted in delivery items" />
@@ -685,7 +683,9 @@
     <MESSAGE value="updated the output apk/exe" />
     <MESSAGE value="added the quality in the checking if the current record already exists in the coa database" />
     <MESSAGE value="upodated the database condition to check the quantity delivered output more accurate" />
-    <option name="LAST_COMMIT_MESSAGE" value="upodated the database condition to check the quantity delivered output more accurate" />
+    <MESSAGE value="removed the vertical header and add a row count for coa table" />
+    <MESSAGE value="updated exe" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated exe" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
