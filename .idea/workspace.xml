@@ -90,10 +90,10 @@
       <recent name="C:\Users\Brant\PycharmProjects\File" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Brant\PycharmProjects\File\img" />
       <recent name="C:\Users\Brant\PycharmProjects\File" />
       <recent name="C:\Users\Brant\PycharmProjects\File\db" />
       <recent name="C:\Users\Brant\PycharmProjects\File\table" />
-      <recent name="C:\Users\Brant\PycharmProjects\File\img" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -239,30 +239,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
-    </task>
-    <task id="LOCAL-00092" summary="comment out the clicked fuunction">
-      <option name="closed" value="true" />
-      <created>1765006803311</created>
-      <option name="number" value="00092" />
-      <option name="presentableId" value="LOCAL-00092" />
-      <option name="project" value="LOCAL" />
-      <updated>1765006803311</updated>
-    </task>
-    <task id="LOCAL-00093" summary="change buttton name">
-      <option name="closed" value="true" />
-      <created>1765006818555</created>
-      <option name="number" value="00093" />
-      <option name="presentableId" value="LOCAL-00093" />
-      <option name="project" value="LOCAL" />
-      <updated>1765006818555</updated>
-    </task>
-    <task id="LOCAL-00094" summary="added style for sync  update">
-      <option name="closed" value="true" />
-      <created>1765007110423</created>
-      <option name="number" value="00094" />
-      <option name="presentableId" value="LOCAL-00094" />
-      <option name="project" value="LOCAL" />
-      <updated>1765007110423</updated>
     </task>
     <task id="LOCAL-00095" summary="updating the color update sync">
       <option name="closed" value="true" />
@@ -632,7 +608,31 @@
       <option name="project" value="LOCAL" />
       <updated>1776826432070</updated>
     </task>
-    <option name="localTasksCounter" value="141" />
+    <task id="LOCAL-00141" summary="updated search function for COA">
+      <option name="closed" value="true" />
+      <created>1780035424702</created>
+      <option name="number" value="00141" />
+      <option name="presentableId" value="LOCAL-00141" />
+      <option name="project" value="LOCAL" />
+      <updated>1780035424702</updated>
+    </task>
+    <task id="LOCAL-00142" summary="updated coa exe">
+      <option name="closed" value="true" />
+      <created>1780291610552</created>
+      <option name="number" value="00142" />
+      <option name="presentableId" value="LOCAL-00142" />
+      <option name="project" value="LOCAL" />
+      <updated>1780291610553</updated>
+    </task>
+    <task id="LOCAL-00143" summary="updated coa exe to reflect the updated address of the Timog">
+      <option name="closed" value="true" />
+      <created>1782982625075</created>
+      <option name="number" value="00143" />
+      <option name="presentableId" value="LOCAL-00143" />
+      <option name="project" value="LOCAL" />
+      <updated>1782982625075</updated>
+    </task>
+    <option name="localTasksCounter" value="144" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,9 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="removed the import dr from the db coon" />
-    <MESSAGE value="skip rows with deleted value in full reset dr" />
-    <MESSAGE value="skip deleted in delivery items" />
     <MESSAGE value="skip deleted in delivery primary in sync" />
     <MESSAGE value="skip deleted in delivery items in sync" />
     <MESSAGE value="comment out the debug database" />
@@ -685,7 +682,10 @@
     <MESSAGE value="upodated the database condition to check the quantity delivered output more accurate" />
     <MESSAGE value="removed the vertical header and add a row count for coa table" />
     <MESSAGE value="updated exe" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated exe" />
+    <MESSAGE value="updated search function for COA" />
+    <MESSAGE value="updated coa exe" />
+    <MESSAGE value="updated coa exe to reflect the updated address of the Timog" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated coa exe to reflect the updated address of the Timog" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

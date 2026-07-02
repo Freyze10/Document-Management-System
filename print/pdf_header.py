@@ -13,7 +13,7 @@ def add_first_page_header(canvas, doc):
     # Page size
     page_width, page_height = doc.pagesize
 
-    logo_path = abs_path.resource("img/MBPI_Logo.jpg")
+    logo_path = abs_path.resource("img/MBPI_Logo_02.png")
 
     # Center horizontally
     x = (page_width - logo_width) / 2
@@ -40,7 +40,7 @@ def add_coa_header(canvas, doc, header_only=False):
     right_margin = doc.rightMargin
 
     # --- First Logo: stretched edge to edge ---
-    logo_path = abs_path.resource("img/MBPI_Logo.jpg")
+    logo_path = abs_path.resource("img/MBPI_Logo_02.png")
     logo_width = page_width - left_margin - right_margin
     logo_height = 3.32 * cm
     x_logo = left_margin
@@ -99,7 +99,7 @@ def add_coa_header_only(canvas, doc, header_only=False):
     right_margin = doc.rightMargin
 
     # --- First Logo: stretched edge to edge ---
-    logo_path = abs_path.resource("img/MBPI_Logo.jpg")
+    logo_path = abs_path.resource("img/MBPI_Logo_02.png")
     logo_width = page_width - left_margin - right_margin
     logo_height = 3.32 * cm
     x_logo = left_margin
