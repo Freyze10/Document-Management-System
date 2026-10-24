@@ -23,8 +23,8 @@ import win32com.client as win32
 
 from utils import abs_path
 
-TEMPLATE_DC = "templates/msds_dc.docx"
-TEMPLATE_MB = "templates/msds_mb.docx"
+TEMPLATE_DC = "print/template-msds/dc.docx"
+TEMPLATE_MB = "print/template-msds/mb1.docx"
 
 # Word constants (late-bound COM has no named constants)
 WD_FORMAT_PDF = 17

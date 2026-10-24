@@ -1,29 +1,30 @@
-import io
-from PyQt6.QtCore import QBuffer, QIODevice, QSize, Qt, QPointF
-from PyQt6.QtGui import QPainter, QPageSize, QPageLayout, QAction, QIcon
-from PyQt6.QtPdf import QPdfDocument, QPdfDocumentRenderOptions
+from PyQt6.QtCore import QBuffer, QIODevice, Qt, pyqtSignal
+from PyQt6.QtGui import QAction, QIcon
+from PyQt6.QtPdf import QPdfDocument
 from PyQt6.QtPdfWidgets import QPdfView
-from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QFileDialog
+from PyQt6.QtWidgets import QWidget, QVBoxLayout, QPushButton, QHBoxLayout, QFileDialog, QLabel
 from PyQt6.QtPrintSupport import QPrinter, QPrintDialog
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
-from reportlab.lib.pagesizes import letter
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib import colors
 
 from alert import window_alert
 from db import db_con
-from print.pdf_header import add_first_page_header
+from print import word_msds          # <-- new: Word COM filler (word_msds.py)
 from utils import abs_path
 
 
 class FileMSDS(QWidget):
+    # emitted from the Word worker thread -> handled on the GUI thread
+    _pdf_ready = pyqtSignal(object, object)     # (msds_id, Future)
+    _print_done = pyqtSignal(object)            # Future
+
     def __init__(self):
         super().__init__()
+        self._pdf_ready.connect(self._on_pdf_ready)
+        self._print_done.connect(self._on_print_done)
+        word_msds.warm_up()      # no-op if main already did it
         self.setWindowTitle("Material Safety Data Sheet Preview")
         self.setWindowIcon(QIcon(abs_path.resource("img/icon.ico")))
         main_layout = QVBoxLayout(self)
 
-        self.isMasterBatch = False
         # PDF Document + Viewer
         self.pdf_doc = QPdfDocument(self)
         self.pdf_viewer = QPdfView(self)
@@ -39,23 +40,23 @@ class FileMSDS(QWidget):
 
         self.file_name = None
         self.msds_id = None
+        self.pdf_bytes = None          # cached so Download doesn't re-launch Word
 
-        btn_download = QPushButton("Download")
-        btn_print = QPushButton("Print")
+        btn_download = self.btn_download = QPushButton("Download")
+        btn_print = self.btn_print = QPushButton("Print")
         btn_download.clicked.connect(lambda: self.download_pdf(self.msds_id, self.file_name))
         btn_print.clicked.connect(self.print_pdf)
 
-        # Put them in a horizontal layout and center
         button_layout = QHBoxLayout()
         button_layout.addStretch(1)
         button_layout.addWidget(btn_download)
-        button_layout.addSpacing(20)  # space between buttons
+        button_layout.addSpacing(20)
         button_layout.addWidget(btn_print)
         button_layout.addStretch(1)
 
         btn_download.setStyleSheet("""
             QPushButton {
-                background-color: #4CAF50;  /* Green */
+                background-color: #4CAF50;
                 color: white;
                 font-size: 14px;
                 font-weight: semi-bold;
@@ -64,18 +65,12 @@ class FileMSDS(QWidget):
                 border-radius: 6px;
                 min-width: 80px;
             }
-            QPushButton:hover {
-                background-color: #45A049;
-            }
-            QPushButton:pressed {
-                background-color: #397D3A;
-            }
+            QPushButton:hover { background-color: #45A049; }
+            QPushButton:pressed { background-color: #397D3A; }
         """)
-
-        # Blue Print button
         btn_print.setStyleSheet("""
             QPushButton {
-                background-color: #2196F3;  /* Blue */
+                background-color: #2196F3;
                 color: white;
                 font-size: 14px;
                 font-weight: semi-bold;
@@ -84,20 +79,21 @@ class FileMSDS(QWidget):
                 border-radius: 6px;
                 min-width: 80px;
             }
-            QPushButton:hover {
-                background-color: #1E88E5;
-            }
-            QPushButton:pressed {
-                background-color: #1565C0;
-            }
+            QPushButton:hover { background-color: #1E88E5; }
+            QPushButton:pressed { background-color: #1565C0; }
         """)
 
         main_layout.addLayout(button_layout)
-        # Center the viewer using a horizontal layout
+
+        self.status_label = QLabel("Preparing document…")
+        self.status_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.status_label.hide()
+        main_layout.addWidget(self.status_label)
+
         viewer_container = QHBoxLayout()
-        viewer_container.addStretch(1)  # left stretch
+        viewer_container.addStretch(1)
         viewer_container.addWidget(self.pdf_viewer)
-        viewer_container.addStretch(1)  # right stretch
+        viewer_container.addStretch(1)
         main_layout.addLayout(viewer_container)
 
         self.print_action = QAction(self)
@@ -105,333 +101,92 @@ class FileMSDS(QWidget):
         self.print_action.triggered.connect(self.print_pdf)
         self.addAction(self.print_action)
 
+    # ------------------------------------------------------------------
+    def _load_data(self, msds_id):
+        return (db_con.get_single_msds_data(msds_id),
+                db_con.get_single_msds_section9(msds_id))
+
     def generate_pdf(self, msds_id):
-        field_result = db_con.get_single_msds_data(msds_id)
-        section9_data = db_con.get_single_msds_section9(msds_id)  # Fetch section 9 data
+        """Same name / same return value as before (PDF bytes), but the PDF
+        now comes from the Word template (DC or MB picked automatically)."""
+        row, section9 = self._load_data(msds_id)
+        return word_msds.render_pdf_bytes(row, section9)
 
-        # Create PDF
-        buffer = io.BytesIO()
-        doc = SimpleDocTemplate(
-            buffer,
-            pagesize=letter,
-            rightMargin=50, leftMargin=50, topMargin=94, bottomMargin=40
-        )
-        styles = getSampleStyleSheet()
-        styles.add(
-            ParagraphStyle(name="SectionHeader", fontSize=12, leading=14, spaceAfter=8, spaceBefore=2, bold=True))
-        styles.add(ParagraphStyle(name="NormalText", fontSize=10, leading=14, spaceAfter=4))
-        IndentedText = ParagraphStyle(
-            'IndentedText',
-            parent=styles['NormalText'],  # inherit font size, leading, etc.
-            leftIndent=40  # indent in points
-        )
-        styles.add(ParagraphStyle(
-            name="TitleSans",
-            fontName="Helvetica-Bold",  # built-in font
-            fontSize=16,
-            leading=22,
-            spaceAfter=2
-        ))
-        content = []
-        page_width = letter[0] - 50 - 50
-        table_width = 0.90 * page_width
-        indent_width = 40
-        content_col_width = table_width - indent_width
-        col_widths = [
-            indent_width,
-            0.3 * content_col_width,
-            0.05 * content_col_width,
-            0.65 * content_col_width
-        ]
-
-        # Title
-        content.append(Paragraph("TECHNICAL DATA AND MATERIAL SAFETY DATA SHEET", styles['TitleSans']))
-        content.append(Spacer(1, 12))
-
-        # Section 1
-        content.append(Paragraph("1) Product Identification", styles['SectionHeader']))
-        section1_content = [
-            ['', Paragraph('Trade Name', styles['NormalText']), ':', Paragraph(str(field_result[2]), styles['NormalText'])],
-            ['', Paragraph('Manufactured By', styles['NormalText']), ':', Paragraph(str(field_result[6]), styles['NormalText'])],
-            ['', Paragraph('Tel No.', styles['NormalText']), ':', Paragraph(str(field_result[7]), styles['NormalText'])],
-            ['', Paragraph('Facsimile', styles['NormalText']), ':', Paragraph(str(field_result[8]), styles['NormalText'])],
-            ['', Paragraph('Email Address', styles['NormalText']), ':', Paragraph(str(field_result[9]), styles['NormalText'])]
-        ]
-
-        # Create the table
-        table = Table(section1_content, colWidths=col_widths, hAlign='LEFT', spaceBefore=12)  # Changed to 'LEFT'
-
-        # Apply styles
-        def table_style(table_design):
-            return table_design.setStyle(TableStyle([
-                ('FONTNAME', (0, 0), (-1, -1), 'Helvetica'),
-                ('FONTSIZE', (0, 0), (-1, -1), 12),
-                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-                ('ALIGN', (0, 0), (-1, -1), 'LEFT'),  # General left align
-                ('ALIGN', (1, 0), (1, -1), 'RIGHT'),  # Label column right align
-                ('ALIGN', (2, 0), (2, -1), 'CENTER'),  # Colon column center
-                ('LEFTPADDING', (0, 0), (-1, -1), 5),
-                ('RIGHTPADDING', (0, 0), (-1, -1), 5),
-                ('BOTTOMPADDING', (0, 0), (-1, -1), 4),
-                ('TOPPADDING', (0, 0), (-1, -1), 4),
-                ('LINEBELOW', (0, 0), (-1, -1), 0.25, colors.Color(0.85, 0.85, 0.85))
-            ]))
-        table_style(table)
-        # Add the table to the content
-        content.append(table)
-        content.append(Spacer(1, 12))
-
-        # Section 2
-        content.append(Paragraph("2) Composition/Information on Ingredients", styles['SectionHeader']))
-        content.append(Paragraph(str(field_result[10]), IndentedText))
-        content.append(Spacer(1, 8))
-
-        # Section 3
-        content.append(Paragraph("3) Hazard Information", styles['SectionHeader']))
-
-        hazard_fields = [str(field_result[i]) if field_result[i] else "" for i in range(11, 16)]
-
-        # Check if all hazard fields are empty
-        if all(v.strip() == "" for v in hazard_fields):
-            # Only show general note (field_result[16])
-            content.append(Paragraph(str(field_result[16]), IndentedText))
-            content.append(Spacer(1, 8))
-            self.isMasterBatch = True
-        else:
-            section3_content = [
-                ['', Paragraph("• Preliminaries", styles['NormalText']), ":", Paragraph(str(field_result[11]), styles['NormalText'])],
-                ['', Paragraph("• Preliminary route of entry", styles['NormalText']), ":", Paragraph(str(field_result[12]), styles['NormalText'])],
-                ['', Paragraph("• Symptoms of Exposure", styles['NormalText']), ":", Paragraph(str(field_result[13]), styles['NormalText'])],
-                ['', Paragraph("• Restrictive conditions", styles['NormalText']), ":", Paragraph(str(field_result[14]), styles['NormalText'])],
-                ['', Paragraph("• Eyes", styles['NormalText']), ":", Paragraph(str(field_result[15]), styles['NormalText'])]
-            ]
-
-            table = Table(section3_content, colWidths=col_widths, hAlign='LEFT', spaceBefore=12)
-            table_style(table)
-            content.append(Paragraph("Adverse Human Health Effects", IndentedText))
-            content.append(table)
-            content.append(Spacer(1, 12))
-            content.append(Paragraph(str(field_result[16]), IndentedText))
-            content.append(Spacer(1, 8))
-            self.isMasterBatch = False
-
-        # Section 4
-        content.append(Paragraph("4) First Aid Measures", styles['SectionHeader']))
-        colon_or_dash = '-' if self.isMasterBatch else ':'
-        section4_content = [
-            ['', Paragraph('• Inhalation', styles['NormalText']), colon_or_dash, Paragraph(str(field_result[17]), styles['NormalText'])],
-            ['', Paragraph('• Eyes', styles['NormalText']), colon_or_dash, Paragraph(str(field_result[18]), styles['NormalText'])],
-            ['', Paragraph('• Skin', styles['NormalText']), colon_or_dash, Paragraph(str(field_result[19]), styles['NormalText'])],
-            ['', Paragraph('• Ingestion', styles['NormalText']), colon_or_dash, Paragraph(str(field_result[20]), styles['NormalText'])],
-        ]
-
-        # Create the table
-        table = Table(section4_content, colWidths=col_widths, hAlign='LEFT', spaceBefore=12)
-        table_style(table)
-        content.append(table)
-        content.append(Spacer(1, 12))
-
-        # Section 5
-        content.append(Paragraph("5) Fire Fighting Measures", styles['SectionHeader']))
-        content.append(Paragraph(str(field_result[21]), IndentedText))
-        content.append(Spacer(1, 8))
-
-        # Section 6
-        content.append(Paragraph("6) Accidental Release Measures", styles['SectionHeader']))
-        content.append(Paragraph(str(field_result[22]),
-                                 IndentedText))
-        content.append(Spacer(1, 8))
-
-        # Section 7
-        content.append(Paragraph("7) Handling and Storage", styles['SectionHeader']))
-        if not self.isMasterBatch:
-            section7_content = [
-                ['', Paragraph('• Handling', styles['NormalText']), ':', Paragraph(str(field_result[23]), styles['NormalText'])],
-                ['', Paragraph('• Storage', styles['NormalText']), ':', Paragraph(str(field_result[24]), styles['NormalText'])],
-            ]
-            table = Table(section7_content, colWidths=col_widths, hAlign='LEFT', spaceBefore=12)
-            table_style(table)
-            content.append(table)
-            content.append(Spacer(1, 12))
-        else:
-            content.append(Paragraph(str(field_result[24]), IndentedText))
-            content.append(Spacer(1, 8))
-
-        # Section 8
-        content.append(Paragraph("8) Exposure Controls/ Personal Protection", styles['SectionHeader']))
-        colon_or_dash = '-' if self.isMasterBatch else ':'
-        section8_content = [
-            ['', Paragraph('• Exposure Control', styles['NormalText']), colon_or_dash, Paragraph(str(field_result[25]), styles['NormalText'])],
-            ['', Paragraph('• Respiratory Protection', styles['NormalText']), colon_or_dash, Paragraph(str(field_result[26]), styles['NormalText'])],
-            ['', Paragraph('• Hand Protection', styles['NormalText']), colon_or_dash, Paragraph(str(field_result[27]), styles['NormalText'])],
-            ['', Paragraph('• Eye Protection', styles['NormalText']), colon_or_dash, Paragraph(str(field_result[28]), styles['NormalText'])],
-            ['', Paragraph('• Skin Protection', styles['NormalText']), colon_or_dash, Paragraph(str(field_result[29]), styles['NormalText'])]
-        ]
-        table = Table(section8_content, colWidths=col_widths, hAlign='LEFT', spaceBefore=12)
-        table_style(table)
-        content.append(table)
-        content.append(Spacer(1, 12))
-
-        # Section 9
-        content.append(Paragraph("9) Physical & Chemical Properties", styles['SectionHeader']))
-        # New logic to use section9_data
-        if section9_data:
-            section9_table_content = []
-            for row in section9_data:
-                property_name = row[3] or ""
-                property_value = row[4] or ""
-                section9_table_content.append(
-                    ['', Paragraph(str(property_name), styles['NormalText']), ':', Paragraph(str(property_value), styles['NormalText'])]
-                )
-            table = Table(section9_table_content, colWidths=col_widths, hAlign='LEFT', spaceBefore=12)
-            table_style(table)  # Apply the same table style
-            content.append(table)
-        else:
-            content.append(
-                Paragraph("No specific physical and chemical properties information available.", IndentedText))
-        content.append(Spacer(1, 8))
-
-        # Section 10
-        content.append(Paragraph("10) Stability & Reactivity", styles['SectionHeader']))
-        content.append(Paragraph(str(field_result[30]), IndentedText))
-        section10_additional_content = [
-            ['', Paragraph('Conditions to avoid', styles['NormalText']), ':', Paragraph(str(field_result[31]), styles['NormalText'])],
-            ['', Paragraph('Materials to avoid', styles['NormalText']), ':', Paragraph(str(field_result[32]), styles['NormalText'])],
-            ['', Paragraph('Hazardous decomposition', styles['NormalText']), ':', Paragraph(str(field_result[33]), styles['NormalText'])]
-        ]
-        table = Table(section10_additional_content, colWidths=col_widths, hAlign='LEFT', spaceBefore=12)
-        table_style(table)
-        content.append(table)
-        content.append(Spacer(1, 8))
-
-        # Section 11
-        content.append(Paragraph("11) Toxicological Information", styles['SectionHeader']))
-        content.append(Paragraph(str(field_result[34]), IndentedText))
-        content.append(Spacer(1, 8))
-
-        # Section 12
-        content.append(Paragraph("12) Ecological Information", styles['SectionHeader']))
-        content.append(Paragraph(str(field_result[35]), IndentedText))
-        content.append(Spacer(1, 8))
-        # Section 13
-        content.append(Paragraph("13) Disposal", styles['SectionHeader']))
-        content.append(Paragraph(str(field_result[36]), IndentedText))
-        content.append(Spacer(1, 8))
-
-        # Section 14
-        content.append(Paragraph("14) Transport Information", styles['SectionHeader']))
-        content.append(
-            Paragraph(str(field_result[37]), IndentedText))
-        content.append(Spacer(1, 8))
-
-        # Section 15
-        content.append(Paragraph("15) Regulatory Information", styles['SectionHeader']))
-        content.append(Paragraph(
-            str(field_result[38]), IndentedText))
-        content.append(Spacer(1, 8))
-
-        # Section 16
-        content.append(Paragraph("16) Shelf-Life", styles['SectionHeader']))
-        content.append(
-            Paragraph(str(field_result[39]), IndentedText))
-        content.append(Spacer(1, 8))
-
-        # Section 17
-        content.append(Paragraph("17) Other Information", styles['SectionHeader']))
-        content.append(Paragraph(str(field_result[40]), IndentedText))
-        content.append(PageBreak())
-
-        doc.build(content, onFirstPage=add_first_page_header)
-        buffer.seek(0)
-        return buffer.getvalue()  # returns PDF bytes
+    def _set_busy(self, busy, text="Preparing document…"):
+        self.status_label.setText(text)
+        self.status_label.setVisible(busy)
+        self.btn_download.setEnabled(not busy)
+        self.btn_print.setEnabled(not busy)
 
     def show_pdf_preview(self, msds_id, filename):
         self.file_name = filename
         self.msds_id = msds_id
-        pdf_bytes = self.generate_pdf(msds_id)
-        # Wrap the PDF bytes in a QBuffer
-        self.buffer = QBuffer()  # keep it as an instance attribute so it's not garbage collected
-        self.buffer.setData(pdf_bytes)
-        self.buffer.open(QIODevice.OpenModeFlag.ReadOnly)
+        self.pdf_bytes = None
+        self._set_busy(True)
 
-        # Load PDF from QBuffer
+        row, section9 = self._load_data(msds_id)
+        fut = word_msds.render_pdf_async(row, section9)      # returns immediately
+        fut.add_done_callback(lambda f, mid=msds_id: self._pdf_ready.emit(mid, f))
+
+    def _on_pdf_ready(self, msds_id, fut):
+        if msds_id != self.msds_id:          # user already opened another record
+            return
+        self._set_busy(False)
+        try:
+            self.pdf_bytes = fut.result()
+        except Exception as e:
+            window_alert.show_message(self, "Preview Error", f"Could not build the MSDS: {e}",
+                                      icon_type="critical")
+            return
+
+        self.buffer = QBuffer()  # keep as attribute so it isn't garbage collected
+        self.buffer.setData(self.pdf_bytes)
+        self.buffer.open(QIODevice.OpenModeFlag.ReadOnly)
         self.pdf_doc.load(self.buffer)
         self.pdf_viewer.setZoomMode(QPdfView.ZoomMode.FitToWidth)
 
     def download_pdf(self, msds_id, filename):
-        file_path, _ = QFileDialog.getSaveFileName(
-            self,
-            "Save PDF",
-            filename,  # default name
-            "PDF Files (*.pdf)"
-        )
+        if not self.pdf_bytes:
+            return
 
+        file_path, _ = QFileDialog.getSaveFileName(self, "Save PDF", filename, "PDF Files (*.pdf)")
         if not file_path:  # user cancelled
             return None
-
         if not file_path.endswith(".pdf"):
             file_path += ".pdf"
 
-        pdf_bytes = self.generate_pdf(msds_id)
         with open(file_path, "wb") as f:
-            f.write(pdf_bytes)
+            f.write(self.pdf_bytes)
 
         window_alert.show_message(self, "Success", "File downloaded!", icon_type="info")
 
     def print_pdf(self):
+        """Pick the printer with Qt's dialog, print through Word (pywin32)."""
         try:
-            if not self.pdf_doc or self.pdf_doc.pageCount() == 0:
-                return  # nothing to print
+            if not self.msds_id:
+                return
 
             printer = QPrinter(QPrinter.PrinterMode.HighResolution)
-
-            # Set printer page size using QPageLayout
-            page_layout = QPageLayout()
-            page_layout.setPageSize(QPageSize(QPageSize.PageSizeId.Letter))
-            printer.setPageLayout(page_layout)
-
             dialog = QPrintDialog(printer, self)
-            dialog.setWindowTitle("Print Certificate of Analysis")
+            dialog.setWindowTitle("Print Material Safety Data Sheet")
+            if not dialog.exec():
+                return
 
-            if dialog.exec():
-                painter = QPainter(printer)
-                render_options = QPdfDocumentRenderOptions()
-
-                # Choose a sufficiently high DPI for rendering the PDF to an image
-                # 600 DPI is a good balance for print quality
-                render_dpi = 600
-
-                for i in range(self.pdf_doc.pageCount()):
-                    if i > 0:
-                        printer.newPage()
-
-                    pdf_page_size_points = self.pdf_doc.pagePointSize(i)
-
-                    render_dpi = 300
-                    image_render_width_pixels = int(pdf_page_size_points.width() / 72.0 * render_dpi)
-                    image_render_height_pixels = int(pdf_page_size_points.height() / 72.0 * render_dpi)
-
-                    pdf_image = self.pdf_doc.render(
-                        i,
-                        QSize(image_render_width_pixels, image_render_height_pixels),
-                        render_options
-                    )
-
-                    if not pdf_image.isNull():
-                        # Use the full page, not the printable area
-                        full_page_pixels = printer.paperRect(QPrinter.Unit.DevicePixel)
-
-                        scaled_image = pdf_image.scaled(
-                            full_page_pixels.size().toSize(),
-                            Qt.AspectRatioMode.KeepAspectRatio,
-                            Qt.TransformationMode.SmoothTransformation
-                        )
-
-                        # Align to the top (no margin)
-                        x = full_page_pixels.x() + (full_page_pixels.width() - scaled_image.width()) / 2
-                        y = full_page_pixels.y()  # start at the very top
-
-                        painter.drawImage(QPointF(x, y), scaled_image)
-                painter.end()
+            row, section9 = self._load_data(self.msds_id)
+            self._set_busy(True, "Sending to printer…")
+            fut = word_msds.print_msds_async(row, section9,
+                                             printer_name=printer.printerName(),
+                                             copies=printer.copyCount())
+            fut.add_done_callback(self._print_done.emit)
         except Exception as e:
-            print(f"An error occurred during printing: {e}")
+            self._set_busy(False)
+            window_alert.show_message(self, "Print Error", f"An error occurred during printing: {e}",
+                                      icon_type="critical")
+
+    def _on_print_done(self, fut):
+        self._set_busy(False)
+        try:
+            fut.result()
+        except Exception as e:
+            window_alert.show_message(self, "Print Error", f"An error occurred during printing: {e}",
+                                      icon_type="critical")
