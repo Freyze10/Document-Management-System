@@ -703,8 +703,8 @@ def clear_msds_form(self):
 
         self.manufactured_label_input.setPlainText(
             "Masterbatch Philippines, Inc. 24 Diamond Road, Caloocan Industrial Subdivision, Bo. Kaybiga, Caloocan City, Philippines")
-        self.tel_label_input.setText("(632) 87088681")
-        self.facsimile_label_input.setText("(632) 83747085")
+        self.tel_label_input.setText("(632) 70023720")
+        self.facsimile_label_input.setText("(63) 9088106546")
         self.email_label_input.setText("sales@polycolor.biz")
         self.composition_input.setPlainText(
             "The preparation consists of organic and inorganic pigments, and other additives.")

@@ -240,22 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00097" summary="conected style to  sync uupdate button">
-      <option name="closed" value="true" />
-      <created>1765007247504</created>
-      <option name="number" value="00097" />
-      <option name="presentableId" value="LOCAL-00097" />
-      <option name="project" value="LOCAL" />
-      <updated>1765007247504</updated>
-    </task>
-    <task id="LOCAL-00098" summary="added sync update to display">
-      <option name="closed" value="true" />
-      <created>1765007282545</created>
-      <option name="number" value="00098" />
-      <option name="presentableId" value="LOCAL-00098" />
-      <option name="project" value="LOCAL" />
-      <updated>1765007282545</updated>
-    </task>
     <task id="LOCAL-00099" summary="added margin between sync and uupdate">
       <option name="closed" value="true" />
       <created>1765007340363</created>
@@ -632,7 +616,23 @@
       <option name="project" value="LOCAL" />
       <updated>1792810741855</updated>
     </task>
-    <option name="localTasksCounter" value="146" />
+    <task id="LOCAL-00146" summary="fixing the new print function using template">
+      <option name="closed" value="true" />
+      <created>1792820431038</created>
+      <option name="number" value="00146" />
+      <option name="presentableId" value="LOCAL-00146" />
+      <option name="project" value="LOCAL" />
+      <updated>1792820431038</updated>
+    </task>
+    <task id="LOCAL-00147" summary="fixing the new print function using template">
+      <option name="closed" value="true" />
+      <created>1792820441427</created>
+      <option name="number" value="00147" />
+      <option name="presentableId" value="LOCAL-00147" />
+      <option name="project" value="LOCAL" />
+      <updated>1792820441428</updated>
+    </task>
+    <option name="localTasksCounter" value="148" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="skip deleted in delivery items in sync" />
     <MESSAGE value="comment out the debug database" />
     <MESSAGE value="connected to the server again" />
     <MESSAGE value="added condition in toggle tab for rrf" />
@@ -685,7 +684,8 @@
     <MESSAGE value="updated coa exe" />
     <MESSAGE value="updated coa exe to reflect the updated address of the Timog" />
     <MESSAGE value="addedd new python requirements" />
-    <option name="LAST_COMMIT_MESSAGE" value="addedd new python requirements" />
+    <MESSAGE value="fixing the new print function using template" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixing the new print function using template" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
