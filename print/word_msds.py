@@ -2,9 +2,9 @@
 Fill the MSDS Word templates (DC / MB) through Word COM (pywin32),
 then export to PDF (for the preview / download) or print.
 
-Templates live in  <app resources>/templates/
-    msds_dc.docx   -> has the 5 hazard bullets in Section 3 (old "else" branch)
-    msds_mb.docx   -> single general-note paragraph in Section 3 (old "all empty" branch)
+Templates live in  <app resources>/print/template-msds/
+    dc.docx        -> has the 5 hazard bullets in Section 3 (old "else" branch)
+    mb1.docx       -> single general-note paragraph in Section 3 (old "all empty" branch)
 
 Every value in the templates is a plain-text token like [[TRADE_NAME]].
 Tokens that don't exist in a template are simply skipped, so ONE token map
@@ -140,6 +140,27 @@ def _fill_section9(doc, section9_rows):
         table.Cell(i, 3).Range.Text = value
 
 
+def _section9_starts_page2(doc):
+    """MB: heading 9 should start page 2.
+    If it lands on page 1, force a page break before it.
+    If section 8 already runs onto page 2, leave the normal flow alone."""
+    rng = doc.Content
+    find = rng.Find
+    find.ClearFormatting()
+    find.Text = "Physical & Chemical Properties"   # must match the heading text
+    find.Forward = True
+    find.Wrap = 0                                   # wdFindStop
+    find.MatchCase = True
+    find.MatchWildcards = False
+    if not find.Execute():
+        return
+    para = rng.Paragraphs(1)
+    para.Format.PageBreakBefore = False
+    doc.Repaginate()
+    if rng.Information(3) == 1:                     # 3 = wdActiveEndPageNumber
+        para.Format.PageBreakBefore = True
+
+
 def _open_filled_doc(word, row, section9_rows, workdir):
     template = TEMPLATE_DC if is_dc(row) else TEMPLATE_MB
     src = abs_path.resource(template)
@@ -153,6 +174,10 @@ def _open_filled_doc(word, row, section9_rows, workdir):
     _fill_section9(doc, section9_rows)
     for token, value in _build_tokens(row).items():
         _fill_token(doc, token, value)
+
+    # Section 8's length is only known now, so decide the page break last
+    if not is_dc(row):               # MB template only
+        _section9_starts_page2(doc)
     return doc
 
 

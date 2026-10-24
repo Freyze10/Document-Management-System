@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00099" summary="added margin between sync and uupdate">
-      <option name="closed" value="true" />
-      <created>1765007340363</created>
-      <option name="number" value="00099" />
-      <option name="presentableId" value="LOCAL-00099" />
-      <option name="project" value="LOCAL" />
-      <updated>1765007340363</updated>
-    </task>
     <task id="LOCAL-00100" summary="added new sync function in the db">
       <option name="closed" value="true" />
       <created>1765008195071</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1792820441428</updated>
     </task>
-    <option name="localTasksCounter" value="148" />
+    <task id="LOCAL-00148" summary="updated the contact details in the default value">
+      <option name="closed" value="true" />
+      <created>1792820579605</created>
+      <option name="number" value="00148" />
+      <option name="presentableId" value="LOCAL-00148" />
+      <option name="project" value="LOCAL" />
+      <updated>1792820579605</updated>
+    </task>
+    <option name="localTasksCounter" value="149" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="comment out the debug database" />
     <MESSAGE value="connected to the server again" />
     <MESSAGE value="added condition in toggle tab for rrf" />
     <MESSAGE value="added new exe" />
@@ -685,7 +684,8 @@
     <MESSAGE value="updated coa exe to reflect the updated address of the Timog" />
     <MESSAGE value="addedd new python requirements" />
     <MESSAGE value="fixing the new print function using template" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixing the new print function using template" />
+    <MESSAGE value="updated the contact details in the default value" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated the contact details in the default value" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
