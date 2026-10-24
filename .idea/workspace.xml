@@ -240,22 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00100" summary="added new sync function in the db">
-      <option name="closed" value="true" />
-      <created>1765008195071</created>
-      <option name="number" value="00100" />
-      <option name="presentableId" value="LOCAL-00100" />
-      <option name="project" value="LOCAL" />
-      <updated>1765008195071</updated>
-    </task>
-    <task id="LOCAL-00101" summary="clean some comment">
-      <option name="closed" value="true" />
-      <created>1765008281931</created>
-      <option name="number" value="00101" />
-      <option name="presentableId" value="LOCAL-00101" />
-      <option name="project" value="LOCAL" />
-      <updated>1765008281931</updated>
-    </task>
     <task id="LOCAL-00102" summary="create new function for the update sync">
       <option name="closed" value="true" />
       <created>1765008352770</created>
@@ -632,7 +616,23 @@
       <option name="project" value="LOCAL" />
       <updated>1792820579605</updated>
     </task>
-    <option name="localTasksCounter" value="149" />
+    <task id="LOCAL-00149" summary="adjusted the normal print function and is working">
+      <option name="closed" value="true" />
+      <created>1792821401015</created>
+      <option name="number" value="00149" />
+      <option name="presentableId" value="LOCAL-00149" />
+      <option name="project" value="LOCAL" />
+      <updated>1792821401015</updated>
+    </task>
+    <task id="LOCAL-00150" summary="addeding new details in the entry of msds to have the breakdown of composition">
+      <option name="closed" value="true" />
+      <created>1792825648363</created>
+      <option name="number" value="00150" />
+      <option name="presentableId" value="LOCAL-00150" />
+      <option name="project" value="LOCAL" />
+      <updated>1792825648363</updated>
+    </task>
+    <option name="localTasksCounter" value="151" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,8 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="connected to the server again" />
-    <MESSAGE value="added condition in toggle tab for rrf" />
     <MESSAGE value="added new exe" />
     <MESSAGE value="renamed new exe" />
     <MESSAGE value="changed the records header font size" />
@@ -685,29 +683,26 @@
     <MESSAGE value="addedd new python requirements" />
     <MESSAGE value="fixing the new print function using template" />
     <MESSAGE value="updated the contact details in the default value" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated the contact details in the default value" />
+    <MESSAGE value="adjusted the normal print function and is working" />
+    <MESSAGE value="addeding new details in the entry of msds to have the breakdown of composition" />
+    <option name="LAST_COMMIT_MESSAGE" value="addeding new details in the entry of msds to have the breakdown of composition" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/table/msds_data_entry.py</url>
-          <line>63</line>
+          <line>64</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/table/msds_data_entry.py</url>
-          <line>26</line>
-          <option name="timeStamp" value="12" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/db/db_con.py</url>
-          <line>281</line>
+          <line>292</line>
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1270</line>
+          <line>1276</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">

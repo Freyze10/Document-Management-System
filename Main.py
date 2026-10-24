@@ -16,6 +16,7 @@ from utils import abs_path, scroll_date, calendar_design, check_cx, multiple_dat
 from utils.debounce import setup_finished_typing
 from formats_input import rowell_litho, packageworld, dynamiccaps, smypc
 from PyQt6.QtGui import QTextCharFormat, QFont
+from utils import section2_ui
 
 class MainWindow(QMainWindow):
     def __init__(self, username=None):
@@ -781,13 +782,18 @@ class MainWindow(QMainWindow):
                     section9_data[property_name] = property_value
 
             # Save
+
+            section2_data = section2_ui.get_rows(self)
             try:
                 if msds_data_entry.current_msds_id is not None:  # Update existing MSDS
-                    db_con.update_msds_sheet(msds_data_entry.current_msds_id, msds_data, section9_data)
+                    msds_id = msds_data_entry.current_msds_id
+                    db_con.update_msds_sheet(msds_id, msds_data, section9_data)
+                    db_con.save_msds_section2(msds_id, section2_data)
                     window_alert.show_message(self, "Success", "MSDS updated successfully!", icon_type="info")
                     msds_data_entry.current_msds_id = None
                 else:  # Save new MSDS
-                    db_con.save_msds_sheet(msds_data, section9_data)
+                    msds_id = db_con.save_msds_sheet(msds_data, section9_data)
+                    db_con.save_msds_section2(msds_id, section2_data)
                     window_alert.show_message(self, "Success", "MSDS saved successfully!", icon_type="info")
             except Exception as e:
                 window_alert.show_message(self, "Database Error", str(e), icon_type="critical")

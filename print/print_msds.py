@@ -7,7 +7,7 @@ from PyQt6.QtPrintSupport import QPrinter, QPrintDialog
 
 from alert import window_alert
 from db import db_con
-from print import word_msds          # <-- new: Word COM filler (word_msds.py)
+from print import word_msds          # Word COM filler (word_msds.py)
 from utils import abs_path
 
 
@@ -104,13 +104,13 @@ class FileMSDS(QWidget):
     # ------------------------------------------------------------------
     def _load_data(self, msds_id):
         return (db_con.get_single_msds_data(msds_id),
-                db_con.get_single_msds_section9(msds_id))
+                db_con.get_single_msds_section9(msds_id),
+                db_con.get_single_msds_section2(msds_id))
 
     def generate_pdf(self, msds_id):
-        """Same name / same return value as before (PDF bytes), but the PDF
-        now comes from the Word template (DC or MB picked automatically)."""
-        row, section9 = self._load_data(msds_id)
-        return word_msds.render_pdf_bytes(row, section9)
+        """Returns PDF bytes. Template (DC / MB1 / MB2) is picked automatically."""
+        row, section9, section2 = self._load_data(msds_id)
+        return word_msds.render_pdf_bytes(row, section9, section2)
 
     def _set_busy(self, busy, text="Preparing document…"):
         self.status_label.setText(text)
@@ -124,8 +124,8 @@ class FileMSDS(QWidget):
         self.pdf_bytes = None
         self._set_busy(True)
 
-        row, section9 = self._load_data(msds_id)
-        fut = word_msds.render_pdf_async(row, section9)      # returns immediately
+        row, section9, section2 = self._load_data(msds_id)
+        fut = word_msds.render_pdf_async(row, section9, section2)      # returns immediately
         fut.add_done_callback(lambda f, mid=msds_id: self._pdf_ready.emit(mid, f))
 
     def _on_pdf_ready(self, msds_id, fut):
@@ -172,9 +172,9 @@ class FileMSDS(QWidget):
             if not dialog.exec():
                 return
 
-            row, section9 = self._load_data(self.msds_id)
+            row, section9, section2 = self._load_data(self.msds_id)
             self._set_busy(True, "Sending to printer…")
-            fut = word_msds.print_msds_async(row, section9,
+            fut = word_msds.print_msds_async(row, section9, section2,
                                              printer_name=printer.printerName(),
                                              copies=printer.copyCount())
             fut.add_done_callback(self._print_done.emit)

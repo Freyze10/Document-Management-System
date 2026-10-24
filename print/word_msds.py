@@ -1,14 +1,21 @@
 """
-Fill the MSDS Word templates (DC / MB) through Word COM (pywin32),
+Fill the MSDS Word templates (DC / MB1 / MB2) through Word COM (pywin32),
 then export to PDF (for the preview / download) or print.
 
 Templates live in  <app resources>/print/template-msds/
-    dc.docx        -> has the 5 hazard bullets in Section 3 (old "else" branch)
-    mb1.docx       -> single general-note paragraph in Section 3 (old "all empty" branch)
+    dc.docx   -> has the 5 hazard bullets in Section 3
+    mb1.docx  -> single general-note paragraph in Section 3, plain Section 2
+    mb2.docx  -> same as mb1 + ingredient breakdown table in Section 2
+                 (Common Name | Color Index No. | CAS No.)
+
+Template choice:
+    msds_section_2 has rows                  -> mb2.docx
+    else any of the 5 hazard fields filled   -> dc.docx
+    else                                     -> mb1.docx
 
 Every value in the templates is a plain-text token like [[TRADE_NAME]].
 Tokens that don't exist in a template are simply skipped, so ONE token map
-serves both templates.
+serves all templates.
 """
 import hashlib
 import os
@@ -24,7 +31,8 @@ import win32com.client as win32
 from utils import abs_path
 
 TEMPLATE_DC = "print/template-msds/dc.docx"
-TEMPLATE_MB = "print/template-msds/mb1.docx"
+TEMPLATE_MB1 = "print/template-msds/mb1.docx"
+TEMPLATE_MB2 = "print/template-msds/mb2.docx"
 
 # Word constants (late-bound COM has no named constants)
 WD_FORMAT_PDF = 17
@@ -33,6 +41,7 @@ WD_DO_NOT_SAVE = 0
 
 S9_NAME_TOKEN = "[[S9_NAME]]"
 S9_VALUE_TOKEN = "[[S9_VALUE]]"
+S2_HEADER_TEXT = "Common Name"      # first header cell of the mb2 breakdown table
 
 # token -> index in db_con.get_single_msds_data()
 FIELD_MAP = {
@@ -84,8 +93,27 @@ def _s(value):
 
 
 def is_dc(row):
-    """Same rule as before: any of the 5 hazard fields filled in => DC template."""
+    """Any of the 5 hazard fields filled in => DC template."""
     return any(_s(row[i]) for i in range(11, 16))
+
+
+def _section2_clean(section2_rows):
+    """DB rows (id, msds_id, row_order, common_name, color_index_no, cas_no)
+    -> [(name, color_index, cas)] without completely empty rows."""
+    out = []
+    for r in (section2_rows or []):
+        item = (_s(r[3]), _s(r[4]), _s(r[5]))
+        if any(item):
+            out.append(item)
+    return out
+
+
+def _pick_template(row, section2_rows):
+    if _section2_clean(section2_rows):
+        return TEMPLATE_MB2
+    if is_dc(row):
+        return TEMPLATE_DC
+    return TEMPLATE_MB1
 
 
 def _build_tokens(row):
@@ -113,6 +141,38 @@ def _fill_token(doc, token, value):
         rng.Text = value.replace("\r\n", "\v").replace("\n", "\v").replace("\r", "\v")
         return True
     return False
+
+
+def _fill_section2(doc, section2_rows):
+    """mb2 only: Section 2 breakdown table (header + sample rows in the template).
+    Keep the header and the first data row (as the formatting row), drop the
+    other sample rows, then add one row per DB record.
+
+    In the CAS column use ';' to put several numbers in one cell,
+    each one is printed on its own line."""
+    table = None
+    for t in doc.Tables:
+        if S2_HEADER_TEXT in t.Range.Text:
+            table = t
+            break
+    if table is None:
+        return
+
+    rows = _section2_clean(section2_rows)
+    if not rows:
+        return
+
+    for i in range(table.Rows.Count, 2, -1):    # keep header (1) + first data row (2)
+        table.Rows(i).Delete()
+
+    for _ in range(len(rows) - 1):
+        table.Rows.Add()                        # copies formatting of the last row
+
+    for i, (name, color_index, cas) in enumerate(rows, start=2):   # Word is 1-based
+        cas = "\r".join(p.strip() for p in cas.split(";") if p.strip())
+        table.Cell(i, 1).Range.Text = name
+        table.Cell(i, 2).Range.Text = color_index
+        table.Cell(i, 3).Range.Text = cas
 
 
 def _fill_section9(doc, section9_rows):
@@ -161,8 +221,8 @@ def _section9_starts_page2(doc):
         para.Format.PageBreakBefore = True
 
 
-def _open_filled_doc(word, row, section9_rows, workdir):
-    template = TEMPLATE_DC if is_dc(row) else TEMPLATE_MB
+def _open_filled_doc(word, row, section9_rows, section2_rows, workdir):
+    template = _pick_template(row, section2_rows)
     src = abs_path.resource(template)
     tmp = os.path.join(workdir, os.path.basename(src))
     shutil.copy(src, tmp)            # never touch the real template
@@ -170,13 +230,15 @@ def _open_filled_doc(word, row, section9_rows, workdir):
     doc = word.Documents.Open(os.path.abspath(tmp), ReadOnly=False,
                               AddToRecentFiles=False, Visible=False)
 
-    # Section 9 first (its tokens live inside a table), then everything else
+    # Tables first (their tokens / sample rows live inside tables), then everything else
+    if template == TEMPLATE_MB2:
+        _fill_section2(doc, section2_rows)
     _fill_section9(doc, section9_rows)
     for token, value in _build_tokens(row).items():
         _fill_token(doc, token, value)
 
     # Section 8's length is only known now, so decide the page break last
-    if not is_dc(row):               # MB template only
+    if template != TEMPLATE_DC:      # MB1 / MB2
         _section9_starts_page2(doc)
     return doc
 
@@ -222,8 +284,10 @@ def _reset_word():
     _word = None
 
 
-def _cache_key(row, section9_rows):
-    raw = repr((tuple(row), tuple(tuple(r) for r in (section9_rows or []))))
+def _cache_key(row, section9_rows, section2_rows):
+    raw = repr((tuple(row),
+                tuple(tuple(r) for r in (section9_rows or [])),
+                tuple(tuple(r) for r in (section2_rows or []))))
     return hashlib.md5(raw.encode("utf8")).hexdigest()
 
 
@@ -236,8 +300,8 @@ def _with_retry(fn, *args):
         return fn(*args)
 
 
-def _render_job(row, section9_rows):
-    key = _cache_key(row, section9_rows)
+def _render_job(row, section9_rows, section2_rows):
+    key = _cache_key(row, section9_rows, section2_rows)
     if key in _cache:
         _cache.move_to_end(key)
         return _cache[key]
@@ -246,7 +310,7 @@ def _render_job(row, section9_rows):
         word = _get_word()
         workdir = tempfile.mkdtemp(prefix="msds_")
         try:
-            doc = _open_filled_doc(word, row, section9_rows, workdir)
+            doc = _open_filled_doc(word, row, section9_rows, section2_rows, workdir)
             try:
                 pdf_path = os.path.join(workdir, "msds.pdf")
                 doc.ExportAsFixedFormat(OutputFileName=os.path.abspath(pdf_path),
@@ -265,12 +329,12 @@ def _render_job(row, section9_rows):
     return data
 
 
-def _print_job(row, section9_rows, printer_name, copies):
+def _print_job(row, section9_rows, section2_rows, printer_name, copies):
     def run():
         word = _get_word()
         workdir = tempfile.mkdtemp(prefix="msds_")
         try:
-            doc = _open_filled_doc(word, row, section9_rows, workdir)
+            doc = _open_filled_doc(word, row, section9_rows, section2_rows, workdir)
             try:
                 if printer_name:
                     word.ActivePrinter = printer_name
@@ -292,19 +356,19 @@ def warm_up():
     return _executor.submit(_get_word)
 
 
-def render_pdf_async(row, section9_rows):
-    """-> Future[bytes]  (PDF of the filled DC/MB template)"""
-    return _executor.submit(_render_job, row, section9_rows)
+def render_pdf_async(row, section9_rows, section2_rows=None):
+    """-> Future[bytes]  (PDF of the filled DC/MB1/MB2 template)"""
+    return _executor.submit(_render_job, row, section9_rows, section2_rows)
 
 
-def print_msds_async(row, section9_rows, printer_name=None, copies=1):
+def print_msds_async(row, section9_rows, section2_rows=None, printer_name=None, copies=1):
     """-> Future[None]  (resolves when the job has reached the spooler)"""
-    return _executor.submit(_print_job, row, section9_rows, printer_name, copies)
+    return _executor.submit(_print_job, row, section9_rows, section2_rows, printer_name, copies)
 
 
-def render_pdf_bytes(row, section9_rows):
+def render_pdf_bytes(row, section9_rows, section2_rows=None):
     """Blocking version, if you ever need it outside the GUI thread."""
-    return render_pdf_async(row, section9_rows).result()
+    return render_pdf_async(row, section9_rows, section2_rows).result()
 
 
 def shutdown():

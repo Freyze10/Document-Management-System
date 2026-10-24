@@ -3,14 +3,14 @@ import psycopg2
 
 
 # server
-def get_connection():
-    return psycopg2.connect(
-        host="192.168.1.13",
-        dbname="db_msds",
-        user="postgres",
-        password="mbpi",
-        port="5432"
-    )
+# def get_connection():
+#     return psycopg2.connect(
+#         host="192.168.1.13",
+#         dbname="db_msds",
+#         user="postgres",
+#         password="mbpi",
+#         port="5432"
+#     )
 
 # uncomment this if you are running this in your local computer
 
@@ -24,14 +24,14 @@ def get_connection():
 #     )
 
 # # debug database
-# def get_connection():
-#     return psycopg2.connect(
-#         host="localhost",
-#         dbname="dms_debug",
-#         user="postgres",
-#         password="password",
-#         port="5433"
-#     )
+def get_connection():
+    return psycopg2.connect(
+        host="localhost",
+        dbname="dms_debug",
+        user="postgres",
+        password="password",
+        port="5433"
+    )
 
 
 def create_tables():
@@ -102,6 +102,17 @@ def create_tables():
                 property_order INT NOT NULL, 
                 property_name TEXT NOT NULL, 
                 property_value TEXT
+            );
+        """)
+    # section 2
+    cur.execute("""
+            CREATE TABLE IF NOT EXISTS msds_section_2 (
+                id SERIAL PRIMARY KEY,
+                msds_id INTEGER NOT NULL REFERENCES msds_sheets(id) ON DELETE CASCADE,
+                row_order INT NOT NULL,
+                common_name TEXT,
+                color_index_no TEXT,
+                cas_no TEXT
             );
         """)
 
@@ -453,10 +464,25 @@ def save_msds_sheet(data, section9):
                             INSERT INTO msds_section_9 (msds_id, property_order, property_name, property_value)
                             VALUES (%s, %s, %s, %s)
                         """, (msds_id, idx, property_name, property_value))
-
+            return msds_id
     finally:
         if conn:
             conn.close()
+
+
+def save_msds_section2(msds_id, rows):
+    """Replace all section 2 rows of this MSDS. rows = [(name, color_index, cas), ...]"""
+    conn = get_connection()
+    try:
+        cur = conn.cursor()
+        cur.execute("DELETE FROM msds_section_2 WHERE msds_id = %s", (msds_id,))
+        for order, (name, ci, cas) in enumerate(rows, start=1):
+            cur.execute("""INSERT INTO msds_section_2
+                           (msds_id, row_order, common_name, color_index_no, cas_no)
+                           VALUES (%s, %s, %s, %s, %s)""", (msds_id, order, name, ci, cas))
+        conn.commit()
+    finally:
+        conn.close()
 
 
 def save_certificate_of_analysis(data, summary_of_analysis):
@@ -1159,6 +1185,17 @@ def get_single_msds_section9(msds_id):
     cur.close()
     conn.close()
     return record
+
+def get_single_msds_section2(msds_id):
+    """-> [(id, msds_id, row_order, common_name, color_index_no, cas_no), ...]"""
+    conn = get_connection()
+    try:
+        cur = conn.cursor()
+        cur.execute("""SELECT id, msds_id, row_order, common_name, color_index_no, cas_no
+                       FROM msds_section_2 WHERE msds_id = %s ORDER BY row_order""", (msds_id,))
+        return cur.fetchall()
+    finally:
+        conn.close()
 
 
 def get_single_coa_data(coa_id):

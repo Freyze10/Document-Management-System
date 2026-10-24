@@ -7,6 +7,7 @@ from PyQt6.QtCore import Qt  # Import Qt for alignment flags
 from alert import window_alert
 from db import db_con
 from utils import section9_design
+from utils import section2_ui
 
 current_msds_id = None  # Global variable to store the current MSDS ID
 
@@ -93,6 +94,7 @@ def load_msds_details(self, msds_id):
             # Insert before the "Add Property" button (which is always the last item)
             self.physical_properties_layout.insertWidget(self.physical_properties_layout.count() - 1, row_widget)
 
+    section2_ui.set_rows(self, [(r[3], r[4], r[5]) for r in db_con.get_single_msds_section2(msds_id)])
     # 4. Update the state of the up/down buttons
     _update_property_buttons(self)
     check_empty_fields(self)
@@ -268,10 +270,7 @@ def create_form(self):
     main_v_layout.addWidget(create_form_group("1) Product Identification", product_id_fields))
 
     # Section 2: Composition/Information on Ingredients
-    composition_fields = [
-        ("Details:", self.composition_input),
-    ]
-    main_v_layout.addWidget(create_form_group("2) Composition/Information on Ingredients", composition_fields))
+    main_v_layout.addWidget(section2_ui.build_group(self))
 
     # Section 3: Hazard Information
     self.hazard_toggle_button = QPushButton("Switch Layout")
@@ -762,6 +761,8 @@ def clear_msds_form(self):
                 row = _create_property_row(self, name, value)
                 self.physical_properties_layout.insertWidget(self.physical_properties_layout.count() - 1, row)
             _update_property_buttons(self)
+
+        section2_ui.set_rows(self, [])
 
         self.stability_reactivity_input.setPlainText("This product is chemically stable and non-reactive.")
         self.conditions_to_avoid_input.setText("None")
