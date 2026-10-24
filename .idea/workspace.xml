@@ -240,14 +240,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00102" summary="create new function for the update sync">
-      <option name="closed" value="true" />
-      <created>1765008352770</created>
-      <option name="number" value="00102" />
-      <option name="presentableId" value="LOCAL-00102" />
-      <option name="project" value="LOCAL" />
-      <updated>1765008352770</updated>
-    </task>
     <task id="LOCAL-00103" summary="updated the new function with fullreset">
       <option name="closed" value="true" />
       <created>1765008462112</created>
@@ -632,7 +624,15 @@
       <option name="project" value="LOCAL" />
       <updated>1792825648363</updated>
     </task>
-    <option name="localTasksCounter" value="151" />
+    <task id="LOCAL-00151" summary="added the new template for the additional print output">
+      <option name="closed" value="true" />
+      <created>1792826587071</created>
+      <option name="number" value="00151" />
+      <option name="presentableId" value="LOCAL-00151" />
+      <option name="project" value="LOCAL" />
+      <updated>1792826587071</updated>
+    </task>
+    <option name="localTasksCounter" value="152" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,7 +660,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added new exe" />
     <MESSAGE value="renamed new exe" />
     <MESSAGE value="changed the records header font size" />
     <MESSAGE value="used 16px font in horizontal header records" />
@@ -685,24 +684,25 @@
     <MESSAGE value="updated the contact details in the default value" />
     <MESSAGE value="adjusted the normal print function and is working" />
     <MESSAGE value="addeding new details in the entry of msds to have the breakdown of composition" />
-    <option name="LAST_COMMIT_MESSAGE" value="addeding new details in the entry of msds to have the breakdown of composition" />
+    <MESSAGE value="added the new template for the additional print output" />
+    <option name="LAST_COMMIT_MESSAGE" value="added the new template for the additional print output" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/table/msds_data_entry.py</url>
-          <line>64</line>
+          <line>309</line>
           <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/db/db_con.py</url>
-          <line>292</line>
+          <line>741</line>
           <option name="timeStamp" value="23" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/Main.py</url>
-          <line>1276</line>
+          <line>1443</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">

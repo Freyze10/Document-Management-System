@@ -1,17 +1,262 @@
-from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QLabel, QWidget, QTabWidget, \
-    QTableWidget, QLineEdit, QHeaderView, QTableWidgetItem, QFormLayout, QPushButton, QTextEdit, QGroupBox, QGridLayout, \
-    QStackedLayout, QInputDialog
-from PyQt6.QtCore import Qt  # Import Qt for alignment flags
+from PyQt6.QtCore import Qt, QObject, QEvent, QTimer
+from PyQt6.QtGui import QFontMetrics, QKeySequence, QShortcut
+from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QLabel, QWidget, QLineEdit, QPushButton, QTextEdit,
+                             QGroupBox, QGridLayout, QInputDialog, QSizePolicy)
 
-# Assuming alert and db_con are correctly imported
 from alert import window_alert
 from db import db_con
-from utils import section9_design
 from utils import section2_ui
 
 current_msds_id = None  # Global variable to store the current MSDS ID
 
+LABEL_W = 205           # px, label column of every card
+FORM_MAX_W = 1120       # px, the form is centered and never wider than this
 
+# Section 9 defaults (used by the form and by clear_msds_form)
+DEFAULT_SECTION9 = [
+    ("Appearance", "White pellet form"),
+    ("Odor", "Odorless"),
+    ("Packaging", "25 kgs."),
+    ("Carrier Material", "Polyolefin resin"),
+    ("Resin Suitability", "Polyolefin"),
+    ("Light fastness (1-8)", ""),
+    ("Heat Stability (1-5)", ""),
+    ("Non Toxicity", "Non-toxic, colorant contains no heavy metal"),
+    ("Flash Point", "N/A"),
+    ("Auto Ignition", "N/A"),
+    ("Explosion Property", "N/A"),
+    ("Solubility (Water)", "Insoluble"),
+]
+
+# One stylesheet for the whole form (every section is a white "card" on the page background).
+# Empty fields are marked with the dynamic property  class="empty_field".
+FORM_STYLE = """
+    QWidget#msdsForm { background: transparent; }
+    QWidget { font-family: 'Segoe UI', 'Inter', sans-serif; font-size: 13px; color: #343a40; }
+
+    QLabel { font-size: 13px; font-weight: 600; color: #495057; background: transparent; }
+    QLabel#mainHeader { font-size: 26px; font-weight: 700; color: #1f3a5f; }
+    QLabel#subHeader { font-size: 13px; font-weight: 400; color: #6c757d; }
+
+    QLineEdit, QTextEdit {
+        font-size: 13px;
+        padding: 6px 10px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        background-color: #ffffff;
+        min-height: 22px;
+        selection-background-color: #aed6f1;
+        color: #343a40;
+    }
+    QLineEdit:hover, QTextEdit:hover { border: 1px solid #adb5bd; }
+    QLineEdit:focus, QTextEdit:focus { border: 1px solid #007bff; background-color: #f2f9ff; }
+    QLineEdit[class="empty_field"], QTextEdit[class="empty_field"] {
+        border: 1px solid #dc3545;
+        background-color: #fff5f5;
+    }
+    QLineEdit[class="empty_field"]:focus, QTextEdit[class="empty_field"]:focus {
+        border: 1px solid #dc3545;
+        background-color: #fff0f0;
+    }
+
+    QGroupBox {
+        font-size: 15px;
+        font-weight: 700;
+        color: #1f3a5f;
+        background-color: #ffffff;
+        border: 1px solid #dde3ea;
+        border-radius: 10px;
+        margin-top: 0px;
+        padding-top: 42px;
+    }
+    QGroupBox::title {
+        subcontrol-origin: padding;
+        subcontrol-position: top left;
+        left: 20px;
+        top: 12px;
+        padding: 0px;
+        color: #1f3a5f;
+    }
+
+    QPushButton#HazardToggle {
+        background-color: #ffffff;
+        color: #495057;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 5px 14px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        min-width: 90px;
+    }
+    QPushButton#HazardToggle:hover { background-color: #f1f3f5; border: 1px solid #adb5bd; }
+    QPushButton#HazardToggle:checked { background-color: #e7f1ff; color: #0056b3; border: 1px solid #7ab3ef; }
+
+    QPushButton#resetButton {
+        background-color: #ffffff;
+        color: #495057;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 8px 18px;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        min-height: 22px;
+    }
+    QPushButton#resetButton:hover { background-color: #f1f3f5; border: 1px solid #868e96; }
+    QPushButton#resetButton:pressed { background-color: #e9ecef; }
+
+    /* Section 9 rows */
+    QPushButton#actionButton, QPushButton#actionButton_delete {
+        background-color: #ffffff;
+        font-size: 12px;
+        font-weight: 600;
+        padding: 0px 10px;
+        min-height: 32px;
+        max-height: 32px;
+        border-radius: 6px;
+    }
+    QPushButton#actionButton { color: #495057; border: 1px solid #ced4da; min-width: 32px; max-width: 32px; padding: 0px; }
+    QPushButton#actionButton:hover { background-color: #e9ecef; }
+    QPushButton#actionButton:disabled { color: #ced4da; background-color: #f8f9fa; }
+    QPushButton#actionButton_delete { color: #dc3545; border: 1px solid #f1aeb5; min-width: 64px; }
+    QPushButton#actionButton_delete:hover { background-color: #ffebeb; border: 1px solid #dc3545; }
+    QPushButton#addPropertyButton {
+        background-color: #ffffff;
+        color: #007bff;
+        font-size: 13px;
+        font-weight: 600;
+        padding: 6px 18px;
+        border: 1px dashed #7ab3ef;
+        border-radius: 6px;
+        min-height: 22px;
+    }
+    QPushButton#addPropertyButton:hover { background-color: #e9f5ff; border: 1px solid #007bff; }
+    QLabel#propertyColon { font-weight: 700; color: #868e96; }
+"""
+
+
+# --------------------------------------------------------------------------
+# helpers
+# --------------------------------------------------------------------------
+class _AutoHeight(QObject):
+    """QTextEdit that is `min_lines` high when short, and grows with its text
+    up to `max_lines` (then it scrolls)."""
+
+    def __init__(self, edit, min_lines=2, max_lines=7):
+        super().__init__(edit)
+        self.edit, self.min_lines, self.max_lines = edit, min_lines, max_lines
+        edit.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
+        edit.textChanged.connect(self.fit)
+        edit.installEventFilter(self)
+
+    def eventFilter(self, obj, ev):
+        if ev.type() in (QEvent.Type.Resize, QEvent.Type.Show):
+            QTimer.singleShot(0, self.fit)
+        return False
+
+    def fit(self):
+        e = self.edit
+        vw = e.viewport().width()
+        if vw <= 20:  # not laid out yet; the Show event will call us again
+            return
+        doc = e.document()
+        doc.setTextWidth(vw)
+        line = QFontMetrics(e.font()).lineSpacing()
+        margin = doc.documentMargin() * 2
+        content = doc.size().height()
+        lo = line * self.min_lines + margin
+        hi = line * self.max_lines + margin
+        chrome = max(e.height() - e.viewport().height(), 0)  # border + padding
+        target = int(min(max(content, lo), hi) + chrome)
+        if target != e.height():
+            e.setFixedHeight(target)
+
+
+class _ShowFromStart(QObject):
+    """A one-line box that is not being edited shows the START of its text
+    (instead of the end, which is where setText() leaves it)."""
+
+    def __init__(self, edit):
+        super().__init__(edit)
+        self.edit = edit
+        edit.textChanged.connect(self.reset)
+        edit.installEventFilter(self)
+
+    def reset(self, *_):
+        if not self.edit.hasFocus():
+            self.edit.setCursorPosition(0)
+
+    def eventFilter(self, obj, ev):
+        if ev.type() in (QEvent.Type.Show, QEvent.Type.Resize, QEvent.Type.FocusOut):
+            QTimer.singleShot(0, self.reset)
+        return False
+
+
+def _wire(widget):
+    """Validation (red border when empty) + auto-height for text boxes."""
+    if isinstance(widget, QLineEdit):
+        widget.textChanged.connect(lambda _t, w=widget: validate_field(w))
+        if widget.property("_fromstart") is None:
+            widget.setProperty("_fromstart", True)
+            _ShowFromStart(widget)
+    elif isinstance(widget, QTextEdit):
+        widget.textChanged.connect(lambda w=widget: validate_field(w))
+        if widget.property("_autoheight") is None:
+            widget.setProperty("_autoheight", True)
+            _AutoHeight(widget)
+
+
+def _fit_stack(stack):
+    """A QStackedLayout is as tall as its tallest page. Make the hidden pages
+    ignore their height so the card shrinks when the short page is shown."""
+    cur = stack.currentIndex()
+    for i in range(stack.count()):
+        w = stack.widget(i)
+        pol = w.sizePolicy()
+        pol.setVerticalPolicy(QSizePolicy.Policy.Preferred if i == cur else QSizePolicy.Policy.Ignored)
+        w.setSizePolicy(pol)
+    stack.invalidate()
+
+
+def _fill_grid(layout, fields):
+    """label (right aligned, fixed width)  |  field (stretches)"""
+    layout.setHorizontalSpacing(16)
+    layout.setVerticalSpacing(12)
+    layout.setColumnMinimumWidth(0, LABEL_W)
+    layout.setColumnStretch(1, 1)
+    for r, (label_text, widget) in enumerate(fields):
+        if label_text:
+            v = Qt.AlignmentFlag.AlignTop if isinstance(widget, QTextEdit) else Qt.AlignmentFlag.AlignVCenter
+            lbl = QLabel(label_text)
+            if isinstance(widget, QTextEdit):
+                lbl.setContentsMargins(0, 8, 0, 0)       # line up with the first text line
+            layout.addWidget(lbl, r, 0, Qt.AlignmentFlag.AlignRight | v)
+            layout.addWidget(widget, r, 1)
+        else:  # no label: the box spans the whole row
+            layout.addWidget(widget, r, 0, 1, 2)
+        _wire(widget)
+
+
+def create_form_group(title, fields):
+    group = QGroupBox(title)
+    layout = QGridLayout(group)
+    layout.setContentsMargins(20, 4, 20, 20)
+    if len(fields) == 1 and fields[0][0] == "Details:":
+        fields = [("", fields[0][1])]  # single box: the card title already says what it is
+    _fill_grid(layout, fields)
+    return group
+
+
+def _page(fields):
+    page = QWidget()
+    layout = QGridLayout(page)
+    layout.setContentsMargins(0, 0, 0, 0)
+    _fill_grid(layout, fields)
+    return page
+
+
+# --------------------------------------------------------------------------
+# load / build
+# --------------------------------------------------------------------------
 def load_msds_details(self, msds_id):
     field_result = db_con.get_single_msds_data(msds_id)
 
@@ -71,214 +316,111 @@ def load_msds_details(self, msds_id):
         self.msds_storage_single_input.clear()
 
     # --- Section 9: Physical & Chemical Properties ---
-    # 1. Clear existing dynamic rows
     if hasattr(self, 'physical_properties_layout'):
-        # Iterate backwards to safely remove widgets
-        # The last widget is the "Add Property" button, so we stop before it.
+        # the last item is the "Add Property" row, so stop before it
         while self.physical_properties_layout.count() > 1:
-            item = self.physical_properties_layout.takeAt(0)  # Take the first item (a row widget)
+            item = self.physical_properties_layout.takeAt(0)
             if item and item.widget():
-                item.widget().deleteLater()  # Delete the widget
-        self.physical_property_rows.clear()  # Clear the tracking list
+                item.widget().deleteLater()
+        self.physical_property_rows.clear()
 
-    # It should return a list of tuples: [(id, msds_id, property_order, property_name, property_value), ...]
+    # [(id, msds_id, property_order, property_name, property_value), ...]
     section9_data = db_con.get_single_msds_section9(msds_id)
-
-    # 3. Create new rows based on fetched data
     if section9_data:
         for row_data in section9_data:
-            # Assuming row_data is (id, msds_id, property_order, property_name, property_value)
-            property_name = str(row_data[3])
-            property_value = str(row_data[4])
-            row_widget = _create_property_row(self, property_name, property_value)
-            # Insert before the "Add Property" button (which is always the last item)
+            row_widget = _create_property_row(self, str(row_data[3]), str(row_data[4]))
             self.physical_properties_layout.insertWidget(self.physical_properties_layout.count() - 1, row_widget)
 
+    # --- Section 2: ingredient breakdown ---
     section2_ui.set_rows(self, [(r[3], r[4], r[5]) for r in db_con.get_single_msds_section2(msds_id)])
-    # 4. Update the state of the up/down buttons
+
     _update_property_buttons(self)
     check_empty_fields(self)
+
+
+def _ctrl_s(self):
+    """Ctrl+S -> behave exactly like a click on Submit / Update."""
+    on_msds_entry = (self.main_tabs.currentWidget() is self.msds_tab
+                     and self.msds_sub_tabs.currentWidget() is self.msds_data_entry_tab)
+    if on_msds_entry and self.btn_msds_submit.isEnabled():
+        self.btn_msds_submit.click()
+
+
+def _reset_button(self):
+    btn = QPushButton("↺  New Entry / Reset")
+    btn.setObjectName("resetButton")
+    btn.setCursor(Qt.CursorShape.PointingHandCursor)
+    btn.setToolTip("Put every field back to its default value and start a new entry")
+    btn.clicked.connect(lambda: reset_form(self))
+    return btn
+
+
+def reset_form(self):
+    """New entry: every field back to its default value (asks first)."""
+    confirm = window_alert.show_message(
+        self, "New Entry",
+        "Reset the form to its default values and start a new entry?\nAnything not submitted yet will be lost.",
+        icon_type="question", is_confirmation=True)
+    if not confirm:
+        return
+    clear_msds_form(self)   # also drops the "editing" state, so the next Submit creates a new record
+    if hasattr(self, "msds_scroll_area"):
+        self.msds_scroll_area.verticalScrollBar().setValue(0)
+    self.customer_name_input.setFocus()
 
 
 def create_form(self):
     clear_msds_form(self)
 
     form_widget = QWidget()
-    main_v_layout = QVBoxLayout(form_widget)  # Use QVBoxLayout for overall structure
-    main_v_layout.setContentsMargins(30, 20, 30, 30)  # Add overall padding
+    form_widget.setObjectName("msdsForm")
+    form_widget.setStyleSheet(FORM_STYLE)
+    form_widget.setMaximumWidth(FORM_MAX_W)
+    main_v_layout = QVBoxLayout(form_widget)
+    main_v_layout.setContentsMargins(24, 18, 24, 28)
+    main_v_layout.setSpacing(18)
 
-    form_widget.setStyleSheet("""
-            QWidget {
-                background-color: #f8f9fa; /* Very light background for the whole form */
-                font-family: 'Inter', 'Segoe UI', sans-serif; /* Modern font */
-                color: #343a40; /* Dark gray for general text */
-            }
-            QLabel {
-                font-size: 12px; /* Changed from 14px to 12px */
-                font-weight: 600;
-                color: #495057; /* Slightly darker gray for labels */
-                padding-bottom: 2px; /* Small padding below labels */
-                background-color: transparent;
-            }
-            /* Specific style for the main header */
-            QLabel#mainHeader {
-                font-size: 32px;
-                font-weight: 700;
-                color: #2c3e50;
-                margin-bottom: 30px;
-                padding-bottom: 10px;
-                border-bottom: 3px solid #007bff; /* Primary blue underline */
-                text-align: center; /* This will center the text if the label's width allows */
-            }
-            QLineEdit, QTextEdit {
-                font-size: 12px;
-                padding: 4px 8px;
-                border: 1px solid #ced4da; /* Lighter, more neutral border */
-                border-radius: 6px; /* Slightly less rounded for a crisp look */
-                background-color: #ffffff;
-                min-height: 26px; /* Consistent height for QLineEdit */
-                selection-background-color: #aed6f1;
-                color: #343a40;
-            }
-            QLineEdit:focus, QTextEdit:focus {
-                border: 1px solid #007bff; /* Primary blue on focus */
-                background-color: #e9f5ff; /* Very light blue background on focus */
-                box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* Subtle focus ring */
-            }
-            /* Style for empty fields with red border */
-            QLineEdit.empty_field, QTextEdit.empty_field {
-                border: 1px solid #dc3545; /* Red border */
-                background-color: #ffebeb; /* Very light red background */
-            }
-            QLineEdit.empty_field:focus, QTextEdit.empty_field:focus {
-                border: 1px solid #dc3545; /* Keep red border on focus for empty fields */
-                box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25); /* Red focus ring */
-            }
-            QTextEdit {
-                min-height: 50px; /* Slightly taller */
-                max-height: 80px; /* Allow more vertical space if needed but cap */
-                vertical-align: top;
-            }
-            QGroupBox {
-                font-size: 14px;
-                font-weight: 600;
-                color: #212529;
-                border: 1px solid #e0e0e0; /* Lighter border for group box */
-                border-radius: 8px;
-                margin-top: 2.0ex; /* Space for title */
-                background-color: #ffffff;
-                padding: 8px; /* Inner padding for group box content */
-            }
-            QGroupBox::title {
-                subcontrol-origin: margin;
-                subcontrol-position: top left;
-                padding: 0 10px; /* Wider padding for title text */
-                left: 15px; /* Adjust title position */
-                margin-left: 0px; /* No margin here, padding takes over */
-                color: #34495e;
-            }
-            QPushButton#HazardToggle {
-                background-color: #6c757d; /* A neutral gray */
-                color: #ffffff;
-                font-size: 13px;
-                padding: 5px 10px;
-                border: none;
-                border-radius: 4px;
-                min-width: 80px;
-                margin-bottom: 10px;
-            }
-            QPushButton#HazardToggle:hover {
-                background-color: #5a6268;
-            }
-            #detailedHazardWidget, #simplifiedHazardWidget, #detailedHandlingStorageWidget, #simplifiedHandlingStorageWidget {
-                background-color: #ffffff;
-            }
-        """)
+    # Ctrl+S = same as clicking Submit / Update (works anywhere in the window
+    # as long as the MSDS "Data Entry" tab is the one on screen)
+    save_shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
+    save_shortcut.setContext(Qt.ShortcutContext.WindowShortcut)
+    save_shortcut.activated.connect(lambda: _ctrl_s(self))
+    self.btn_msds_submit.setToolTip("Ctrl+S")
 
     # === Header ===
+    header_box = QVBoxLayout()
+    header_box.setSpacing(2)
     header = QLabel("Technical Data and Material Safety")
-    header.setObjectName("mainHeader")  # Set object name for styling
-    header_layout = QHBoxLayout()
-    header_layout.addStretch()
-    header_layout.addWidget(header)
-    header_layout.addStretch()
-    main_v_layout.addLayout(header_layout)  # Add header to the main layout
+    header.setObjectName("mainHeader")
+    sub = QLabel("Fill in every section. Fields that are still empty are outlined in red.")
+    sub.setObjectName("subHeader")
+    header_box.addWidget(header)
+    header_box.addWidget(sub)
+    header_row = QHBoxLayout()
+    header_row.addLayout(header_box, 1)
+    header_row.addWidget(_reset_button(self), 0, Qt.AlignmentFlag.AlignTop)
+    main_v_layout.addLayout(header_row)
 
-    # Helper function to create form groups with GridLayout for alignment
-    def create_form_group(title, fields):
-        group = QGroupBox(title)
-        if title == "10) Stability & Reactivity":
-            # Use QHBoxLayout for a single row with two sections
-            main_layout = QHBoxLayout()
-            main_layout.setContentsMargins(20, 25, 20, 20)
-            main_layout.setSpacing(30)
-
-            # Left side: Details (QTextEdit, no label)
-            details_layout = QVBoxLayout()
-            details_widget = fields[0][1]  # self.stability_reactivity_input (QTextEdit)
-            details_layout.addWidget(details_widget)
-            main_layout.addLayout(details_layout, stretch=2)  # Give more space to Details
-
-            # Right side: Three QLineEdit fields in a vertical layout
-            right_layout = QVBoxLayout()
-            right_layout.setSpacing(15)
-            for label_text, input_widget in fields[1:]:  # Skip Details
-                field_layout = QHBoxLayout()
-                label = QLabel(label_text)
-                field_layout.addWidget(label, alignment=Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-                field_layout.addWidget(input_widget)
-                right_layout.addLayout(field_layout)
-                # Connect text changed signal for validation
-                if isinstance(input_widget, QLineEdit):
-                    input_widget.textChanged.connect(lambda text, widget=input_widget: validate_field(widget))
-            main_layout.addLayout(right_layout, stretch=1)
-
-            group.setLayout(main_layout)
-        else:
-            # Original single-column layout for other sections
-            layout = QGridLayout()
-            layout.setHorizontalSpacing(30)
-            layout.setVerticalSpacing(15)
-            layout.setContentsMargins(20, 25, 20, 20)
-            row_idx = 0
-            for label_text, input_widget in fields:
-                if label_text:  # Only create and add label if label_text is non-empty
-                    label = QLabel(label_text)
-                    layout.addWidget(label, row_idx, 0, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-                    layout.addWidget(input_widget, row_idx, 1)
-                else:
-                    # If no label, span the widget across both columns
-                    layout.addWidget(input_widget, row_idx, 0, 1, 2)
-                # Connect text changed signal for validation
-                if isinstance(input_widget, QLineEdit):
-                    input_widget.textChanged.connect(lambda text, widget=input_widget: validate_field(widget))
-                elif isinstance(input_widget, QTextEdit):
-                    input_widget.textChanged.connect(lambda: validate_field(input_widget))
-                row_idx += 1
-            group.setLayout(layout)
-        return group
-
-    # Section 1: Product Identification
-    product_id_fields = [
+    # ---- 1) Product Identification ----
+    main_v_layout.addWidget(create_form_group("1) Product Identification", [
         ("Customer Name:", self.customer_name_input),
         ("Trade Name:", self.trade_label_input),
         ("Manufactured By:", self.manufactured_label_input),
         ("Tel No.:", self.tel_label_input),
         ("Facsimile:", self.facsimile_label_input),
         ("Email Address:", self.email_label_input),
-    ]
-    main_v_layout.addWidget(create_form_group("1) Product Identification", product_id_fields))
+    ]))
 
-    # Section 2: Composition/Information on Ingredients
-    main_v_layout.addWidget(section2_ui.build_group(self))
+    # ---- 2) Composition + ingredient breakdown ----
+    main_v_layout.addWidget(section2_ui.build_group(self, _wire))
 
-    # Section 3: Hazard Information
+    # ---- 3) Hazard Information (detailed / simplified) ----
     self.hazard_toggle_button = QPushButton("Switch Layout")
-    self.hazard_toggle_button.setObjectName("HazardToggle")  # For specific styling
-    self.hazard_toggle_button.setCheckable(True)  # Make it checkable for state management
+    self.hazard_toggle_button.setObjectName("HazardToggle")
+    self.hazard_toggle_button.setCheckable(True)
     self.hazard_toggle_button.setChecked(False)  # Start with detailed view
+    self.hazard_toggle_button.setCursor(Qt.CursorShape.PointingHandCursor)
 
-    # Detailed Hazard Fields
     detailed_hazard_fields = [
         ("Preliminaries:", self.hazard_preliminaries_input),
         ("Preliminary route of entry:", self.hazard_entry_route_input),
@@ -287,119 +429,43 @@ def create_form(self):
         ("Eyes:", self.hazard_eyes_input),
         ("General Note:", self.hazard_general_note_input),
     ]
-    # Simplified Hazard Field (only General Note)
-    simplified_hazard_fields = [
-        ("General Note:", self.hazard_single_field_input),  # Reuse the same input widget
-    ]
-
-    # Create the detailed view widget
-    detailed_hazard_widget = QWidget()
-    detailed_hazard_widget.setObjectName("detailedHazardWidget")  # Set object name for styling
-    detailed_hazard_layout = QGridLayout(detailed_hazard_widget)
-    detailed_hazard_layout.setHorizontalSpacing(30)
-    detailed_hazard_layout.setVerticalSpacing(15)
-    detailed_hazard_layout.setContentsMargins(20, 10, 20, 20)
-    row_idx = 0
-    for label_text, input_widget in detailed_hazard_fields:
-        label = QLabel(label_text)
-        detailed_hazard_layout.addWidget(label, row_idx, 0, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-        detailed_hazard_layout.addWidget(input_widget, row_idx, 1)
-        if isinstance(input_widget, QLineEdit):
-            input_widget.textChanged.connect(lambda text, widget=input_widget: validate_field(widget))
-        elif isinstance(input_widget, QTextEdit):
-            input_widget.textChanged.connect(lambda: validate_field(input_widget))
-        row_idx += 1
-
-    # Create the simplified view widget
-    simplified_hazard_widget = QWidget()
-    simplified_hazard_widget.setObjectName("simplifiedHazardWidget")  # Set object name for styling
-    simplified_hazard_layout = QGridLayout(simplified_hazard_widget)
-    simplified_hazard_layout.setHorizontalSpacing(30)
-    simplified_hazard_layout.setVerticalSpacing(15)
-    simplified_hazard_layout.setContentsMargins(20, 10, 20, 20)
-    label_general_note = QLabel("General Note:")
-    simplified_hazard_layout.addWidget(label_general_note, 0, 0,
-                                       Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-    simplified_hazard_layout.addWidget(self.hazard_single_field_input, 0, 1)
-
-    # Create a QStackedLayout for hazard information
-    self.hazard_stacked_layout.addWidget(detailed_hazard_widget)  # Index 0: Detailed view
-    self.hazard_stacked_layout.addWidget(simplified_hazard_widget)  # Index 1: Simplified view
+    self.hazard_stacked_layout.addWidget(_page(detailed_hazard_fields))  # 0
+    self.hazard_stacked_layout.addWidget(_page([("General Note:", self.hazard_single_field_input)]))  # 1
+    self.hazard_stacked_layout.currentChanged.connect(lambda _i, s=self.hazard_stacked_layout: _fit_stack(s))
+    _fit_stack(self.hazard_stacked_layout)
 
     button_h_layout = QHBoxLayout()
     button_h_layout.addStretch()
     button_h_layout.addWidget(self.hazard_toggle_button)
+    self.hazard_group_v_layout.setContentsMargins(20, 4, 20, 20)
+    self.hazard_group_v_layout.setSpacing(10)
     self.hazard_group_v_layout.addLayout(button_h_layout)
     self.hazard_group_v_layout.addLayout(self.hazard_stacked_layout)
-
     main_v_layout.addWidget(self.hazard_group)
 
-    # Section 4: First Aid Measures
-    first_aid_fields = [
+    # ---- 4) 5) 6) ----
+    main_v_layout.addWidget(create_form_group("4) First Aid Measures", [
         ("Inhalation:", self.first_aid_inhalation_input),
         ("Eyes:", self.first_aid_eyes),
         ("Skin:", self.first_aid_skin_input),
         ("Ingestion:", self.first_aid_ingestion_input),
-    ]
-    main_v_layout.addWidget(create_form_group("4) First Aid Measures", first_aid_fields))
+    ]))
+    main_v_layout.addWidget(create_form_group("5) Fire Fighting Measures",
+                                              [("Details:", self.fire_fighting_media_input)]))
+    main_v_layout.addWidget(create_form_group("6) Accidental Release Measures",
+                                              [("Details:", self.accidental_release_input)]))
 
-    # Section 5: Fire Fighting Measures
-    fire_fighting_fields = [
-        ("Details:", self.fire_fighting_media_input),
-    ]
-    main_v_layout.addWidget(create_form_group("5) Fire Fighting Measures", fire_fighting_fields))
-
-    # Section 6: Accidental Release Measures
-    accidental_release_fields = [
-        ("Details:", self.accidental_release_input),
-    ]
-    main_v_layout.addWidget(create_form_group("6) Accidental Release Measures", accidental_release_fields))
-
-    # Section 7: Handling and Storage - NEW STACKED LAYOUT
-    detailed_handling_storage_fields = [
+    # ---- 7) Handling and Storage (detailed / simplified) ----
+    self.handling_storage_stacked_layout.addWidget(_page([
         ("Handling:", self.handling_input),
         ("Storage:", self.msds_storage_input),
-    ]
+    ]))  # 0
+    self.handling_storage_stacked_layout.addWidget(_page([("Storage:", self.msds_storage_single_input)]))  # 1
+    self.handling_storage_stacked_layout.currentChanged.connect(
+        lambda _i, s=self.handling_storage_stacked_layout: _fit_stack(s))
+    _fit_stack(self.handling_storage_stacked_layout)
 
-    # Create the detailed handling/storage view widget
-    detailed_handling_storage_widget = QWidget()
-    detailed_handling_storage_widget.setObjectName("detailedHandlingStorageWidget")
-    detailed_handling_storage_layout = QGridLayout(detailed_handling_storage_widget)
-    detailed_handling_storage_layout.setHorizontalSpacing(30)
-    detailed_hazard_layout.setVerticalSpacing(15)
-    detailed_handling_storage_layout.setContentsMargins(20, 10, 20, 20)
-    row_idx = 0
-    for label_text, input_widget in detailed_handling_storage_fields:
-        label = QLabel(label_text)
-        detailed_handling_storage_layout.addWidget(label, row_idx, 0,
-                                                   Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-        detailed_handling_storage_layout.addWidget(input_widget, row_idx, 1)
-        if isinstance(input_widget, QLineEdit):
-            input_widget.textChanged.connect(lambda text, widget=input_widget: validate_field(widget))
-        elif isinstance(input_widget, QTextEdit):
-            input_widget.textChanged.connect(lambda: validate_field(input_widget))
-        row_idx += 1
-
-    # Create the simplified handling/storage view widget (only Storage)
-    simplified_handling_storage_widget = QWidget()
-    simplified_handling_storage_widget.setObjectName("simplifiedHandlingStorageWidget")
-    simplified_handling_storage_layout = QGridLayout(simplified_handling_storage_widget)
-    simplified_handling_storage_layout.setHorizontalSpacing(30)
-    simplified_handling_storage_layout.setVerticalSpacing(15)
-    simplified_handling_storage_layout.setContentsMargins(20, 10, 20, 20)
-    label_storage_simplified = QLabel("Storage:")
-    simplified_handling_storage_layout.addWidget(label_storage_simplified, 0, 0,
-                                                 Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter)
-    simplified_handling_storage_layout.addWidget(self.msds_storage_single_input, 0, 1)
-    if isinstance(self.msds_storage_input, QLineEdit):
-        self.msds_storage_input.textChanged.connect(
-            lambda text, widget=self.msds_storage_input: validate_field(widget))
-    elif isinstance(self.msds_storage_input, QTextEdit):
-        self.msds_storage_input.textChanged.connect(lambda: validate_field(self.msds_storage_input))
-
-    self.handling_storage_stacked_layout.addWidget(detailed_handling_storage_widget)  # Index 0: Detailed view
-    self.handling_storage_stacked_layout.addWidget(simplified_handling_storage_widget)  # Index 1: Simplified view
-
+    self.handling_storage_group_v_layout.setContentsMargins(20, 4, 20, 20)
     self.handling_storage_group_v_layout.addLayout(self.handling_storage_stacked_layout)
     main_v_layout.addWidget(self.handling_storage_group)
 
@@ -410,7 +476,7 @@ def create_form(self):
             self.hazard_single_field_input.setText(
                 "No known harmful effects to human lives or to the environment.")
 
-            # Clear and disable all detailed fields except the general note
+            # Clear all detailed fields except the general note
             for _, input_widget in detailed_hazard_fields:
                 if input_widget != self.hazard_general_note_input and hasattr(input_widget, "clear"):
                     input_widget.clear()
@@ -443,116 +509,88 @@ def create_form(self):
 
     self.hazard_toggle_button.clicked.connect(toggle_hazard_layout)
 
-    # Section 8: Exposure Controls/Personal Protection
-    exposure_control_fields = [
+    # ---- 8) .. 17) ----
+    main_v_layout.addWidget(create_form_group("8) Exposure Controls/Personal Protection", [
         ("Exposure Control:", self.exposure_control_input),
         ("Respiratory Protection:", self.respiratory_protection_input),
         ("Hand Protection:", self.hand_protection_input),
         ("Eye Protection:", self.eye_protection_input),
         ("Skin Protection:", self.skin_protection_input),
-    ]
-    main_v_layout.addWidget(create_form_group("8) Exposure Controls/Personal Protection", exposure_control_fields))
-
-    # Section 9: Physical & Chemical Properties
-    main_v_layout.addWidget(create_dynamic_section9(self))
-
-    # Section 10: Stability & Reactivity
-    stability_reactivity_fields = [
+    ]))
+    main_v_layout.addWidget(create_dynamic_section9(self))  # 9
+    main_v_layout.addWidget(create_form_group("10) Stability && Reactivity", [
         ("", self.stability_reactivity_input),
         ("Conditions to avoid:", self.conditions_to_avoid_input),
         ("Materials to avoid:", self.materials_to_avoid_input),
         ("Hazardous decomposition:", self.hazardous_decomposition_input),
-    ]
-    main_v_layout.addWidget(create_form_group("10) Stability & Reactivity", stability_reactivity_fields))
-
-    # Section 11: Toxicological Information
-    toxicological_fields = [
-        ("Details:", self.toxicological_input),
-    ]
-    main_v_layout.addWidget(create_form_group("11) Toxicological Information", toxicological_fields))
-
-    # Section 12-17
-    ecological_fields = [("Details:", self.ecological_input)]
-    main_v_layout.addWidget(create_form_group("12) Ecological Information", ecological_fields))
-
-    disposal_fields = [("Details:", self.disposal_input)]
-    main_v_layout.addWidget(create_form_group("13) Disposal", disposal_fields))
-
-    transport_fields = [("Details:", self.transport_input)]
-    main_v_layout.addWidget(create_form_group("14) Transport Information", transport_fields))
-
-    regulatory_fields = [("Details:", self.regulatory_input)]
-    main_v_layout.addWidget(create_form_group("15) Regulatory Information", regulatory_fields))
-
-    shelf_life_fields = [("Details:", self.msds_shelf_life_input)]
-    main_v_layout.addWidget(create_form_group("16) Shelf-Life", shelf_life_fields))
-
-    other_info_fields = [("Details:", self.other_input)]
-    main_v_layout.addWidget(create_form_group("17) Other Information", other_info_fields))
+    ]))
+    main_v_layout.addWidget(create_form_group("11) Toxicological Information", [("Details:", self.toxicological_input)]))
+    main_v_layout.addWidget(create_form_group("12) Ecological Information", [("Details:", self.ecological_input)]))
+    main_v_layout.addWidget(create_form_group("13) Disposal", [("Details:", self.disposal_input)]))
+    main_v_layout.addWidget(create_form_group("14) Transport Information", [("Details:", self.transport_input)]))
+    main_v_layout.addWidget(create_form_group("15) Regulatory Information", [("Details:", self.regulatory_input)]))
+    main_v_layout.addWidget(create_form_group("16) Shelf-Life", [("Details:", self.msds_shelf_life_input)]))
+    main_v_layout.addWidget(create_form_group("17) Other Information", [("Details:", self.other_input)]))
 
     main_v_layout.addLayout(form_btn(self))
     main_v_layout.addStretch(1)
 
-    self.msds_form_layout.addWidget(form_widget)
+    # centered column, never wider than FORM_MAX_W
+    outer = QHBoxLayout()
+    outer.setContentsMargins(0, 0, 0, 0)
+    outer.addStretch(1)
+    outer.addWidget(form_widget, 100)
+    outer.addStretch(1)
+    self.msds_form_layout.addLayout(outer)
 
     # Perform initial validation after all widgets are set up
     check_empty_fields(self)
 
+
 def create_dynamic_section9(self):
     """Custom dynamic layout for Section 9."""
-    group = QGroupBox("9) Physical & Chemical Properties")
+    group = QGroupBox("9) Physical && Chemical Properties")
     group.setObjectName("section9Group")
     self.physical_properties_layout = QVBoxLayout()
+    self.physical_properties_layout.setContentsMargins(20, 4, 20, 20)
+    self.physical_properties_layout.setSpacing(8)
     self.physical_property_rows = []  # Reset for cleanliness
-    group.setStyleSheet(section9_design.STYLESHEET)
 
-    # Initial fixed properties with defaults (from your clear_msds_form)
-    initial_props = [
-        ("Appearance", "White pellet form"),
-        ("Odor", "Odorless"),
-        ("Packaging", "25 kgs."),
-        ("Carrier Material", "Polyolefin resin"),
-        ("Resin Suitability", "Polyolefin"),
-        ("Light fastness (1-8)", ""),
-        ("Heat Stability (1-5)", ""),
-        ("Non Toxicity", "Non-toxic, colorant contains no heavy metal"),
-        ("Flash Point", "N/A"),
-        ("Auto Ignition", "N/A"),
-        ("Explosion Property", "N/A"),
-        ("Solubility (Water)", "Insoluble"),
-    ]
-
-    for name, value in initial_props:
-        row = _create_property_row(self, name, value)
-        self.physical_properties_layout.addWidget(row)
+    for name, value in DEFAULT_SECTION9:
+        self.physical_properties_layout.addWidget(_create_property_row(self, name, value))
 
     # Add button row at the bottom
     add_row = QWidget()
     add_hlayout = QHBoxLayout(add_row)
-    add_hlayout.setContentsMargins(20, 10, 20, 10)
-    add_btn = QPushButton("Add Property")
+    add_hlayout.setContentsMargins(0, 6, 0, 0)
+    add_btn = QPushButton("+ Add Property")
     add_btn.setObjectName("addPropertyButton")
+    add_btn.setCursor(Qt.CursorShape.PointingHandCursor)
     add_btn.clicked.connect(lambda: _add_property(self))
     add_hlayout.addWidget(add_btn)
     add_hlayout.addStretch()
     self.physical_properties_layout.addWidget(add_row)
 
-    # Initial button state update
     _update_property_buttons(self)
 
     group.setLayout(self.physical_properties_layout)
     return group
 
+
 def _create_property_row(self, name, value):
-    """Create a single dynamic row widget."""
+    """Create a single dynamic row widget:  [name]  :  [value]  [↑] [↓] [Delete]"""
     row_widget = QWidget()
     row_layout = QHBoxLayout(row_widget)
-    row_layout.setContentsMargins(20, 10, 20, 10)
+    row_layout.setContentsMargins(0, 0, 0, 0)
+    row_layout.setSpacing(8)
 
     name_edit = QLineEdit(name)
     name_edit.setObjectName("propertyName")
+    name_edit.setMinimumWidth(180)
     value_edit = QLineEdit(value)
     value_edit.setProperty("class", "")
+    colon = QLabel(":")
+    colon.setObjectName("propertyColon")
     delete_btn = QPushButton("Delete")
     delete_btn.setObjectName("actionButton_delete")
     delete_btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
@@ -563,14 +601,9 @@ def _create_property_row(self, name, value):
     down_btn.setObjectName("actionButton")
     down_btn.setFocusPolicy(Qt.FocusPolicy.NoFocus)
 
-    # Layout: Property: [name] : [value (stretch)] [↑] [↓] [Delete]
-    label = QLabel("")
-    label.setObjectName("propertyLabel")
-    row_layout.addWidget(label)
-    row_layout.addWidget(name_edit, stretch=1)
-    row_layout.addWidget(QLabel(":"))
-    row_layout.addWidget(value_edit, stretch=2)
-    row_layout.addStretch()
+    row_layout.addWidget(name_edit, stretch=2)
+    row_layout.addWidget(colon)
+    row_layout.addWidget(value_edit, stretch=3)
     row_layout.addWidget(up_btn)
     row_layout.addWidget(down_btn)
     row_layout.addWidget(delete_btn)
@@ -585,11 +618,9 @@ def _create_property_row(self, name, value):
     # Track in order list
     self.physical_property_rows.append((name_edit, value_edit))
 
-    # Connect validation (reuse your existing function)
     name_edit.textChanged.connect(lambda: validate_field(name_edit))
     value_edit.textChanged.connect(lambda: validate_field(value_edit))
 
-    # Button connections
     def delete_row():
         idx = self.physical_properties_layout.indexOf(row_widget)
         if idx != -1 and idx < self.physical_properties_layout.count() - 1:  # Not the add row
@@ -607,7 +638,7 @@ def _create_property_row(self, name, value):
                 if t[0] == name_edit:
                     if i > 0:
                         self.physical_property_rows[i], self.physical_property_rows[i - 1] = \
-                        self.physical_property_rows[i - 1], self.physical_property_rows[i]
+                            self.physical_property_rows[i - 1], self.physical_property_rows[i]
                     break
             _update_property_buttons(self)
 
@@ -621,7 +652,7 @@ def _create_property_row(self, name, value):
                 if t[0] == name_edit:
                     if i < len(self.physical_property_rows) - 1:
                         self.physical_property_rows[i], self.physical_property_rows[i + 1] = \
-                        self.physical_property_rows[i + 1], self.physical_property_rows[i]
+                            self.physical_property_rows[i + 1], self.physical_property_rows[i]
                     break
             _update_property_buttons(self)
 
@@ -631,6 +662,7 @@ def _create_property_row(self, name, value):
 
     return row_widget
 
+
 def _add_property(self):
     """Add a new empty row."""
     name, ok = QInputDialog.getText(self, "Add Property", "Property Name:", text="")
@@ -638,6 +670,7 @@ def _add_property(self):
         row = _create_property_row(self, name.strip(), "")
         self.physical_properties_layout.insertWidget(self.physical_properties_layout.count() - 1, row)
         _update_property_buttons(self)
+
 
 def _update_property_buttons(self):
     """Enable/disable up/down buttons based on position."""
@@ -650,47 +683,40 @@ def _update_property_buttons(self):
                 row_widget.up_btn.setEnabled(i > 0)
                 row_widget.down_btn.setEnabled(i < total_rows - 1)
 
+
 def form_btn(self):
     button_style = """
         QPushButton {
-            background-color: #007bff; /* Primary blue for submit (consistent with COA) */
+            background-color: #007bff;
             color: #ffffff;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
-            padding: 6px 12px;
+            padding: 8px 28px;
             border: none;
-            border-radius: 6px;
-            min-width: 80px;
-            min-height: 30px;
-            margin-top: 20px;
-            letter-spacing: 0.5px;
+            border-radius: 8px;
+            min-width: 150px;
+            min-height: 26px;
         }
-        QPushButton:hover {
-            background-color: #0056b3; /* Darker blue on hover */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        QPushButton:pressed {
-            background-color: #004085; /* Even darker on press */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        QPushButton:focus {
-            outline: none;
-            border: 2px solid #5dade2;
-        }
+        QPushButton:hover { background-color: #0056b3; }
+        QPushButton:pressed { background-color: #004085; }
+        QPushButton:focus { outline: none; border: 2px solid #5dade2; }
     """
     self.btn_msds_submit.setStyleSheet(button_style)
+    self.btn_msds_submit.setCursor(Qt.CursorShape.PointingHandCursor)
     submit_button_row = QHBoxLayout()
+    submit_button_row.setSpacing(12)
     submit_button_row.addStretch()
+    submit_button_row.addWidget(_reset_button(self))
     submit_button_row.addWidget(self.btn_msds_submit)
-    submit_button_row.addStretch()  # Center button
+    submit_button_row.addStretch()  # Center buttons
     return submit_button_row
 
+
 def clear_msds_form(self):
-    """Clear all input fields and the summary table."""
+    """Reset every field to its default text."""
     global current_msds_id
     try:
         current_msds_id = None  # Reset the global MSDS ID
-        # Set Pre-defined text
 
         # Stop all typing timers (assuming these exist and are QTimer objects)
         if hasattr(self, 'tel_label_timer') and self.tel_label_timer.isActive():
@@ -743,26 +769,21 @@ def clear_msds_form(self):
                     item.widget().deleteLater()
             self.physical_property_rows.clear()
 
-            initial_props = [  # Same as in create_dynamic_section9
-                ("Appearance", "White pellet form"),
-                ("Odor", "Odorless"),
-                ("Packaging", "25 kgs."),
-                ("Carrier Material", "Polyolefin resin"),
-                ("Resin Suitability", "Polyolefin"),
-                ("Light fastness (1-8)", ""),
-                ("Heat Stability (1-5)", ""),
-                ("Non Toxicity", "Non-toxic, colorant contains no heavy metal"),
-                ("Flash Point", "N/A"),
-                ("Auto Ignition", "N/A"),
-                ("Explosion Property", "N/A"),
-                ("Solubility (Water)", "Insoluble"),
-            ]
-            for name, value in initial_props:
+            for name, value in DEFAULT_SECTION9:
                 row = _create_property_row(self, name, value)
                 self.physical_properties_layout.insertWidget(self.physical_properties_layout.count() - 1, row)
             _update_property_buttons(self)
 
         section2_ui.set_rows(self, [])
+
+        # back to the detailed Hazard (3) / Handling & Storage (7) layout
+        if hasattr(self, "hazard_toggle_button"):
+            self.hazard_stacked_layout.setCurrentIndex(0)
+            self.handling_storage_stacked_layout.setCurrentIndex(0)
+            self.hazard_toggle_button.setChecked(False)
+            self.hazard_toggle_button.setText("Switch Layout")
+            self.hazard_single_field_input.clear()
+            self.msds_storage_single_input.clear()
 
         self.stability_reactivity_input.setPlainText("This product is chemically stable and non-reactive.")
         self.conditions_to_avoid_input.setText("None")
@@ -798,8 +819,9 @@ def clear_msds_form(self):
     except Exception as e:
         window_alert.show_message(self, "Unexpected Error", f"An error occurred: {str(e)}", icon_type="critical")
 
+
 def validate_field(widget):
-    """Checks if a QLineEdit or QTextEdit is empty and applies/removes red border."""
+    """Checks if a QLineEdit or QTextEdit is empty and applies/removes the red border."""
     is_empty = False
     if isinstance(widget, QLineEdit):
         is_empty = not widget.text().strip()
@@ -814,6 +836,7 @@ def validate_field(widget):
         if widget.property("class") == "empty_field":
             widget.setProperty("class", "")
             widget.style().polish(widget)  # Reapply stylesheet to update appearance
+
 
 def check_empty_fields(self):
     """Applies validation to all relevant input fields in the form."""
