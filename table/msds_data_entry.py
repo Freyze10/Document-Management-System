@@ -130,6 +130,19 @@ FORM_STYLE = """
         min-height: 22px;
     }
     QPushButton#addPropertyButton:hover { background-color: #e9f5ff; border: 1px solid #007bff; }
+    QPushButton#printButton {
+        background-color: #28a745;
+        color: #ffffff;
+        font-size: 15px;
+        font-weight: 600;
+        padding: 8px 24px;
+        border: none;
+        border-radius: 8px;
+        min-height: 26px;
+    }
+    QPushButton#printButton:hover { background-color: #218838; }
+    QPushButton#printButton:pressed { background-color: #1e7e34; }
+    QPushButton#printButton:disabled { background-color: #94d3a2; color: #f8f9fa; }
     QLabel#propertyColon { font-weight: 700; color: #868e96; }
 """
 
@@ -258,6 +271,9 @@ def _page(fields):
 # load / build
 # --------------------------------------------------------------------------
 def load_msds_details(self, msds_id):
+    global current_msds_id
+    current_msds_id = msds_id
+
     field_result = db_con.get_single_msds_data(msds_id)
 
     # inputs variable
@@ -299,6 +315,8 @@ def load_msds_details(self, msds_id):
     self.msds_shelf_life_input.setText(str(field_result[39]))
     self.other_input.setPlainText(str(field_result[40]))
     self.btn_msds_submit.setText("Update")
+    if hasattr(self, 'btn_msds_print'):
+        self.btn_msds_print.setEnabled(True)
     check_empty_fields(self)  # Call validation after loading data
 
     if not self.hazard_preliminaries_input.text().strip():
@@ -380,8 +398,7 @@ def create_form(self):
     main_v_layout.setContentsMargins(24, 18, 24, 28)
     main_v_layout.setSpacing(18)
 
-    # Ctrl+S = same as clicking Submit / Update (works anywhere in the window
-    # as long as the MSDS "Data Entry" tab is the one on screen)
+    # Ctrl+S shortcut
     save_shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
     save_shortcut.setContext(Qt.ShortcutContext.WindowShortcut)
     save_shortcut.activated.connect(lambda: _ctrl_s(self))
@@ -684,31 +701,111 @@ def _update_property_buttons(self):
                 row_widget.down_btn.setEnabled(i < total_rows - 1)
 
 
+def _print_current_msds(self):
+    """Triggers the preview/print dialog using open_msds_preview from main.py."""
+    global current_msds_id
+    if not current_msds_id:
+        window_alert.show_message(
+            self, "No Record",
+            "Please save or submit the record first before printing.",
+            icon_type="warning"
+        )
+        return
+
+    display_text = self.trade_label_input.text().strip() or self.customer_name_input.text().strip() or "MSDS"
+
+    if hasattr(self, 'open_msds_preview'):
+        self.open_msds_preview(current_msds_id, display_text)
+
+
+def _ctrl_p(self):
+    """Ctrl+P -> trigger print when on the MSDS Data Entry tab."""
+    on_msds_entry = (
+        self.main_tabs.currentWidget() is self.msds_tab
+        and self.msds_sub_tabs.currentWidget() is self.msds_data_entry_tab
+    )
+    if on_msds_entry:
+        if hasattr(self, 'btn_msds_print') and self.btn_msds_print.isEnabled():
+            self.btn_msds_print.click()
+        else:
+            window_alert.show_message(
+                self, "Not Saved",
+                "Please submit or update the MSDS record first before printing.",
+                icon_type="warning"
+            )
+    print(self)
+
 def form_btn(self):
     button_style = """
-        QPushButton {
+        QPushButton#resetButton, QPushButton#msdsSubmitButton, QPushButton#printButton {
+            font-size: 14px;
+            font-weight: 600;
+            padding: 8px 22px;
+            border-radius: 7px;
+            min-height: 22px;
+            max-height: 22px;
+            margin: 0px;
+        }
+
+        QPushButton#resetButton {
+            background-color: #ffffff;
+            color: #495057;
+            border: 1px solid #ced4da;
+        }
+        QPushButton#resetButton:hover { background-color: #f1f3f5; border: 1px solid #868e96; }
+        QPushButton#resetButton:pressed { background-color: #e9ecef; }
+
+        QPushButton#msdsSubmitButton {
             background-color: #007bff;
             color: #ffffff;
-            font-size: 15px;
-            font-weight: 600;
-            padding: 8px 28px;
             border: none;
-            border-radius: 8px;
-            min-width: 150px;
-            min-height: 26px;
+            min-width: 140px;
         }
-        QPushButton:hover { background-color: #0056b3; }
-        QPushButton:pressed { background-color: #004085; }
-        QPushButton:focus { outline: none; border: 2px solid #5dade2; }
+        QPushButton#msdsSubmitButton:hover { background-color: #0056b3; }
+        QPushButton#msdsSubmitButton:pressed { background-color: #004085; }
+
+        QPushButton#printButton {
+            background-color: #28a745;
+            color: #ffffff;
+            border: none;
+            min-width: 130px;
+        }
+        QPushButton#printButton:hover { background-color: #218838; }
+        QPushButton#printButton:pressed { background-color: #1e7e34; }
+        QPushButton#printButton:disabled { background-color: #a3d9b1; color: #f8f9fa; }
     """
-    self.btn_msds_submit.setStyleSheet(button_style)
+
+    # Ensure reset button
+    reset_btn = _reset_button(self)
+
+    # Configure Submit / Update button
+    self.btn_msds_submit.setObjectName("msdsSubmitButton")
+    self.btn_msds_submit.setProperty("class", "")  # Clear old class that had conflicting margin
     self.btn_msds_submit.setCursor(Qt.CursorShape.PointingHandCursor)
+
+    # Configure Print button
+    self.btn_msds_print = QPushButton("🖶  Print MSDS")
+    self.btn_msds_print.setObjectName("printButton")
+    self.btn_msds_print.setCursor(Qt.CursorShape.PointingHandCursor)
+    self.btn_msds_print.setEnabled(False)
+    self.btn_msds_print.setToolTip("Ctrl+P (Print MSDS)")
+    self.btn_msds_print.clicked.connect(lambda: _print_current_msds(self))
+
+    # Apply stylesheet to all 3
+    reset_btn.setStyleSheet(button_style)
+    self.btn_msds_submit.setStyleSheet(button_style)
+    self.btn_msds_print.setStyleSheet(button_style)
+
+    # Row Layout: Perfectly leveled and centered
     submit_button_row = QHBoxLayout()
-    submit_button_row.setSpacing(12)
-    submit_button_row.addStretch()
-    submit_button_row.addWidget(_reset_button(self))
-    submit_button_row.addWidget(self.btn_msds_submit)
-    submit_button_row.addStretch()  # Center buttons
+    submit_button_row.setContentsMargins(0, 16, 0, 10)
+    submit_button_row.setSpacing(14)
+    submit_button_row.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+    submit_button_row.addWidget(reset_btn, alignment=Qt.AlignmentFlag.AlignVCenter)
+    submit_button_row.addWidget(self.btn_msds_submit, alignment=Qt.AlignmentFlag.AlignVCenter)
+    submit_button_row.addWidget(self.btn_msds_print, alignment=Qt.AlignmentFlag.AlignVCenter)
+
     return submit_button_row
 
 
@@ -717,8 +814,10 @@ def clear_msds_form(self):
     global current_msds_id
     try:
         current_msds_id = None  # Reset the global MSDS ID
+        if hasattr(self, 'btn_msds_print'):
+            self.btn_msds_print.setEnabled(False)
 
-        # Stop all typing timers (assuming these exist and are QTimer objects)
+            # Stop all typing timers (assuming these exist and are QTimer objects)
         if hasattr(self, 'tel_label_timer') and self.tel_label_timer.isActive():
             self.tel_label_timer.stop()
         if hasattr(self, 'facsimile_label_timer') and self.facsimile_label_timer.isActive():

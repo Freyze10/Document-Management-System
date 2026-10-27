@@ -236,8 +236,9 @@ class MainWindow(QMainWindow):
         self.coa_others_input = QTextEdit()
         self.summary_initial_v_header = ["Color", "Light Fastness (1-8)", "Heat Stability (1-5)"]
         #  print only if in the  data entry tab
-        coa_shortcut_print = QShortcut(QKeySequence("Ctrl+P"), self)
-        coa_shortcut_print.activated.connect(self.coa_print_data_entry)
+        self.global_print_shortcut = QShortcut(QKeySequence("Ctrl+P"), self)
+        self.global_print_shortcut.setContext(Qt.ShortcutContext.WindowShortcut)
+        self.global_print_shortcut.activated.connect(self.handle_ctrl_p_print)
 
         # Zeller
         self.zp_code_input = QLineEdit()
@@ -790,11 +791,19 @@ class MainWindow(QMainWindow):
                     db_con.update_msds_sheet(msds_id, msds_data, section9_data)
                     db_con.save_msds_section2(msds_id, section2_data)
                     window_alert.show_message(self, "Success", "MSDS updated successfully!", icon_type="info")
-                    msds_data_entry.current_msds_id = None
                 else:  # Save new MSDS
                     msds_id = db_con.save_msds_sheet(msds_data, section9_data)
                     db_con.save_msds_section2(msds_id, section2_data)
                     window_alert.show_message(self, "Success", "MSDS saved successfully!", icon_type="info")
+
+                # Keep current ID active and enable the Print button immediately
+                msds_data_entry.current_msds_id = msds_id
+                self.btn_msds_submit.setText("Update")
+                if hasattr(self, 'btn_msds_print'):
+                    self.btn_msds_print.setEnabled(True)
+
+                table.load_msds_table(self)
+
             except Exception as e:
                 window_alert.show_message(self, "Database Error", str(e), icon_type="critical")
             finally:
@@ -940,6 +949,22 @@ class MainWindow(QMainWindow):
             coa_data_entry.adjust_table_height(self)
             self.coa_scroll_area.verticalScrollBar().setValue(0)
             self.coa_sub_tabs.setCurrentIndex(0)
+
+    def handle_ctrl_p_print(self):
+        """Dispatches Ctrl+P depending on whether user is on MSDS or CoA tab."""
+        # Check if on MSDS Data Entry tab
+        if self.main_tabs.currentWidget() is self.msds_tab and self.msds_sub_tabs.currentWidget() is self.msds_data_entry_tab:
+            if hasattr(self, 'btn_msds_print') and self.btn_msds_print.isEnabled():
+                self.btn_msds_print.click()
+            else:
+                window_alert.show_message(
+                    self, "Not Saved",
+                    "Please submit or update the MSDS record first before printing.",
+                    icon_type="warning"
+                )
+        # Check if on CoA Data Entry tab
+        elif self.main_tabs.currentWidget() is self.coa_tab and self.coa_sub_tabs.currentIndex() == 1:
+            self.coa_print_data_entry()
 
     def save_as_new_clicked(self):
         coa_data_entry.current_coa_id = None
