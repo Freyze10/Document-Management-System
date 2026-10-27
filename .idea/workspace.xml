@@ -90,6 +90,7 @@
       <recent name="C:\Users\Brant\PycharmProjects\File" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Brant\PycharmProjects\File\print" />
       <recent name="C:\Users\Brant\PycharmProjects\File\img" />
       <recent name="C:\Users\Brant\PycharmProjects\File" />
       <recent name="C:\Users\Brant\PycharmProjects\File\db" />
@@ -239,22 +240,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
-    </task>
-    <task id="LOCAL-00104" summary="connected the function to sync update button">
-      <option name="closed" value="true" />
-      <created>1765008529070</created>
-      <option name="number" value="00104" />
-      <option name="presentableId" value="LOCAL-00104" />
-      <option name="project" value="LOCAL" />
-      <updated>1765008529070</updated>
-    </task>
-    <task id="LOCAL-00105" summary="chenged connection to debug databse">
-      <option name="closed" value="true" />
-      <created>1765241292664</created>
-      <option name="number" value="00105" />
-      <option name="presentableId" value="LOCAL-00105" />
-      <option name="project" value="LOCAL" />
-      <updated>1765241292664</updated>
     </task>
     <task id="LOCAL-00106" summary="reuse the connection from the get_connection()">
       <option name="closed" value="true" />
@@ -632,7 +617,23 @@
       <option name="project" value="LOCAL" />
       <updated>1792828963442</updated>
     </task>
-    <option name="localTasksCounter" value="153" />
+    <task id="LOCAL-00153" summary="updated the display button and added print button oin the entry as well as a shortcut key for printing">
+      <option name="closed" value="true" />
+      <created>1793070199702</created>
+      <option name="number" value="00153" />
+      <option name="presentableId" value="LOCAL-00153" />
+      <option name="project" value="LOCAL" />
+      <updated>1793070199702</updated>
+    </task>
+    <task id="LOCAL-00154" summary="added a word layout so the contents of the word will not split">
+      <option name="closed" value="true" />
+      <created>1793080614165</created>
+      <option name="number" value="00154" />
+      <option name="presentableId" value="LOCAL-00154" />
+      <option name="project" value="LOCAL" />
+      <updated>1793080614165</updated>
+    </task>
+    <option name="localTasksCounter" value="155" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -660,8 +661,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="changed the records header font size" />
-    <MESSAGE value="used 16px font in horizontal header records" />
     <MESSAGE value="added a row count on audit trail" />
     <MESSAGE value="modify" />
     <MESSAGE value="addeed table model for table view" />
@@ -685,7 +684,9 @@
     <MESSAGE value="addeding new details in the entry of msds to have the breakdown of composition" />
     <MESSAGE value="added the new template for the additional print output" />
     <MESSAGE value="changed the entry field to match the  required new field for the msds" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed the entry field to match the  required new field for the msds" />
+    <MESSAGE value="updated the display button and added print button oin the entry as well as a shortcut key for printing" />
+    <MESSAGE value="added a word layout so the contents of the word will not split" />
+    <option name="LAST_COMMIT_MESSAGE" value="added a word layout so the contents of the word will not split" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -11,6 +11,22 @@ from print import word_msds          # Word COM filler (word_msds.py)
 from utils import abs_path
 
 
+def prefetch_record(msds_id):
+    """Render this record's PDF in the background so its preview opens instantly.
+
+    Call it when a record is SELECTED in your list (single click / row change),
+    not only when Preview is pressed. Safe to call as often as you like: a record
+    that is already rendered or already queued is skipped, and a click on Preview
+    always jumps ahead of this background work. Needs no FileMSDS window."""
+    try:
+        row = db_con.get_single_msds_data(msds_id)
+        section9 = db_con.get_single_msds_section9(msds_id)
+        section2 = db_con.get_single_msds_section2(msds_id)
+        word_msds.prefetch_async(row, section9, section2)
+    except Exception:
+        pass                              # a failed prefetch must never bother the user
+
+
 class FileMSDS(QWidget):
     # emitted from the Word worker thread -> handled on the GUI thread
     _pdf_ready = pyqtSignal(object, object)     # (msds_id, Future)
@@ -111,6 +127,10 @@ class FileMSDS(QWidget):
         """Returns PDF bytes. Template (DC / MB1 / MB2) is picked automatically."""
         row, section9, section2 = self._load_data(msds_id)
         return word_msds.render_pdf_bytes(row, section9, section2)
+
+    def prefetch(self, msds_id):
+        """Same as the module-level prefetch_record(): render in the background."""
+        prefetch_record(msds_id)
 
     def _set_busy(self, busy, text="Preparing document…"):
         self.status_label.setText(text)

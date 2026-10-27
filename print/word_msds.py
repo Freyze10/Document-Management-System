@@ -16,28 +16,57 @@ Template choice:
 Every value in the templates is a plain-text token like [[TRADE_NAME]].
 Tokens that don't exist in a template are simply skipped, so ONE token map
 serves all templates.
+
+SPEED  (why the first preview of a record used to be slow)
+    1. Word is started in the background at app start            -> warm_up()
+    2. One spare copy of every template is kept OPEN and idle;
+       a preview uses it, then a fresh spare is opened afterwards -> _spares
+    3. The first export after Word starts is slow (fonts, PDF engine);
+       a spare is exported once at start-up to get that out of the way
+    4. A record can be rendered BEFORE the user clicks Preview
+       (call prefetch_async when a record is selected)            -> prefetch_async()
+    5. Everything runs on ONE worker thread with priorities:
+       a user click always jumps ahead of background work.
+    Set TIMING = True to print where the time goes for each render.
 """
 import hashlib
+import itertools
 import os
+import queue
 import shutil
 import tempfile
+import threading
+import time
+import uuid
 from collections import OrderedDict
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import Future
 
 import pythoncom
 import pywintypes
 import win32com.client as win32
 
 from utils import abs_path
+from print import word_layout
 
 TEMPLATE_DC = "print/template-msds/dc.docx"
 TEMPLATE_MB1 = "print/template-msds/mb1.docx"
 TEMPLATE_MB2 = "print/template-msds/mb2.docx"
+ALL_TEMPLATES = (TEMPLATE_MB1, TEMPLATE_DC, TEMPLATE_MB2)
+
+TIMING = True       # print "[msds timing] ..." for every render (set False when you are done measuring)
 
 # Word constants (late-bound COM has no named constants)
 WD_FORMAT_PDF = 17
 WD_ALERTS_NONE = 0
 WD_DO_NOT_SAVE = 0
+
+# job priorities (lower number runs first)
+PRIO_STOP = -1        # shutdown
+PRIO_USER = 0         # the user clicked Preview / Print
+PRIO_START = 1        # start Word
+PRIO_SPARE = 4        # re-open a spare template after one was used
+PRIO_PREFETCH = 5     # render a record before it is asked for
+PRIO_WARM = 6         # start-up: pre-open spares + warm the PDF engine
 
 S9_NAME_TOKEN = "[[S9_NAME]]"
 S9_VALUE_TOKEN = "[[S9_VALUE]]"
@@ -118,6 +147,27 @@ def _pick_template(row, section2_rows):
 
 def _build_tokens(row):
     return {f"[[{name}]]": _s(row[idx]) for name, idx in FIELD_MAP.items()}
+
+
+class _Timer:
+    """Collects 'step: seconds' for one render and prints one line at the end."""
+
+    def __init__(self, label):
+        self.label = label
+        self.t0 = self.last = time.perf_counter()
+        self.laps = []
+
+    def lap(self, name):
+        now = time.perf_counter()
+        self.laps.append((name, now - self.last))
+        self.last = now
+
+    def report(self, note=""):
+        if not TIMING:
+            return
+        steps = " | ".join(f"{n} {d:.2f}s" for n, d in self.laps)
+        total = time.perf_counter() - self.t0
+        print(f"[msds timing] {self.label}: {steps} | TOTAL {total:.2f}s {note}".rstrip(), flush=True)
 
 
 def _fill_token(doc, token, value):
@@ -221,40 +271,62 @@ def _section9_starts_page2(doc):
         para.Format.PageBreakBefore = True
 
 
-def _open_filled_doc(word, row, section9_rows, section2_rows, workdir):
-    template = _pick_template(row, section2_rows)
-    src = abs_path.resource(template)
-    tmp = os.path.join(workdir, os.path.basename(src))
-    shutil.copy(src, tmp)            # never touch the real template
-
-    doc = word.Documents.Open(os.path.abspath(tmp), ReadOnly=False,
-                              AddToRecentFiles=False, Visible=False)
-
-    # Tables first (their tokens / sample rows live inside tables), then everything else
-    if template == TEMPLATE_MB2:
-        _fill_section2(doc, section2_rows)
-    _fill_section9(doc, section9_rows)
-    for token, value in _build_tokens(row).items():
-        _fill_token(doc, token, value)
-
-    # Section 8's length is only known now, so decide the page break last
-    if template != TEMPLATE_DC:      # MB1 / MB2
-        _section9_starts_page2(doc)
-    return doc
-
-
 # --------------------------------------------------------------------------
-# One persistent, invisible Word on ONE dedicated thread.
+# ONE worker thread that owns Word. Priority queue: user clicks first.
 #
 # COM objects must be used from the thread that created them, so every Word
-# call goes through this single-thread executor. Callers get a Future back and
-# never block the GUI thread.
+# call goes through this thread. Callers get a Future back and never block
+# the GUI thread. Background jobs (prefetch, spares, warm-up) have a higher
+# priority NUMBER, so a user click waits at most for the job already running.
 # --------------------------------------------------------------------------
-_executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix="word-com",
-                               initializer=pythoncom.CoInitialize)
-_word = None
-_cache = OrderedDict()      # only touched from the worker thread
-_CACHE_SIZE = 10
+class _Worker:
+    def __init__(self):
+        self._q = queue.PriorityQueue()
+        self._seq = itertools.count()
+        self._thread = threading.Thread(target=self._run, name="word-com", daemon=True)
+        self._thread.start()
+
+    def submit(self, fn, *args, priority=PRIO_USER):
+        fut = Future()
+        self._q.put((priority, next(self._seq), fut, fn, args))
+        return fut
+
+    def stop(self):
+        self._q.put((PRIO_STOP, next(self._seq), None, None, ()))
+
+    def _run(self):
+        pythoncom.CoInitialize()
+        try:
+            while True:
+                _prio, _seq, fut, fn, args = self._q.get()
+                if fn is None:                      # stop sentinel
+                    break
+                if not fut.set_running_or_notify_cancel():
+                    continue
+                try:
+                    fut.set_result(fn(*args))
+                except BaseException as e:          # noqa: BLE001 - handed to the caller
+                    fut.set_exception(e)
+        finally:
+            pythoncom.CoUninitialize()
+
+
+_worker = _Worker()
+_lock = threading.Lock()           # guards _pending / _spare_pending (touched by GUI + worker thread)
+_word = None                       # worker thread only
+_cache = OrderedDict()             # worker thread writes; key lookups from the GUI thread are safe
+_CACHE_SIZE = 20
+_pending = set()                   # cache keys queued for prefetch
+_spares = {}                       # template path -> _Spare (worker thread only)
+_spare_pending = set()             # templates with a spare job queued
+_engine_warm = False
+
+
+class _Spare:
+    """A template copy that is already open in Word and waiting to be filled."""
+
+    def __init__(self, doc, tmpdir, mtime):
+        self.doc, self.tmpdir, self.mtime = doc, tmpdir, mtime
 
 
 def _get_word():
@@ -265,6 +337,7 @@ def _get_word():
             _word.Version            # ping: raises if the user killed Word
             return _word
         except Exception:
+            _forget_spares()
             _word = None
     # DispatchEx = our own instance; never grabs a Word window the user has open
     _word = win32.DispatchEx("Word.Application")
@@ -272,6 +345,15 @@ def _get_word():
     _word.DisplayAlerts = WD_ALERTS_NONE
     _word.ScreenUpdating = False
     return _word
+
+
+def _forget_spares():
+    """Word died / was restarted: the open spare documents are gone with it."""
+    global _engine_warm
+    for sp in _spares.values():
+        shutil.rmtree(sp.tmpdir, ignore_errors=True)
+    _spares.clear()
+    _engine_warm = False
 
 
 def _reset_word():
@@ -282,8 +364,126 @@ def _reset_word():
     except Exception:
         pass
     _word = None
+    _forget_spares()
 
 
+def _discard_spare(sp):
+    try:
+        sp.doc.Close(SaveChanges=WD_DO_NOT_SAVE)
+    except Exception:
+        pass
+    shutil.rmtree(sp.tmpdir, ignore_errors=True)
+
+
+# --------------------------------------------------------------------------
+# spare templates
+# --------------------------------------------------------------------------
+def _copy_template(template):
+    """-> (tmpdir, path of a private copy). Unique file name so Word never
+    mistakes two open copies for the same document."""
+    src = abs_path.resource(template)
+    tmpdir = tempfile.mkdtemp(prefix="msds_")
+    dst = os.path.join(tmpdir, f"{uuid.uuid4().hex[:8]}_{os.path.basename(src)}")
+    shutil.copy(src, dst)
+    return tmpdir, os.path.abspath(dst)
+
+
+def _make_spare(template, warm_engine=False):
+    """(worker thread) Open one idle copy of `template`."""
+    global _engine_warm
+    tmpdir = None
+    try:
+        if template in _spares:
+            return
+        word = _get_word()
+        tmpdir, dst = _copy_template(template)
+        mtime = os.path.getmtime(abs_path.resource(template))
+        doc = word.Documents.Open(dst, ReadOnly=False, AddToRecentFiles=False, Visible=False)
+        if warm_engine and not _engine_warm:
+            # the first export after Word starts is slow (fonts, PDF engine): do it now, once
+            t = time.perf_counter()
+            doc.ExportAsFixedFormat(OutputFileName=os.path.join(tmpdir, "warm.pdf"),
+                                    ExportFormat=WD_FORMAT_PDF)
+            _engine_warm = True
+            if TIMING:
+                print(f"[msds timing] PDF engine warm-up: {time.perf_counter() - t:.2f}s", flush=True)
+        _spares[template] = _Spare(doc, tmpdir, mtime)
+        tmpdir = None                      # now owned by the spare
+    except Exception as e:                 # a spare is optional: never break anything for it
+        if TIMING:
+            print(f"[msds timing] spare for {os.path.basename(template)} failed: {e}", flush=True)
+    finally:
+        if tmpdir:
+            shutil.rmtree(tmpdir, ignore_errors=True)
+        with _lock:
+            _spare_pending.discard(template)
+
+
+def _schedule_spare(template, warm_engine=False, priority=PRIO_SPARE):
+    with _lock:
+        if template in _spares or template in _spare_pending:
+            return
+        _spare_pending.add(template)
+    _worker.submit(_make_spare, template, warm_engine, priority=priority)
+
+
+def _acquire_template(word, template):
+    """-> (doc, tmpdir, from_spare). Uses the idle spare if there is a valid one."""
+    spare = _spares.pop(template, None)
+    if spare is not None:
+        try:
+            if spare.mtime == os.path.getmtime(abs_path.resource(template)):   # template not edited meanwhile
+                spare.doc.Name                                                  # ping: raises if closed
+                return spare.doc, spare.tmpdir, True
+        except Exception:
+            pass
+        _discard_spare(spare)
+
+    tmpdir, dst = _copy_template(template)
+    try:
+        doc = word.Documents.Open(dst, ReadOnly=False, AddToRecentFiles=False, Visible=False)
+    except Exception:
+        shutil.rmtree(tmpdir, ignore_errors=True)
+        raise
+    return doc, tmpdir, False
+
+
+def _open_filled_doc(word, row, section9_rows, section2_rows, timer):
+    """-> (doc, tmpdir). Caller closes the doc and deletes tmpdir."""
+    template = _pick_template(row, section2_rows)
+    doc, tmpdir, from_spare = _acquire_template(word, template)
+    timer.label = f"{os.path.basename(template)}{' (spare)' if from_spare else ' (opened now)'}"
+    timer.lap("open")
+    try:
+        # Tables first (their tokens / sample rows live inside tables), then everything else
+        if template == TEMPLATE_MB2:
+            _fill_section2(doc, section2_rows)
+        _fill_section9(doc, section9_rows)
+        for token, value in _build_tokens(row).items():
+            _fill_token(doc, token, value)
+        timer.lap("fill")
+
+        word_layout.keep_sections_together(doc)
+
+        # Section 8's length is only known now, so decide the page break last
+        if template != TEMPLATE_DC:      # MB1 / MB2
+            _section9_starts_page2(doc)
+        timer.lap("layout")
+    except Exception:
+        try:
+            doc.Close(SaveChanges=WD_DO_NOT_SAVE)
+        except Exception:
+            pass
+        shutil.rmtree(tmpdir, ignore_errors=True)
+        raise
+
+    _schedule_spare(template)            # open a fresh idle copy for the next record
+    return doc, tmpdir
+
+
+# --------------------------------------------------------------------------
+# jobs (all run on the worker thread)
+# --------------------------------------------------------------------------
 def _cache_key(row, section9_rows, section2_rows):
     raw = repr((tuple(row),
                 tuple(tuple(r) for r in (section9_rows or [])),
@@ -300,70 +500,121 @@ def _with_retry(fn, *args):
         return fn(*args)
 
 
-def _render_job(row, section9_rows, section2_rows):
+def _render_job(row, section9_rows, section2_rows, source="preview"):
     key = _cache_key(row, section9_rows, section2_rows)
     if key in _cache:
         _cache.move_to_end(key)
+        if TIMING:
+            print(f"[msds timing] {source}: served from cache (0.00s)", flush=True)
         return _cache[key]
+
+    timer = _Timer(source)
 
     def run():
         word = _get_word()
-        workdir = tempfile.mkdtemp(prefix="msds_")
+        timer.lap("word")
+        doc, tmpdir = _open_filled_doc(word, row, section9_rows, section2_rows, timer)
         try:
-            doc = _open_filled_doc(word, row, section9_rows, section2_rows, workdir)
-            try:
-                pdf_path = os.path.join(workdir, "msds.pdf")
-                doc.ExportAsFixedFormat(OutputFileName=os.path.abspath(pdf_path),
-                                        ExportFormat=WD_FORMAT_PDF)
-            finally:
-                doc.Close(SaveChanges=WD_DO_NOT_SAVE)
+            pdf_path = os.path.join(tmpdir, "msds.pdf")
+            doc.ExportAsFixedFormat(OutputFileName=os.path.abspath(pdf_path),
+                                    ExportFormat=WD_FORMAT_PDF)
+            timer.lap("export")
             with open(pdf_path, "rb") as f:
-                return f.read()
+                data = f.read()
+            timer.lap("read")
+            return data
         finally:
-            shutil.rmtree(workdir, ignore_errors=True)
+            try:
+                doc.Close(SaveChanges=WD_DO_NOT_SAVE)
+            except Exception:
+                pass
+            shutil.rmtree(tmpdir, ignore_errors=True)
 
     data = _with_retry(run)
     _cache[key] = data
     if len(_cache) > _CACHE_SIZE:
         _cache.popitem(last=False)
+    timer.report(f"[{source}]")
     return data
 
 
+def _prefetch_job(key, row, section9_rows, section2_rows):
+    try:
+        _render_job(row, section9_rows, section2_rows, source="prefetch")
+    except Exception:
+        pass                                   # background work must never raise into the app
+    finally:
+        with _lock:
+            _pending.discard(key)
+
+
 def _print_job(row, section9_rows, section2_rows, printer_name, copies):
+    timer = _Timer("print")
+
     def run():
         word = _get_word()
-        workdir = tempfile.mkdtemp(prefix="msds_")
+        timer.lap("word")
+        doc, tmpdir = _open_filled_doc(word, row, section9_rows, section2_rows, timer)
         try:
-            doc = _open_filled_doc(word, row, section9_rows, section2_rows, workdir)
-            try:
-                if printer_name:
-                    word.ActivePrinter = printer_name
-                # Background=False: wait until the job is in the spooler
-                doc.PrintOut(Background=False, Copies=max(1, int(copies)))
-            finally:
-                doc.Close(SaveChanges=WD_DO_NOT_SAVE)
+            if printer_name:
+                word.ActivePrinter = printer_name
+            # Background=False: wait until the job is in the spooler
+            doc.PrintOut(Background=False, Copies=max(1, int(copies)))
+            timer.lap("print")
         finally:
-            shutil.rmtree(workdir, ignore_errors=True)
+            try:
+                doc.Close(SaveChanges=WD_DO_NOT_SAVE)
+            except Exception:
+                pass
+            shutil.rmtree(tmpdir, ignore_errors=True)
 
     _with_retry(run)
+    timer.report("[print]")
+
+
+def _shutdown_job():
+    for sp in list(_spares.values()):
+        _discard_spare(sp)
+    _spares.clear()
+    _reset_word()
 
 
 # --------------------------------------------------------------------------
 # public API
 # --------------------------------------------------------------------------
 def warm_up():
-    """Start Word in the background. Call once at app start (safe to repeat)."""
-    return _executor.submit(_get_word)
+    """Call once at app start (safe to repeat).
+    Starts Word, then in the background pre-opens one idle copy of every
+    template and warms up the PDF engine."""
+    fut = _worker.submit(_get_word, priority=PRIO_START)
+    for i, template in enumerate(ALL_TEMPLATES):
+        _schedule_spare(template, warm_engine=(i == 0), priority=PRIO_WARM)
+    return fut
+
+
+def prefetch_async(row, section9_rows, section2_rows=None):
+    """Render this record's PDF in the background so Preview opens instantly.
+    Call it when a record is SELECTED in the list. Does nothing if the record
+    is already cached or already queued. Returns a Future or None."""
+    key = _cache_key(row, section9_rows, section2_rows)
+    with _lock:
+        if key in _cache or key in _pending:
+            return None
+        _pending.add(key)
+    return _worker.submit(_prefetch_job, key, row, section9_rows, section2_rows,
+                          priority=PRIO_PREFETCH)
 
 
 def render_pdf_async(row, section9_rows, section2_rows=None):
     """-> Future[bytes]  (PDF of the filled DC/MB1/MB2 template)"""
-    return _executor.submit(_render_job, row, section9_rows, section2_rows)
+    return _worker.submit(_render_job, row, section9_rows, section2_rows, "preview",
+                          priority=PRIO_USER)
 
 
 def print_msds_async(row, section9_rows, section2_rows=None, printer_name=None, copies=1):
     """-> Future[None]  (resolves when the job has reached the spooler)"""
-    return _executor.submit(_print_job, row, section9_rows, section2_rows, printer_name, copies)
+    return _worker.submit(_print_job, row, section9_rows, section2_rows, printer_name, copies,
+                          priority=PRIO_USER)
 
 
 def render_pdf_bytes(row, section9_rows, section2_rows=None):
@@ -375,7 +626,7 @@ def shutdown():
     """Quit the hidden Word. Connect to QApplication.aboutToQuit, otherwise a
     WINWORD.exe is left running in the background."""
     try:
-        _executor.submit(_reset_word).result(timeout=10)
+        _worker.submit(_shutdown_job, priority=PRIO_STOP).result(timeout=10)
     except Exception:
         pass
-    _executor.shutdown(wait=False)
+    _worker.stop()
