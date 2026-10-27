@@ -472,7 +472,7 @@ def create_form(self):
     def toggle_hazard_layout(checked):
         if checked:
             self.hazard_stacked_layout.setCurrentIndex(1)  # Show simplified
-            self.hazard_toggle_button.setText("Show Detailed")
+            self.hazard_toggle_button.setText("Switch layout")
             self.hazard_single_field_input.setText(
                 "No known harmful effects to human lives or to the environment.")
 
