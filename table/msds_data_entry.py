@@ -462,19 +462,30 @@ def load_msds_details(self, msds_id):
     check_empty_fields(self)
 
 
+def _on_msds_entry_tab(self):
+    """True while the MSDS 'Data Entry' tab is the one on screen (the shortcuts only work there)."""
+    return (self.main_tabs.currentWidget() is self.msds_tab
+            and self.msds_sub_tabs.currentWidget() is self.msds_data_entry_tab)
+
+
 def _ctrl_s(self):
     """Ctrl+S -> behave exactly like a click on Submit / Update."""
-    on_msds_entry = (self.main_tabs.currentWidget() is self.msds_tab
-                     and self.msds_sub_tabs.currentWidget() is self.msds_data_entry_tab)
-    if on_msds_entry and self.btn_msds_submit.isEnabled():
+    if _on_msds_entry_tab(self) and self.btn_msds_submit.isEnabled():
         self.btn_msds_submit.click()
+
+
+def _ctrl_n(self):
+    """Ctrl+N -> behave exactly like a click on New Entry / Reset."""
+    if _on_msds_entry_tab(self):
+        reset_form(self)
 
 
 def _reset_button(self):
     btn = QPushButton("↺  New Entry / Reset")
     btn.setObjectName("resetButton")
     btn.setCursor(Qt.CursorShape.PointingHandCursor)
-    btn.setToolTip("Put every field back to its default value (of the selected sheet type) and start a new entry")
+    btn.setToolTip("Put every field back to its default value (of the selected sheet type) "
+                   "and start a new entry  (Ctrl+N)")
     btn.clicked.connect(lambda: reset_form(self))
     return btn
 
@@ -504,11 +515,15 @@ def create_form(self):
     main_v_layout.setContentsMargins(24, 18, 24, 28)
     main_v_layout.setSpacing(18)
 
-    # Ctrl+S shortcut
+    # Keyboard shortcuts (window-wide, but only act while the MSDS Data Entry tab is open)
     save_shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
     save_shortcut.setContext(Qt.ShortcutContext.WindowShortcut)
     save_shortcut.activated.connect(lambda: _ctrl_s(self))
     self.btn_msds_submit.setToolTip("Ctrl+S")
+
+    new_shortcut = QShortcut(QKeySequence("Ctrl+N"), self)
+    new_shortcut.setContext(Qt.ShortcutContext.WindowShortcut)
+    new_shortcut.activated.connect(lambda: _ctrl_n(self))
 
     # === Header: title | MB-DC switch | reset ===
     header_box = QVBoxLayout()

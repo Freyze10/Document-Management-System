@@ -3,11 +3,11 @@
 ; MyAppExe: the exe name
 ; MySourceDir: the folder containing that exe and its _internal.
 
-#define MyAppName "MBPI Lab AR"
-#define MyAppVersion "1.6.1"
-#define MyAppId "MBPI_AR_System"
-#define MyAppExe "main.exe"
-#define MySourceDir "output\main"
+#define MyAppName "MBPI Lab DMS"
+#define MyAppVersion "1.1.0"
+#define MyAppId "MBPI_DMS_System"
+#define MyAppExe "Login.exe"
+#define MySourceDir "output\Login"
 #define MyAppPublisher "Masterbatch Philippines, INC."
 
 [Setup]
