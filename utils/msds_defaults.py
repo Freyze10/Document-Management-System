@@ -106,7 +106,7 @@ _MB = {
     "skin_protection_input": "None",
     "transport_input":
         "This material is not classified as a dangerous good by the International Transport regulation.",
-    "other_input": "",          # e.g. "PICASSO Number 5080955" - different for every product
+    "other_input": "None",
 }
 
 DEFAULTS = {DC: {**_COMMON, **_DC}, MB: {**_COMMON, **_MB}}
@@ -148,7 +148,7 @@ USUAL_SECTION9 = {
 
 PLACEHOLDERS = {
     "trade_label_input": {DC: "e.g. Colorant Pink DP-K14150E", MB: "e.g. Masterbatch Red RA6804E"},
-    "other_input": {DC: "", MB: "e.g. PICASSO Number 5080955"},
+    "other_input": {DC: "", MB: ""},
 }
 
 # Hidden-page fields: always rewritten when the sheet type is switched, so a MB sheet

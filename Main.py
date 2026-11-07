@@ -17,6 +17,7 @@ from utils.debounce import setup_finished_typing
 from formats_input import rowell_litho, packageworld, dynamiccaps, smypc
 from PyQt6.QtGui import QTextCharFormat, QFont
 from utils import section2_ui
+from utils import msds_export
 
 class MainWindow(QMainWindow):
     def __init__(self, username=None):
@@ -785,16 +786,17 @@ class MainWindow(QMainWindow):
             # Save
 
             section2_data = section2_ui.get_rows(self)
+            saved_id = None        # set once the record is saved -> the download dialog is shown for it
+            was_update = False
             try:
                 if msds_data_entry.current_msds_id is not None:  # Update existing MSDS
                     msds_id = msds_data_entry.current_msds_id
                     db_con.update_msds_sheet(msds_id, msds_data, section9_data)
                     db_con.save_msds_section2(msds_id, section2_data)
-                    window_alert.show_message(self, "Success", "MSDS updated successfully!", icon_type="info")
+                    was_update = True
                 else:  # Save new MSDS
                     msds_id = db_con.save_msds_sheet(msds_data, section9_data)
                     db_con.save_msds_section2(msds_id, section2_data)
-                    window_alert.show_message(self, "Success", "MSDS saved successfully!", icon_type="info")
 
                 # Keep current ID active and enable the Print button immediately
                 msds_data_entry.current_msds_id = msds_id
@@ -803,6 +805,7 @@ class MainWindow(QMainWindow):
                     self.btn_msds_print.setEnabled(True)
 
                 table.load_msds_table(self)
+                saved_id = msds_id
 
             except Exception as e:
                 window_alert.show_message(self, "Database Error", str(e), icon_type="critical")
@@ -811,6 +814,11 @@ class MainWindow(QMainWindow):
                 table.load_msds_table(self)
                 self.msds_scroll_area.verticalScrollBar().setValue(0)
                 self.msds_sub_tabs.setCurrentIndex(0)
+
+            # "Saved - download this MSDS / TDS to a shared folder?" (records list is reloaded above,
+            # so the file name is the same one the print preview uses)
+            if saved_id is not None:
+                msds_export.offer_download(self, saved_id, updated=was_update)
         except Exception as e:
             window_alert.show_message(self, "Unexpected Error", f"An error occurred msds submit: {str(e)}", icon_type="critical")
 
@@ -1708,4 +1716,3 @@ class UserWidget(QWidget):
         self.logout_button.clicked.connect(self.logout_requested.emit)
         layout.addWidget(self.logout_button, alignment=Qt.AlignmentFlag.AlignVCenter)
         layout.addStretch()  # Pushes content to the left (or right if widget is set to the right)
-
