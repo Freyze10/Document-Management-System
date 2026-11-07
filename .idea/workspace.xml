@@ -241,14 +241,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00106" summary="reuse the connection from the get_connection()">
-      <option name="closed" value="true" />
-      <created>1765242293762</created>
-      <option name="number" value="00106" />
-      <option name="presentableId" value="LOCAL-00106" />
-      <option name="project" value="LOCAL" />
-      <updated>1765242293762</updated>
-    </task>
     <task id="LOCAL-00107" summary="closed the temp connection">
       <option name="closed" value="true" />
       <created>1765242310792</created>
@@ -633,7 +625,15 @@
       <option name="project" value="LOCAL" />
       <updated>1793080614165</updated>
     </task>
-    <option name="localTasksCounter" value="155" />
+    <task id="LOCAL-00155" summary="make the printing procecss morefaster even by a little">
+      <option name="closed" value="true" />
+      <created>1793080767854</created>
+      <option name="number" value="00155" />
+      <option name="presentableId" value="LOCAL-00155" />
+      <option name="project" value="LOCAL" />
+      <updated>1793080767854</updated>
+    </task>
+    <option name="localTasksCounter" value="156" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -661,7 +661,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added a row count on audit trail" />
     <MESSAGE value="modify" />
     <MESSAGE value="addeed table model for table view" />
     <MESSAGE value="updated table model" />
@@ -686,7 +685,8 @@
     <MESSAGE value="changed the entry field to match the  required new field for the msds" />
     <MESSAGE value="updated the display button and added print button oin the entry as well as a shortcut key for printing" />
     <MESSAGE value="added a word layout so the contents of the word will not split" />
-    <option name="LAST_COMMIT_MESSAGE" value="added a word layout so the contents of the word will not split" />
+    <MESSAGE value="make the printing procecss morefaster even by a little" />
+    <option name="LAST_COMMIT_MESSAGE" value="make the printing procecss morefaster even by a little" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

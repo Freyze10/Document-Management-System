@@ -1,35 +1,27 @@
+import html
+
 from PyQt6.QtCore import Qt, QObject, QEvent, QTimer
 from PyQt6.QtGui import QFontMetrics, QKeySequence, QShortcut
 from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QLabel, QWidget, QLineEdit, QPushButton, QTextEdit,
-                             QGroupBox, QGridLayout, QInputDialog, QSizePolicy)
+                             QGroupBox, QGridLayout, QInputDialog, QSizePolicy, QButtonGroup)
 
 from alert import window_alert
 from db import db_con
 from utils import section2_ui
+from utils import msds_defaults as D        # default values of the MB / DC sheet types
 
 current_msds_id = None  # Global variable to store the current MSDS ID
+current_mode = D.DC     # sheet type of the form: D.MB or D.DC (the defaults follow it)
 
 LABEL_W = 205           # px, label column of every card
 FORM_MAX_W = 1120       # px, the form is centered and never wider than this
 
-# Section 9 defaults (used by the form and by clear_msds_form)
-DEFAULT_SECTION9 = [
-    ("Appearance", "White pellet form"),
-    ("Odor", "Odorless"),
-    ("Packaging", "25 kgs."),
-    ("Carrier Material", "Polyolefin resin"),
-    ("Resin Suitability", "Polyolefin"),
-    ("Light fastness (1-8)", ""),
-    ("Heat Stability (1-5)", ""),
-    ("Non Toxicity", "Non-toxic, colorant contains no heavy metal"),
-    ("Flash Point", "N/A"),
-    ("Auto Ignition", "N/A"),
-    ("Explosion Property", "N/A"),
-    ("Solubility (Water)", "Insoluble"),
-]
+USUAL_TIP = "Usually changed for each product"
+USUAL_CHIP = "background-color:#ffe066; color:#495057;"    # the yellow of the Word highlighter
 
 # One stylesheet for the whole form (every section is a white "card" on the page background).
-# Empty fields are marked with the dynamic property  class="empty_field".
+# Empty fields are marked with the dynamic property  class="empty_field",
+# fields that usually change for every product with  usual="true".
 FORM_STYLE = """
     QWidget#msdsForm { background: transparent; }
     QWidget { font-family: 'Segoe UI', 'Inter', sans-serif; font-size: 13px; color: #343a40; }
@@ -58,6 +50,10 @@ FORM_STYLE = """
         border: 1px solid #dc3545;
         background-color: #fff0f0;
     }
+    /* "usually changed for each product": yellow bar on the left (after the red / focus rules so it stays) */
+    QLineEdit[usual="true"], QTextEdit[usual="true"] { border-left: 5px solid #f2c94c; }
+    QLineEdit[usual="true"]:hover, QTextEdit[usual="true"]:hover { border-left: 5px solid #f2c94c; }
+    QLineEdit[usual="true"]:focus, QTextEdit[usual="true"]:focus { border-left: 5px solid #f2c94c; }
 
     QGroupBox {
         font-size: 15px;
@@ -78,18 +74,21 @@ FORM_STYLE = """
         color: #1f3a5f;
     }
 
-    QPushButton#HazardToggle {
+    /* MB | DC switch */
+    QPushButton#modeButton {
         background-color: #ffffff;
         color: #495057;
-        font-size: 12px;
-        font-weight: 600;
-        padding: 5px 14px;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 7px 28px;
         border: 1px solid #ced4da;
-        border-radius: 6px;
-        min-width: 90px;
+        min-width: 56px;
     }
-    QPushButton#HazardToggle:hover { background-color: #f1f3f5; border: 1px solid #adb5bd; }
-    QPushButton#HazardToggle:checked { background-color: #e7f1ff; color: #0056b3; border: 1px solid #7ab3ef; }
+    QPushButton#modeButton[segment="left"] { border-top-left-radius: 8px; border-bottom-left-radius: 8px; }
+    QPushButton#modeButton[segment="right"] { border-top-right-radius: 8px; border-bottom-right-radius: 8px; border-left: none; }
+    QPushButton#modeButton:hover { background-color: #f1f3f5; }
+    QPushButton#modeButton:checked { background-color: #007bff; color: #ffffff; border: 1px solid #007bff; }
+    QPushButton#modeButton[segment="right"]:checked { border-left: 1px solid #007bff; }
 
     QPushButton#resetButton {
         background-color: #ffffff;
@@ -230,6 +229,40 @@ def _fit_stack(stack):
     stack.invalidate()
 
 
+def _get_text(widget):
+    return widget.toPlainText() if isinstance(widget, QTextEdit) else widget.text()
+
+
+def _set_text(widget, text):
+    if isinstance(widget, QTextEdit):
+        widget.setPlainText(text)
+    else:
+        widget.setText(text)
+
+
+def _set_usual(widget, on, force=False):
+    """Mark a box as 'usually changed for each product' (yellow bar + yellow label)."""
+    if widget is None:
+        return
+    if not force and bool(widget.property("usual")) == on:
+        return
+    widget.setProperty("usual", on)
+    widget.setToolTip(USUAL_TIP if on else "")
+    widget.style().unpolish(widget)
+    widget.style().polish(widget)
+    label = getattr(widget, "_usual_label", None)
+    if label is not None:
+        text = html.escape(label._plain)
+        label.setText(f'<span style="{USUAL_CHIP}">&nbsp;{text}&nbsp;</span>' if on else label._plain)
+
+
+def _refresh_usual(self, force=False):
+    for attr in D.USUAL_FIELDS:
+        _set_usual(getattr(self, attr, None), True, force)
+    for name_edit, value_edit in getattr(self, "physical_property_rows", []):
+        _set_usual(value_edit, D.is_usual_section9(current_mode, name_edit.text()), force)
+
+
 def _fill_grid(layout, fields):
     """label (right aligned, fixed width)  |  field (stretches)"""
     layout.setHorizontalSpacing(16)
@@ -240,6 +273,8 @@ def _fill_grid(layout, fields):
         if label_text:
             v = Qt.AlignmentFlag.AlignTop if isinstance(widget, QTextEdit) else Qt.AlignmentFlag.AlignVCenter
             lbl = QLabel(label_text)
+            lbl._plain = label_text
+            widget._usual_label = lbl                    # so the yellow marker can highlight the label too
             if isinstance(widget, QTextEdit):
                 lbl.setContentsMargins(0, 8, 0, 0)       # line up with the first text line
             layout.addWidget(lbl, r, 0, Qt.AlignmentFlag.AlignRight | v)
@@ -265,6 +300,82 @@ def _page(fields):
     layout.setContentsMargins(0, 0, 0, 0)
     _fill_grid(layout, fields)
     return page
+
+
+# --------------------------------------------------------------------------
+# sheet type (MB / DC)
+# --------------------------------------------------------------------------
+def _apply_placeholders(self):
+    for attr, by_mode in D.PLACEHOLDERS.items():
+        w = getattr(self, attr, None)
+        if w is not None:
+            w.setPlaceholderText(by_mode[current_mode])
+
+
+def _sync_mode_ui(self, mode):
+    """Make everything that DEPENDS on the sheet type match `mode` - without touching any value."""
+    global current_mode
+    current_mode = mode
+    if hasattr(self, "mode_mb_button"):
+        (self.mode_mb_button if mode == D.MB else self.mode_dc_button).setChecked(True)
+        idx = 1 if mode == D.MB else 0           # MB: simplified Hazard / Storage, DC: detailed
+        self.hazard_stacked_layout.setCurrentIndex(idx)
+        self.handling_storage_stacked_layout.setCurrentIndex(idx)
+    _apply_placeholders(self)
+    _refresh_usual(self)
+
+
+def set_mode(self, mode):
+    """The user clicked MB or DC.
+    Boxes that still hold the other type's default get the new default, boxes the user typed in keep
+    their text (customer, trade name and the Section 2 breakdown are never touched)."""
+    global current_mode
+    if mode == current_mode:
+        _sync_mode_ui(self, mode)
+        return
+    old = current_mode
+
+    now = {attr: _get_text(getattr(self, attr)) for attr in D.defaults(mode) if getattr(self, attr, None) is not None}
+    for attr, text in D.switch_values(now, old, mode).items():
+        _set_text(getattr(self, attr), text)
+
+    if hasattr(self, "physical_properties_layout"):
+        rows = [(n.text(), v.text()) for n, v in self.physical_property_rows]
+        _set_section9_rows(self, D.merge_section9(rows, old, mode))
+
+    _sync_mode_ui(self, mode)
+    check_empty_fields(self)
+
+
+def _mode_toggle(self):
+    """[ MB | DC ] switch for the top of the form."""
+    box = QVBoxLayout()
+    box.setSpacing(4)
+    caption = QLabel("Sheet type")
+    caption.setObjectName("subHeader")
+    row = QHBoxLayout()
+    row.setSpacing(0)
+
+    self.mode_mb_button = QPushButton("MB")
+    self.mode_dc_button = QPushButton("DC")
+    self.mode_group = QButtonGroup(self)
+    self.mode_group.setExclusive(True)
+    for btn, segment, mode, tip in (
+            (self.mode_mb_button, "left", D.MB, "MB sheet: MB default values, simplified Hazard and Storage"),
+            (self.mode_dc_button, "right", D.DC, "DC sheet: DC default values, detailed Hazard and Handling/Storage")):
+        btn.setObjectName("modeButton")
+        btn.setProperty("segment", segment)
+        btn.setCheckable(True)
+        btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        btn.setToolTip(tip)
+        self.mode_group.addButton(btn)
+        row.addWidget(btn)
+        btn.clicked.connect(lambda _checked=False, m=mode: set_mode(self, m))   # clicks only, not setChecked()
+
+    (self.mode_mb_button if current_mode == D.MB else self.mode_dc_button).setChecked(True)
+    box.addWidget(caption)
+    box.addLayout(row)
+    return box
 
 
 # --------------------------------------------------------------------------
@@ -319,28 +430,23 @@ def load_msds_details(self, msds_id):
         self.btn_msds_print.setEnabled(True)
     check_empty_fields(self)  # Call validation after loading data
 
-    if not self.hazard_preliminaries_input.text().strip():
-        self.hazard_stacked_layout.setCurrentIndex(1)
+    # The sheet type of a saved record follows its data: no detailed hazard text = MB, otherwise DC.
+    # (Only the type is set here, the saved values are never replaced by defaults.)
+    is_mb = not self.hazard_preliminaries_input.text().strip()
+    _sync_mode_ui(self, D.MB if is_mb else D.DC)
+    if is_mb:
         self.hazard_general_note_input.clear()
         self.hazard_single_field_input.setText(str(field_result[16]))
         # section 7
-        self.handling_storage_stacked_layout.setCurrentIndex(1)
         self.msds_storage_input.clear()
         self.msds_storage_single_input.setText(str(field_result[24]))
     else:
-        self.hazard_stacked_layout.setCurrentIndex(0)
-        self.handling_storage_stacked_layout.setCurrentIndex(0)
         self.hazard_single_field_input.clear()
         self.msds_storage_single_input.clear()
 
     # --- Section 9: Physical & Chemical Properties ---
     if hasattr(self, 'physical_properties_layout'):
-        # the last item is the "Add Property" row, so stop before it
-        while self.physical_properties_layout.count() > 1:
-            item = self.physical_properties_layout.takeAt(0)
-            if item and item.widget():
-                item.widget().deleteLater()
-        self.physical_property_rows.clear()
+        _clear_section9_rows(self)
 
     # [(id, msds_id, property_order, property_name, property_value), ...]
     section9_data = db_con.get_single_msds_section9(msds_id)
@@ -368,7 +474,7 @@ def _reset_button(self):
     btn = QPushButton("↺  New Entry / Reset")
     btn.setObjectName("resetButton")
     btn.setCursor(Qt.CursorShape.PointingHandCursor)
-    btn.setToolTip("Put every field back to its default value and start a new entry")
+    btn.setToolTip("Put every field back to its default value (of the selected sheet type) and start a new entry")
     btn.clicked.connect(lambda: reset_form(self))
     return btn
 
@@ -404,18 +510,22 @@ def create_form(self):
     save_shortcut.activated.connect(lambda: _ctrl_s(self))
     self.btn_msds_submit.setToolTip("Ctrl+S")
 
-    # === Header ===
+    # === Header: title | MB-DC switch | reset ===
     header_box = QVBoxLayout()
     header_box.setSpacing(2)
     header = QLabel("Technical Data and Material Safety")
     header.setObjectName("mainHeader")
-    sub = QLabel("Fill in every section. Fields that are still empty are outlined in red.")
+    sub = QLabel(
+        "Fill in every section. Empty fields are outlined in red.&nbsp;&nbsp;"
+        f'<span style="{USUAL_CHIP}">&nbsp;&nbsp;&nbsp;</span> yellow = usually changed for each product.')
     sub.setObjectName("subHeader")
     header_box.addWidget(header)
     header_box.addWidget(sub)
     header_row = QHBoxLayout()
+    header_row.setSpacing(18)
     header_row.addLayout(header_box, 1)
-    header_row.addWidget(_reset_button(self), 0, Qt.AlignmentFlag.AlignTop)
+    header_row.addLayout(_mode_toggle(self), 0)
+    header_row.addWidget(_reset_button(self), 0, Qt.AlignmentFlag.AlignBottom)
     main_v_layout.addLayout(header_row)
 
     # ---- 1) Product Identification ----
@@ -424,20 +534,14 @@ def create_form(self):
         ("Trade Name:", self.trade_label_input),
         ("Manufactured By:", self.manufactured_label_input),
         ("Tel No.:", self.tel_label_input),
-        ("Facsimile:", self.facsimile_label_input),
+        ("Mobile/Viber No.:", self.facsimile_label_input),
         ("Email Address:", self.email_label_input),
     ]))
 
     # ---- 2) Composition + ingredient breakdown ----
     main_v_layout.addWidget(section2_ui.build_group(self, _wire))
 
-    # ---- 3) Hazard Information (detailed / simplified) ----
-    self.hazard_toggle_button = QPushButton("Switch Layout")
-    self.hazard_toggle_button.setObjectName("HazardToggle")
-    self.hazard_toggle_button.setCheckable(True)
-    self.hazard_toggle_button.setChecked(False)  # Start with detailed view
-    self.hazard_toggle_button.setCursor(Qt.CursorShape.PointingHandCursor)
-
+    # ---- 3) Hazard Information (MB: simplified / DC: detailed) ----
     detailed_hazard_fields = [
         ("Preliminaries:", self.hazard_preliminaries_input),
         ("Preliminary route of entry:", self.hazard_entry_route_input),
@@ -446,17 +550,13 @@ def create_form(self):
         ("Eyes:", self.hazard_eyes_input),
         ("General Note:", self.hazard_general_note_input),
     ]
-    self.hazard_stacked_layout.addWidget(_page(detailed_hazard_fields))  # 0
-    self.hazard_stacked_layout.addWidget(_page([("General Note:", self.hazard_single_field_input)]))  # 1
+    self.hazard_stacked_layout.addWidget(_page(detailed_hazard_fields))  # 0  = DC
+    self.hazard_stacked_layout.addWidget(_page([("General Note:", self.hazard_single_field_input)]))  # 1  = MB
     self.hazard_stacked_layout.currentChanged.connect(lambda _i, s=self.hazard_stacked_layout: _fit_stack(s))
     _fit_stack(self.hazard_stacked_layout)
 
-    button_h_layout = QHBoxLayout()
-    button_h_layout.addStretch()
-    button_h_layout.addWidget(self.hazard_toggle_button)
     self.hazard_group_v_layout.setContentsMargins(20, 4, 20, 20)
     self.hazard_group_v_layout.setSpacing(10)
-    self.hazard_group_v_layout.addLayout(button_h_layout)
     self.hazard_group_v_layout.addLayout(self.hazard_stacked_layout)
     main_v_layout.addWidget(self.hazard_group)
 
@@ -472,12 +572,12 @@ def create_form(self):
     main_v_layout.addWidget(create_form_group("6) Accidental Release Measures",
                                               [("Details:", self.accidental_release_input)]))
 
-    # ---- 7) Handling and Storage (detailed / simplified) ----
+    # ---- 7) Handling and Storage (MB: storage only / DC: handling + storage) ----
     self.handling_storage_stacked_layout.addWidget(_page([
         ("Handling:", self.handling_input),
         ("Storage:", self.msds_storage_input),
-    ]))  # 0
-    self.handling_storage_stacked_layout.addWidget(_page([("Storage:", self.msds_storage_single_input)]))  # 1
+    ]))  # 0  = DC
+    self.handling_storage_stacked_layout.addWidget(_page([("Storage:", self.msds_storage_single_input)]))  # 1  = MB
     self.handling_storage_stacked_layout.currentChanged.connect(
         lambda _i, s=self.handling_storage_stacked_layout: _fit_stack(s))
     _fit_stack(self.handling_storage_stacked_layout)
@@ -485,46 +585,6 @@ def create_form(self):
     self.handling_storage_group_v_layout.setContentsMargins(20, 4, 20, 20)
     self.handling_storage_group_v_layout.addLayout(self.handling_storage_stacked_layout)
     main_v_layout.addWidget(self.handling_storage_group)
-
-    def toggle_hazard_layout(checked):
-        if checked:
-            self.hazard_stacked_layout.setCurrentIndex(1)  # Show simplified
-            self.hazard_toggle_button.setText("Switch layout")
-            self.hazard_single_field_input.setText(
-                "No known harmful effects to human lives or to the environment.")
-
-            # Clear all detailed fields except the general note
-            for _, input_widget in detailed_hazard_fields:
-                if input_widget != self.hazard_general_note_input and hasattr(input_widget, "clear"):
-                    input_widget.clear()
-
-            self.hazard_general_note_input.clear()
-            # section 7
-            self.handling_storage_stacked_layout.setCurrentIndex(1)
-            self.handling_input.clear()
-            self.msds_storage_input.clear()
-            self.msds_storage_single_input.setText(
-                "Store in a dry place and shaded area. Close bag after use to prevent moisture intake & soiling.")
-
-        else:
-            self.hazard_stacked_layout.setCurrentIndex(0)  # Show detailed
-            self.hazard_toggle_button.setText("Switch Layout")
-            self.hazard_preliminaries_input.setText("Inert nuisance dust can cause lung irritation.")
-            self.hazard_entry_route_input.setText("Inhalation of airborne dust.")
-            self.hazard_symptoms_input.setText("Coughing, sneezing or irritation of the mucous membrane.")
-            self.hazard_restrictive_condition_input.setText("Breathing or respiratory tract disorder/disease")
-            self.hazard_eyes_input.setText("Inert foreign body hazard.")
-            self.hazard_general_note_input.setText(
-                "No adverse health effects during the course of normal industrial handling. If large quantities ingested, seek medical attention.")
-
-            self.hazard_single_field_input.clear()
-            # section 7
-            self.handling_storage_stacked_layout.setCurrentIndex(0)
-            self.msds_storage_single_input.clear()
-            self.handling_input.setText("Use suitable ventilation to prevent excessive inhalation and skin contact. Avoid static discharge during powder handling operation")
-            self.msds_storage_input.setText("Store in dry area, wet material may become very slippery. Close bag after use to prevent moisture intake & soiling.")
-
-    self.hazard_toggle_button.clicked.connect(toggle_hazard_layout)
 
     # ---- 8) .. 17) ----
     main_v_layout.addWidget(create_form_group("8) Exposure Controls/Personal Protection", [
@@ -560,6 +620,10 @@ def create_form(self):
     outer.addStretch(1)
     self.msds_form_layout.addLayout(outer)
 
+    # the widgets exist now: show the right layout, placeholders and yellow markers for the current type
+    _sync_mode_ui(self, current_mode)
+    _refresh_usual(self, force=True)
+
     # Perform initial validation after all widgets are set up
     check_empty_fields(self)
 
@@ -573,7 +637,7 @@ def create_dynamic_section9(self):
     self.physical_properties_layout.setSpacing(8)
     self.physical_property_rows = []  # Reset for cleanliness
 
-    for name, value in DEFAULT_SECTION9:
+    for name, value in D.section9_defaults(current_mode):
         self.physical_properties_layout.addWidget(_create_property_row(self, name, value))
 
     # Add button row at the bottom
@@ -592,6 +656,24 @@ def create_dynamic_section9(self):
 
     group.setLayout(self.physical_properties_layout)
     return group
+
+
+def _clear_section9_rows(self):
+    """Remove every property row (the last item, the 'Add Property' row, stays)."""
+    while self.physical_properties_layout.count() > 1:
+        item = self.physical_properties_layout.takeAt(0)
+        if item and item.widget():
+            item.widget().deleteLater()
+    self.physical_property_rows.clear()
+
+
+def _set_section9_rows(self, rows):
+    """Replace all property rows by `rows` = [(name, value), ...]."""
+    _clear_section9_rows(self)
+    for name, value in rows:
+        row = _create_property_row(self, name, value)
+        self.physical_properties_layout.insertWidget(self.physical_properties_layout.count() - 1, row)
+    _update_property_buttons(self)
 
 
 def _create_property_row(self, name, value):
@@ -637,6 +719,11 @@ def _create_property_row(self, name, value):
 
     name_edit.textChanged.connect(lambda: validate_field(name_edit))
     value_edit.textChanged.connect(lambda: validate_field(value_edit))
+
+    # yellow bar on the value of the rows that usually change (Appearance, Light fastness, ...)
+    _set_usual(value_edit, D.is_usual_section9(current_mode, name))
+    name_edit.textChanged.connect(
+        lambda text: _set_usual(value_edit, D.is_usual_section9(current_mode, text)))
 
     def delete_row():
         idx = self.physical_properties_layout.indexOf(row_widget)
@@ -810,14 +897,14 @@ def form_btn(self):
 
 
 def clear_msds_form(self):
-    """Reset every field to its default text."""
+    """Reset every field to the default text of the selected sheet type (MB / DC)."""
     global current_msds_id
     try:
         current_msds_id = None  # Reset the global MSDS ID
         if hasattr(self, 'btn_msds_print'):
             self.btn_msds_print.setEnabled(False)
 
-            # Stop all typing timers (assuming these exist and are QTimer objects)
+        # Stop all typing timers (assuming these exist and are QTimer objects)
         if hasattr(self, 'tel_label_timer') and self.tel_label_timer.isActive():
             self.tel_label_timer.stop()
         if hasattr(self, 'facsimile_label_timer') and self.facsimile_label_timer.isActive():
@@ -825,80 +912,20 @@ def clear_msds_form(self):
         if hasattr(self, 'email_label_timer') and self.email_label_timer.isActive():
             self.email_label_timer.stop()
 
-        self.manufactured_label_input.setPlainText(
-            "Masterbatch Philippines, Inc. 24 Diamond Road, Caloocan Industrial Subdivision, Bo. Kaybiga, Caloocan City, Philippines")
-        self.tel_label_input.setText("(632) 70023720")
-        self.facsimile_label_input.setText("(63) 9088106546")
-        self.email_label_input.setText("sales@polycolor.biz")
-        self.composition_input.setPlainText(
-            "The preparation consists of organic and inorganic pigments, and other additives.")
-        self.hazard_preliminaries_input.setText("Inert nuisance dust can cause lung irritation.")
-        self.hazard_entry_route_input.setText("Inhalation of airborne dust.")
-        self.hazard_symptoms_input.setText("Coughing, sneezing or irritation of the mucous membrane.")
-        self.hazard_restrictive_condition_input.setText("Breathing or respiratory tract disorder/disease")
-        self.hazard_eyes_input.setText("Inert foreign body hazard.")
-        self.hazard_general_note_input.setText(
-            "No adverse health effects during the course of normal industrial handling. If large quantities ingested, seek medical attention.")
-        self.first_aid_inhalation_input.setText("Remove to fresh air.")
-        self.first_aid_eyes.setText("Flush with large amount of water. If irritation persists, seek medical attention.")
-        self.first_aid_skin_input.setText("Wash with mild soap")
-        self.first_aid_ingestion_input.setText(
-            "No adverse health effects during the course of normal industrial handling. If large quantities ingested, seek medical attention.")
-        self.fire_fighting_media_input.setPlainText("Water spray, dry powder, foam, carbon dioxide")
-        self.accidental_release_input.setPlainText(
-            "Use any mechanical means to remove pellet. Prevent entry to natural waterways.")
-        self.handling_input.setText(
-            "Use suitable ventilation to prevent excessive inhalation and skin contact. Avoid static discharge during powder handling operation.")
-        self.msds_storage_input.setText(
-            "Store in dry area, wet material may become very slippery. Close bag after use to prevent moisture intake & soiling.")
-        self.exposure_control_input.setText(
-            "Generally handle in areas of good ventilation. If airborne dust is over or thought to approach the occupational exposure standard, local exhaust may be necessary.")
-        self.respiratory_protection_input.setText(
-            "Use approved dust respirator if occupational exposure standard is likely to be exceeded.")
-        self.hand_protection_input.setText("Use gloves for prolonged/repeated contact.")
-        self.eye_protection_input.setText("Use safety glasses/ goggles.")
-        self.skin_protection_input.setText(
-            "Wear normal protective overalls. Sensitive skin can be protected further by use of barrier cream or moisturizer.")
+        # every box -> default of the current sheet type
+        for attr, text in D.defaults(current_mode).items():
+            widget = getattr(self, attr, None)
+            if widget is not None:
+                _set_text(widget, text)
 
-        # Reset Section 9 to initials
+        # Reset Section 9 to the defaults of the sheet type
         if hasattr(self, 'physical_properties_layout'):
-            while self.physical_properties_layout.count() > 1:  # Keep add row
-                item = self.physical_properties_layout.takeAt(0)
-                if item.widget():
-                    item.widget().deleteLater()
-            self.physical_property_rows.clear()
-
-            for name, value in DEFAULT_SECTION9:
-                row = _create_property_row(self, name, value)
-                self.physical_properties_layout.insertWidget(self.physical_properties_layout.count() - 1, row)
-            _update_property_buttons(self)
+            _set_section9_rows(self, D.section9_defaults(current_mode))
 
         section2_ui.set_rows(self, [])
 
-        # back to the detailed Hazard (3) / Handling & Storage (7) layout
-        if hasattr(self, "hazard_toggle_button"):
-            self.hazard_stacked_layout.setCurrentIndex(0)
-            self.handling_storage_stacked_layout.setCurrentIndex(0)
-            self.hazard_toggle_button.setChecked(False)
-            self.hazard_toggle_button.setText("Switch Layout")
-            self.hazard_single_field_input.clear()
-            self.msds_storage_single_input.clear()
-
-        self.stability_reactivity_input.setPlainText("This product is chemically stable and non-reactive.")
-        self.conditions_to_avoid_input.setText("None")
-        self.materials_to_avoid_input.setText("None")
-        self.hazardous_decomposition_input.setText("None")
-        self.toxicological_input.setPlainText("This product is non-toxic and physiologically harmless.")
-        self.ecological_input.setPlainText("No known harmful effects to human lives or to the environment.")
-        self.disposal_input.setPlainText(
-            "If recycling is not practicable, dispose in compliance with local regulation.")
-        self.transport_input.setPlainText(
-            "This material is not classified as a dangerous good by International Transport regulation.")
-        self.regulatory_input.setPlainText(
-            "This product is not classified in the list of controlled substances implemented by the government.")
-        self.msds_shelf_life_input.setPlainText(
-            "Twelve months from date of production when the product is stored in unbroken packaging.")
-        self.other_input.setPlainText("None")
+        # right layout (MB: simplified / DC: detailed), placeholders and yellow markers
+        _sync_mode_ui(self, current_mode)
 
         # Clear QLineEdit/QTextEdit fields
         for widget in [
