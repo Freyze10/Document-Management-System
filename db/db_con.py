@@ -1622,3 +1622,59 @@ def register_user(username, hashed_password):
         if conn:
             conn.rollback()
         raise e
+
+def get_all_msds_customers():
+    """Customer names for the MSDS Customer Name dropdown (view tbl_customer in db_msds)."""
+    conn = get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT customer FROM tbl_customer
+                WHERE customer IS NOT NULL AND TRIM(customer) <> ''
+                ORDER BY customer
+            """)
+            return [r[0] for r in cur.fetchall()]
+    finally:
+        conn.close()
+
+
+
+# write this in the postgre db_msds query to create a view table from the colormatch database
+
+# -- 1. Enable the foreign data wrapper extension in db_msds
+# CREATE EXTENSION IF NOT EXISTS postgres_fdw;
+#
+# -- 2. Define the foreign server connection pointing to db_colormatch
+# CREATE SERVER IF NOT EXISTS colormatch_server
+# FOREIGN DATA WRAPPER postgres_fdw
+# OPTIONS (
+#     host '192.168.1.13',
+#     port '5432',
+#     dbname 'db_colormatch'
+# );
+#
+# -- 3. Map the local postgres user in db_msds to the remote user in db_colormatch
+# CREATE USER MAPPING IF NOT EXISTS FOR postgres
+# SERVER colormatch_server
+# OPTIONS (
+#     user 'postgres',
+#     password 'mbpi'
+# );
+#
+# -- 4. Import the schema or specific table structure into a local foreign table definition
+# CREATE FOREIGN TABLE IF NOT EXISTS ftbl_customer (
+#     id integer NOT NULL,
+#     customer varchar(255) NOT NULL
+# )
+# SERVER colormatch_server
+# OPTIONS (
+#     schema_name 'public',
+#     table_name 'tbl_customer'
+# );
+#
+# -- Create a clean view named tbl_customer inside db_msds
+# CREATE OR REPLACE VIEW tbl_customer AS
+# SELECT
+#     id,
+#     customer
+# FROM ftbl_customer;

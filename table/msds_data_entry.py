@@ -1,9 +1,11 @@
 import html
+import threading
+import time
 
-from PyQt6.QtCore import Qt, QObject, QEvent, QTimer
-from PyQt6.QtGui import QFontMetrics, QKeySequence, QShortcut
+from PyQt6.QtCore import Qt, QObject, QEvent, QTimer, QStringListModel, pyqtSignal
+from PyQt6.QtGui import QAction, QFontMetrics, QKeySequence, QShortcut
 from PyQt6.QtWidgets import (QVBoxLayout, QHBoxLayout, QLabel, QWidget, QLineEdit, QPushButton, QTextEdit,
-                             QGroupBox, QGridLayout, QInputDialog, QSizePolicy, QButtonGroup)
+                             QGroupBox, QGridLayout, QInputDialog, QSizePolicy, QButtonGroup, QCompleter, QStyle)
 
 from alert import window_alert
 from db import db_con
@@ -16,6 +18,16 @@ _loading = False        # True while a saved record is being loaded (then Appear
 
 LABEL_W = 205           # px, label column of every card
 FORM_MAX_W = 1120       # px, the form is centered and never wider than this
+
+CUSTOMER_REFRESH_SECONDS = 60     # the customer list is re-read from the database at most this often
+
+CUSTOMER_POPUP_QSS = """
+    QListView { background-color: #ffffff; border: 1px solid #ced4da; border-radius: 6px;
+                font-size: 13px; padding: 4px; outline: 0; }
+    QListView::item { padding: 6px 10px; border-radius: 4px; color: #343a40; }
+    QListView::item:hover { background-color: #e9f5ff; }
+    QListView::item:selected { background-color: #007bff; color: #ffffff; }
+"""
 
 USUAL_TIP = "Usually changed for each product"
 USUAL_CHIP = "background-color:#ffe066; color:#495057;"    # the yellow of the Word highlighter
@@ -238,6 +250,80 @@ class _TradeNameFocus(QObject):
         if e.hasFocus():
             e.deselect()
             e.setCursorPosition(len(e.text()))
+
+
+class _CustomerSuggest(QObject):
+    """Customer Name = a free text box with a dropdown of the customers in tbl_customer.
+
+    * typing shows the matching customers (anywhere in the name, any case) - the user can still type
+      ANY name, nothing is forced to be in the list
+    * the arrow at the right end (or the Down key) shows the whole list
+    * the list is read from the database in a background thread, at start and again (at most every
+      CUSTOMER_REFRESH_SECONDS) when the box gets focus, so new customers show up without restarting;
+      if the database cannot be reached the last list stays in use"""
+
+    _loaded = pyqtSignal(object)            # list of names, or None when the read failed
+
+    def __init__(self, edit):
+        super().__init__(edit)
+        self.edit = edit
+        self._last = 0.0
+        self._busy = False
+
+        self.model = QStringListModel(self)
+        self.completer = QCompleter(self.model, edit)
+        self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
+        self.completer.setFilterMode(Qt.MatchFlag.MatchContains)
+        self.completer.setCompletionMode(QCompleter.CompletionMode.PopupCompletion)
+        self.completer.setMaxVisibleItems(12)
+        self.completer.popup().setStyleSheet(CUSTOMER_POPUP_QSS)
+        edit.setCompleter(self.completer)
+
+        arrow = QAction(edit.style().standardIcon(QStyle.StandardPixmap.SP_ArrowDown), "Show all customers", edit)
+        arrow.setToolTip("Show all customers")
+        arrow.triggered.connect(self.show_all)
+        edit.addAction(arrow, QLineEdit.ActionPosition.TrailingPosition)
+
+        self._loaded.connect(self._apply)
+        edit.installEventFilter(self)
+        self.refresh(force=True)
+
+    # -- list ---------------------------------------------------------------
+    def refresh(self, force=False):
+        if self._busy or (not force and time.monotonic() - self._last < CUSTOMER_REFRESH_SECONDS):
+            return
+        self._busy = True
+        threading.Thread(target=self._read, name="customer-list", daemon=True).start()
+
+    def _read(self):                         # background thread: only touches the database
+        try:
+            names = db_con.get_all_msds_customers()
+        except Exception:
+            names = None
+        self._loaded.emit(names)
+
+    def _apply(self, names):                 # GUI thread
+        self._busy = False
+        self._last = time.monotonic()        # also after a failure: no hammering while the server is down
+        if names is None:
+            return
+        clean = sorted({str(n).strip() for n in names if n and str(n).strip()}, key=str.lower)
+        self.model.setStringList(clean)
+
+    # -- dropdown -------------------------------------------------------------
+    def show_all(self):
+        self.refresh()
+        self.edit.setFocus()
+        self.completer.setCompletionPrefix("")
+        self.completer.complete()
+
+    def eventFilter(self, obj, ev):
+        if ev.type() == QEvent.Type.FocusIn:
+            self.refresh()                   # picks up customers added since the last read
+        elif ev.type() == QEvent.Type.KeyPress and ev.key() == Qt.Key.Key_Down and not self.completer.popup().isVisible():
+            self.show_all()
+            return True
+        return False
 
 
 def _apply_appearance(self):
@@ -689,6 +775,9 @@ def create_form(self):
     outer.addWidget(form_widget, 100)
     outer.addStretch(1)
     self.msds_form_layout.addLayout(outer)
+
+    # Customer Name: free text + dropdown of the customers from tbl_customer
+    self.customer_suggest = _CustomerSuggest(self.customer_name_input)
 
     # Trade Name: starts with 'Masterbatch ' / 'Colorant '; what is typed after it feeds Section 9 Appearance
     self.trade_label_input.setProperty("_trade_name", True)
