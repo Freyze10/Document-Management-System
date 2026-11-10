@@ -2,7 +2,7 @@
 Fill the MSDS Word templates (DC / MB1 / MB2) through Word COM (pywin32),
 then export to PDF (for the preview / download) or print.
 
-Templates live in  <app resources>/print/template-msds/
+Templates live in  <app folder>/print/template-msds/
     dc.docx   -> has the 5 hazard bullets in Section 3
     mb1.docx  -> single general-note paragraph in Section 3, plain Section 2
     mb2.docx  -> same as mb1 + ingredient breakdown table in Section 2
@@ -34,6 +34,7 @@ import itertools
 import os
 import queue
 import shutil
+import sys
 import tempfile
 import threading
 import time
@@ -45,13 +46,18 @@ import pythoncom
 import pywintypes
 import win32com.client as win32
 
-from utils import abs_path
 from print import word_layout
 
 
-TEMPLATE_DC = "print/template-msds/dc.docx"
-TEMPLATE_MB1 = "print/template-msds/mb1.docx"
-TEMPLATE_MB2 = "print/template-msds/mb2.docx"
+# Where the templates live. When the app is packaged with PyInstaller the files are
+# unpacked into sys._MEIPASS; otherwise we use the project folder (the folder that
+# contains "print/", because this file sits inside print/).
+BASE_DIR = getattr(sys, "_MEIPASS", os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+TEMPLATE_DIR = os.path.join(BASE_DIR, "print", "template-msds")
+
+TEMPLATE_DC = os.path.join(TEMPLATE_DIR, "dc.docx")
+TEMPLATE_MB1 = os.path.join(TEMPLATE_DIR, "mb1.docx")
+TEMPLATE_MB2 = os.path.join(TEMPLATE_DIR, "mb2.docx")
 ALL_TEMPLATES = (TEMPLATE_MB1, TEMPLATE_DC, TEMPLATE_MB2)
 
 TIMING = True       # print "[msds timing] ..." for every render (set False when you are done measuring)
@@ -381,11 +387,11 @@ def _discard_spare(sp):
 # --------------------------------------------------------------------------
 def _copy_template(template):
     """-> (tmpdir, path of a private copy). Unique file name so Word never
-    mistakes two open copies for the same document."""
-    src = abs_path.resource(template)
+    mistakes two open copies for the same document.
+    `template` is the absolute path of the template file."""
     tmpdir = tempfile.mkdtemp(prefix="msds_")
-    dst = os.path.join(tmpdir, f"{uuid.uuid4().hex[:8]}_{os.path.basename(src)}")
-    shutil.copy(src, dst)
+    dst = os.path.join(tmpdir, f"{uuid.uuid4().hex[:8]}_{os.path.basename(template)}")
+    shutil.copy(template, dst)
     return tmpdir, os.path.abspath(dst)
 
 
@@ -398,7 +404,7 @@ def _make_spare(template, warm_engine=False):
             return
         word = _get_word()
         tmpdir, dst = _copy_template(template)
-        mtime = os.path.getmtime(abs_path.resource(template))
+        mtime = os.path.getmtime(template)
         doc = word.Documents.Open(dst, ReadOnly=False, AddToRecentFiles=False, Visible=False)
         if warm_engine and not _engine_warm:
             # the first export after Word starts is slow (fonts, PDF engine): do it now, once
@@ -433,8 +439,8 @@ def _acquire_template(word, template):
     spare = _spares.pop(template, None)
     if spare is not None:
         try:
-            if spare.mtime == os.path.getmtime(abs_path.resource(template)):   # template not edited meanwhile
-                spare.doc.Name                                                  # ping: raises if closed
+            if spare.mtime == os.path.getmtime(template):   # template not edited meanwhile
+                spare.doc.Name                               # ping: raises if closed
                 return spare.doc, spare.tmpdir, True
         except Exception:
             pass
