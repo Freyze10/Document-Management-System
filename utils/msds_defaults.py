@@ -159,6 +159,10 @@ FORCE_ON_SWITCH = (
     "hazard_single_field_input", "handling_input", "msds_storage_input", "msds_storage_single_input",
 )
 
+# --- Trade Name:  "<prefix> <color words> <product code>"  e.g. "Masterbatch Light Blue RA6804E" ---
+TRADE_PREFIX = {MB: "Masterbatch", DC: "Colorant"}                 # first word, put in the box by default
+APPEARANCE_SUFFIX = {MB: "pellet form", DC: "powder form"}          # added after the color in Section 9
+
 
 # --------------------------------------------------------------------------
 # logic (pure functions, easy to test)
@@ -173,6 +177,41 @@ def section9_defaults(mode):
 
 def is_usual_section9(mode, name):
     return (name or "").strip().lower() in USUAL_SECTION9[mode]
+
+
+# ---- trade name -> Section 9 "Appearance" ----
+def trade_prefix_text(mode):
+    """What the Trade Name box holds by default: 'Masterbatch ' / 'Colorant ' (with the space)."""
+    return TRADE_PREFIX[mode] + " "
+
+
+def trade_name_is_empty(text):
+    """True while nothing but the prefix (or nothing at all) is in the Trade Name box."""
+    return len((text or "").split()) <= 1
+
+
+def color_from_trade_name(text):
+    """Split by spaces, drop the first word (prefix) and the last word (product code).
+    'Masterbatch Light Blue RA6804E' -> 'Light Blue'      'Masterbatch Red' -> ''"""
+    return " ".join((text or "").split()[1:-1])
+
+
+def appearance_from_trade_name(mode, text):
+    """'Red pellet form' (MB) / 'Red powder form' (DC), or None while there is no color yet."""
+    color = color_from_trade_name(text)
+    return f"{color} {APPEARANCE_SUFFIX[mode]}" if color else None
+
+
+def swap_trade_prefix(text, old_mode, new_mode):
+    """MB <-> DC switch: 'Masterbatch Red RA1' -> 'Colorant Red RA1'.
+    An empty box gets the new prefix, text that does not start with the old prefix is left alone."""
+    if not (text or "").strip():
+        return trade_prefix_text(new_mode)
+    old = TRADE_PREFIX[old_mode]
+    if text.lstrip().lower().startswith(old.lower()):
+        rest = text.lstrip()[len(old):]
+        return TRADE_PREFIX[new_mode] + rest
+    return text
 
 
 def switch_values(current, old_mode, new_mode):

@@ -48,6 +48,7 @@ import win32com.client as win32
 from utils import abs_path
 from print import word_layout
 
+
 TEMPLATE_DC = "print/template-msds/dc.docx"
 TEMPLATE_MB1 = "print/template-msds/mb1.docx"
 TEMPLATE_MB2 = "print/template-msds/mb2.docx"

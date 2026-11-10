@@ -12,6 +12,7 @@ from utils import msds_defaults as D        # default values of the MB / DC shee
 
 current_msds_id = None  # Global variable to store the current MSDS ID
 current_mode = D.DC     # sheet type of the form: D.MB or D.DC (the defaults follow it)
+_loading = False        # True while a saved record is being loaded (then Appearance is NOT rebuilt from the trade name)
 
 LABEL_W = 205           # px, label column of every card
 FORM_MAX_W = 1120       # px, the form is centered and never wider than this
@@ -217,6 +218,43 @@ def _wire(widget):
             _AutoHeight(widget)
 
 
+class _TradeNameFocus(QObject):
+    """Tab (or shortcut) into the Trade Name box: the cursor goes to the END, nothing is selected,
+    so the user simply keeps typing the color and product code after 'Masterbatch ' / 'Colorant '.
+    (A mouse click keeps the clicked position.)"""
+
+    def __init__(self, edit):
+        super().__init__(edit)
+        self.edit = edit
+        edit.installEventFilter(self)
+
+    def eventFilter(self, obj, ev):
+        if ev.type() == QEvent.Type.FocusIn and ev.reason() != Qt.FocusReason.MouseFocusReason:
+            QTimer.singleShot(0, self._to_end)
+        return False
+
+    def _to_end(self):
+        e = self.edit
+        if e.hasFocus():
+            e.deselect()
+            e.setCursorPosition(len(e.text()))
+
+
+def _apply_appearance(self):
+    """Section 9 'Appearance' = color words of the Trade Name + 'pellet form' (MB) / 'powder form' (DC).
+    Trade Name 'Masterbatch Red RA6804E' -> 'Red pellet form'.  No color typed yet -> the plain default."""
+    if _loading:
+        return
+    value = D.appearance_from_trade_name(current_mode, self.trade_label_input.text())
+    for name_edit, value_edit in getattr(self, "physical_property_rows", []):
+        if name_edit.text().strip().lower() == "appearance":
+            if value is None:
+                value = dict((n.lower(), v) for n, v in D.section9_defaults(current_mode)).get("appearance", "")
+            if value_edit.text() != value:
+                value_edit.setText(value)
+            break
+
+
 def _fit_stack(stack):
     """A QStackedLayout is as tall as its tallest page. Make the hidden pages
     ignore their height so the card shrinks when the short page is shown."""
@@ -343,7 +381,14 @@ def set_mode(self, mode):
         rows = [(n.text(), v.text()) for n, v in self.physical_property_rows]
         _set_section9_rows(self, D.merge_section9(rows, old, mode))
 
+    # Trade Name keeps what was typed, only its first word follows the sheet type
+    trade = self.trade_label_input.text()
+    swapped = D.swap_trade_prefix(trade, old, mode)
+    if swapped != trade:
+        self.trade_label_input.setText(swapped)
+
     _sync_mode_ui(self, mode)
+    _apply_appearance(self)          # 'Red pellet form' <-> 'Red powder form'
     check_empty_fields(self)
 
 
@@ -382,6 +427,16 @@ def _mode_toggle(self):
 # load / build
 # --------------------------------------------------------------------------
 def load_msds_details(self, msds_id):
+    """Fill the form from a saved record (the saved values are shown as they are)."""
+    global _loading
+    _loading = True
+    try:
+        _load_msds_details(self, msds_id)
+    finally:
+        _loading = False
+
+
+def _load_msds_details(self, msds_id):
     global current_msds_id
     current_msds_id = msds_id
 
@@ -634,6 +689,11 @@ def create_form(self):
     outer.addWidget(form_widget, 100)
     outer.addStretch(1)
     self.msds_form_layout.addLayout(outer)
+
+    # Trade Name: starts with 'Masterbatch ' / 'Colorant '; what is typed after it feeds Section 9 Appearance
+    self.trade_label_input.setProperty("_trade_name", True)
+    _TradeNameFocus(self.trade_label_input)
+    self.trade_label_input.textChanged.connect(lambda _t: _apply_appearance(self))
 
     # the widgets exist now: show the right layout, placeholders and yellow markers for the current type
     _sync_mode_ui(self, current_mode)
@@ -942,13 +1002,14 @@ def clear_msds_form(self):
         # right layout (MB: simplified / DC: detailed), placeholders and yellow markers
         _sync_mode_ui(self, current_mode)
 
-        # Clear QLineEdit/QTextEdit fields
-        for widget in [
-            self.customer_name_input,
-            self.trade_label_input,
-        ]:
+        # Customer: empty.  Trade Name: only the first word of the sheet type ('Masterbatch ' / 'Colorant ')
+        for widget, text in (
+            (self.customer_name_input, ""),
+            (self.trade_label_input, D.trade_prefix_text(current_mode)),
+        ):
             widget.blockSignals(True)
-            widget.clear()
+            widget.setText(text)
+            widget.setCursorPosition(len(text))
             widget.blockSignals(False)
             # Ensure the "empty_field" class is removed if it was present
             if widget.property("class") == "empty_field":
@@ -966,6 +1027,8 @@ def validate_field(widget):
     is_empty = False
     if isinstance(widget, QLineEdit):
         is_empty = not widget.text().strip()
+        if widget.property("_trade_name") and D.trade_name_is_empty(widget.text()):
+            is_empty = True          # only 'Masterbatch' / 'Colorant' typed so far
     elif isinstance(widget, QTextEdit):
         is_empty = not widget.toPlainText().strip()
 
