@@ -241,14 +241,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00115" summary="comment out the debug database">
-      <option name="closed" value="true" />
-      <created>1765248753058</created>
-      <option name="number" value="00115" />
-      <option name="presentableId" value="LOCAL-00115" />
-      <option name="project" value="LOCAL" />
-      <updated>1765248753058</updated>
-    </task>
     <task id="LOCAL-00116" summary="connected to the server again">
       <option name="closed" value="true" />
       <created>1765248765284</created>
@@ -633,7 +625,15 @@
       <option name="project" value="LOCAL" />
       <updated>1794296594539</updated>
     </task>
-    <option name="localTasksCounter" value="164" />
+    <task id="LOCAL-00164" summary="added a view table for the customer so a dropdown can show in the entry of cusotmer">
+      <option name="closed" value="true" />
+      <created>1794298358728</created>
+      <option name="number" value="00164" />
+      <option name="presentableId" value="LOCAL-00164" />
+      <option name="project" value="LOCAL" />
+      <updated>1794298358728</updated>
+    </task>
+    <option name="localTasksCounter" value="165" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -661,8 +661,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="enable the server connection on the database" />
-    <MESSAGE value="updated the output apk/exe" />
     <MESSAGE value="added the quality in the checking if the current record already exists in the coa database" />
     <MESSAGE value="upodated the database condition to check the quantity delivered output more accurate" />
     <MESSAGE value="removed the vertical header and add a row count for coa table" />
@@ -686,7 +684,9 @@
     <MESSAGE value="ADDED CTRL + N FOR NEW ENTRY" />
     <MESSAGE value="added a new default value for the mb and dc" />
     <MESSAGE value="fix the absolute path for the print to get the template" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix the absolute path for the print to get the template" />
+    <MESSAGE value="added a view table for the customer so a dropdown can show in the entry of cusotmer" />
+    <MESSAGE value="created updated exe based on the user requests" />
+    <option name="LAST_COMMIT_MESSAGE" value="created updated exe based on the user requests" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
