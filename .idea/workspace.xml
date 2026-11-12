@@ -241,14 +241,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00116" summary="connected to the server again">
-      <option name="closed" value="true" />
-      <created>1765248765284</created>
-      <option name="number" value="00116" />
-      <option name="presentableId" value="LOCAL-00116" />
-      <option name="project" value="LOCAL" />
-      <updated>1765248765284</updated>
-    </task>
     <task id="LOCAL-00117" summary="added condition in toggle tab for rrf">
       <option name="closed" value="true" />
       <created>1765250161374</created>
@@ -633,7 +625,15 @@
       <option name="project" value="LOCAL" />
       <updated>1794298358728</updated>
     </task>
-    <option name="localTasksCounter" value="165" />
+    <task id="LOCAL-00165" summary="created updated exe based on the user requests">
+      <option name="closed" value="true" />
+      <created>1794299413598</created>
+      <option name="number" value="00165" />
+      <option name="presentableId" value="LOCAL-00165" />
+      <option name="project" value="LOCAL" />
+      <updated>1794299413600</updated>
+    </task>
+    <option name="localTasksCounter" value="166" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
