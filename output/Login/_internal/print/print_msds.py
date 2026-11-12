@@ -1,3 +1,5 @@
+import re
+
 from PyQt6.QtCore import QBuffer, QIODevice, Qt, pyqtSignal
 from PyQt6.QtGui import QAction, QIcon
 from PyQt6.QtPdf import QPdfDocument
@@ -26,6 +28,11 @@ def prefetch_record(msds_id):
     except Exception:
         pass                              # a failed prefetch must never bother the user
 
+def _with_tds(filename):
+    """'... MSDS 11-12-2026'  ->  '... MSDS TDS 11-12-2026'"""
+    if not filename or re.search(r"\bTDS\b", filename, re.IGNORECASE):
+        return filename
+    return re.sub(r"\bMSDS\b(?!.*\bMSDS\b)", "MSDS TDS", filename, count=1)
 
 class FileMSDS(QWidget):
     # emitted from the Word worker thread -> handled on the GUI thread
@@ -169,7 +176,7 @@ class FileMSDS(QWidget):
         if not self.pdf_bytes:
             return
 
-        file_path, _ = QFileDialog.getSaveFileName(self, "Save PDF", filename, "PDF Files (*.pdf)")
+        file_path, _ = QFileDialog.getSaveFileName(self, "Save PDF", _with_tds(filename), "PDF Files (*.pdf)")
         if not file_path:  # user cancelled
             return None
         if not file_path.endswith(".pdf"):

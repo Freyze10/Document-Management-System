@@ -241,14 +241,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00118" summary="added new exe">
-      <option name="closed" value="true" />
-      <created>1765250361681</created>
-      <option name="number" value="00118" />
-      <option name="presentableId" value="LOCAL-00118" />
-      <option name="project" value="LOCAL" />
-      <updated>1765250361681</updated>
-    </task>
     <task id="LOCAL-00119" summary="renamed new exe">
       <option name="closed" value="true" />
       <created>1765250527626</created>
@@ -633,7 +625,15 @@
       <option name="project" value="LOCAL" />
       <updated>1794443263147</updated>
     </task>
-    <option name="localTasksCounter" value="167" />
+    <task id="LOCAL-00167" summary="modified the template of tds and created a updated installer">
+      <option name="closed" value="true" />
+      <created>1794462132979</created>
+      <option name="number" value="00167" />
+      <option name="presentableId" value="LOCAL-00167" />
+      <option name="project" value="LOCAL" />
+      <updated>1794462132979</updated>
+    </task>
+    <option name="localTasksCounter" value="168" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
