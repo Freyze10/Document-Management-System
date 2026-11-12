@@ -85,12 +85,6 @@ def _safe(name):
     name = re.sub(r'[<>:"/\\|?*\x00-\x1f]', "_", str(name)).strip(" .")
     return name
 
-def _with_tds(filename):
-    """'... MSDS 11-12-2026'  ->  '... MSDS TDS 11-12-2026'  (only inserts TDS, name and date stay)"""
-    if not filename or re.search(r"\bTDS\b", filename, re.IGNORECASE):
-        return filename
-    return re.sub(r"\bMSDS\b(?!.*\bMSDS\b)", "MSDS TDS", filename, count=1)
-
 
 def preview_filename(window, msds_id):
     """The name the print preview uses: the text of the record's first cell in the Records list.
@@ -106,7 +100,7 @@ def preview_filename(window, msds_id):
     if not name.strip():                                    # list not available: same idea from the DB
         row = db_con.get_single_msds_data(msds_id)
         name = str(row[2] or "").strip() or str(row[1] or "").strip()
-    name = _safe(_with_tds(name)) or f"MSDS_{msds_id}"
+    name = _safe(name) or f"MSDS_{msds_id}"
     return name if name.lower().endswith(".pdf") else name + ".pdf"
 
 

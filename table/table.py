@@ -19,7 +19,7 @@ def load_msds_table(self):
     for row_idx, record in enumerate(records):
         msds_id, customer_name, _, product_code, creation_date = record[:5]
         revision_date_str = creation_date.strftime("%m-%d-%Y")
-        display_text = f"{customer_name} {product_code} MSDS {revision_date_str}".upper()
+        display_text = f"{customer_name} {product_code} MSDS TDS {revision_date_str}".upper()
 
         self.msds_records_table.insertRow(row_idx)
         self.msds_records_table.setItem(row_idx, 0, self.create_readonly_item(display_text, column_idx=0))
