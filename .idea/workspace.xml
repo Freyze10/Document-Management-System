@@ -241,14 +241,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00117" summary="added condition in toggle tab for rrf">
-      <option name="closed" value="true" />
-      <created>1765250161374</created>
-      <option name="number" value="00117" />
-      <option name="presentableId" value="LOCAL-00117" />
-      <option name="project" value="LOCAL" />
-      <updated>1765250161374</updated>
-    </task>
     <task id="LOCAL-00118" summary="added new exe">
       <option name="closed" value="true" />
       <created>1765250361681</created>
@@ -633,7 +625,15 @@
       <option name="project" value="LOCAL" />
       <updated>1794299413600</updated>
     </task>
-    <option name="localTasksCounter" value="166" />
+    <task id="LOCAL-00166" summary="modified the template of tds and created a updated installer">
+      <option name="closed" value="true" />
+      <created>1794443263146</created>
+      <option name="number" value="00166" />
+      <option name="presentableId" value="LOCAL-00166" />
+      <option name="project" value="LOCAL" />
+      <updated>1794443263147</updated>
+    </task>
+    <option name="localTasksCounter" value="167" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -661,7 +661,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="added the quality in the checking if the current record already exists in the coa database" />
     <MESSAGE value="upodated the database condition to check the quantity delivered output more accurate" />
     <MESSAGE value="removed the vertical header and add a row count for coa table" />
     <MESSAGE value="updated exe" />
@@ -686,7 +685,8 @@
     <MESSAGE value="fix the absolute path for the print to get the template" />
     <MESSAGE value="added a view table for the customer so a dropdown can show in the entry of cusotmer" />
     <MESSAGE value="created updated exe based on the user requests" />
-    <option name="LAST_COMMIT_MESSAGE" value="created updated exe based on the user requests" />
+    <MESSAGE value="modified the template of tds and created a updated installer" />
+    <option name="LAST_COMMIT_MESSAGE" value="modified the template of tds and created a updated installer" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
