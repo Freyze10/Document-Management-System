@@ -242,22 +242,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00118" summary="added new exe">
-      <option name="closed" value="true" />
-      <created>1765250361681</created>
-      <option name="number" value="00118" />
-      <option name="presentableId" value="LOCAL-00118" />
-      <option name="project" value="LOCAL" />
-      <updated>1765250361681</updated>
-    </task>
-    <task id="LOCAL-00119" summary="renamed new exe">
-      <option name="closed" value="true" />
-      <created>1765250527626</created>
-      <option name="number" value="00119" />
-      <option name="presentableId" value="LOCAL-00119" />
-      <option name="project" value="LOCAL" />
-      <updated>1765250527626</updated>
-    </task>
     <task id="LOCAL-00120" summary="renamed new exe">
       <option name="closed" value="true" />
       <created>1765250893303</created>
@@ -634,7 +618,23 @@
       <option name="project" value="LOCAL" />
       <updated>1794443263147</updated>
     </task>
-    <option name="localTasksCounter" value="167" />
+    <task id="LOCAL-00167" summary="updated the template and changed the download name">
+      <option name="closed" value="true" />
+      <created>1794472662956</created>
+      <option name="number" value="00167" />
+      <option name="presentableId" value="LOCAL-00167" />
+      <option name="project" value="LOCAL" />
+      <updated>1794472662958</updated>
+    </task>
+    <task id="LOCAL-00168" summary="updatedthe template for better output">
+      <option name="closed" value="true" />
+      <created>1794529439596</created>
+      <option name="number" value="00168" />
+      <option name="presentableId" value="LOCAL-00168" />
+      <option name="project" value="LOCAL" />
+      <updated>1794529439596</updated>
+    </task>
+    <option name="localTasksCounter" value="169" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -662,8 +662,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="upodated the database condition to check the quantity delivered output more accurate" />
-    <MESSAGE value="removed the vertical header and add a row count for coa table" />
     <MESSAGE value="updated exe" />
     <MESSAGE value="updated search function for COA" />
     <MESSAGE value="updated coa exe" />
@@ -687,7 +685,9 @@
     <MESSAGE value="added a view table for the customer so a dropdown can show in the entry of cusotmer" />
     <MESSAGE value="created updated exe based on the user requests" />
     <MESSAGE value="modified the template of tds and created a updated installer" />
-    <option name="LAST_COMMIT_MESSAGE" value="modified the template of tds and created a updated installer" />
+    <MESSAGE value="updated the template and changed the download name" />
+    <MESSAGE value="updatedthe template for better output" />
+    <option name="LAST_COMMIT_MESSAGE" value="updatedthe template for better output" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
