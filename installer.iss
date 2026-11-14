@@ -4,7 +4,7 @@
 ; MySourceDir: the folder containing that exe and its _internal.
 
 #define MyAppName "MBPI Lab DMS"
-#define MyAppVersion "1.3.1"
+#define MyAppVersion "1.4.1"
 #define MyAppId "MBPI_DMS_System"
 #define MyAppExe "Login.exe"
 #define MySourceDir "output\Login"
