@@ -33,6 +33,7 @@ import hashlib
 import itertools
 import os
 import queue
+import re
 import shutil
 import sys
 import tempfile
@@ -74,6 +75,11 @@ PRIO_START = 1        # start Word
 PRIO_SPARE = 4        # re-open a spare template after one was used
 PRIO_PREFETCH = 5     # render a record before it is asked for
 PRIO_WARM = 6         # start-up: pre-open spares + warm the PDF engine
+
+# Protection for the user's own Word documents (see _hand_word_to_user)
+GUARD_INTERVAL = 2.0          # seconds: how often an idle worker checks for documents of the user
+HANDOVER_COOLDOWN = 120       # seconds without background work after a handover (no new hidden Word meanwhile)
+WD_ALERTS_ALL = -1
 
 S9_NAME_TOKEN = "[[S9_NAME]]"
 S9_VALUE_TOKEN = "[[S9_VALUE]]"
@@ -305,7 +311,12 @@ class _Worker:
         pythoncom.CoInitialize()
         try:
             while True:
-                _prio, _seq, fut, fn, args = self._q.get()
+                try:
+                    item = self._q.get(timeout=GUARD_INTERVAL)
+                except queue.Empty:
+                    _guard()  # idle: did the user open a document in our hidden Word?
+                    continue
+                _prio, _seq, fut, fn, args = item
                 if fn is None:                      # stop sentinel
                     break
                 if not fut.set_running_or_notify_cancel():
@@ -327,7 +338,7 @@ _pending = set()                   # cache keys queued for prefetch
 _spares = {}                       # template path -> _Spare (worker thread only)
 _spare_pending = set()             # templates with a spare job queued
 _engine_warm = False
-
+_no_background_until = 0.0         # time.time() until which no background work may start Word
 
 class _Spare:
     """A template copy that is already open in Word and waiting to be filled."""
@@ -342,15 +353,16 @@ def _get_word():
     if _word is not None:
         try:
             _word.Version            # ping: raises if the user killed Word
-            return _word
+            if not _user_documents_present():
+                return _word
+            _hand_word_to_user()     # the user opened a document in our hidden Word: give it to them
         except Exception:
             _forget_spares()
             _word = None
-    # DispatchEx = our own instance; never grabs a Word window the user has open
+    # ScreenUpdating is deliberately NOT switched off: a frozen ScreenUpdating shows a white window
     _word = win32.DispatchEx("Word.Application")
     _word.Visible = False
     _word.DisplayAlerts = WD_ALERTS_NONE
-    _word.ScreenUpdating = False
     return _word
 
 
@@ -367,11 +379,73 @@ def _reset_word():
     global _word
     try:
         if _word is not None:
-            _word.Quit(SaveChanges=WD_DO_NOT_SAVE)
+            if _user_documents_present():
+                _hand_word_to_user()                  # never Quit() a Word that holds somebody's document
+            else:
+                _word.Quit(SaveChanges=WD_DO_NOT_SAVE)
     except Exception:
         pass
     _word = None
     _forget_spares()
+
+
+def _is_our_document(full_name):
+    """Our template copies live in  <temp>/msds_xxxx/<8 hex>_<template>.docx"""
+    parts = (full_name or "").replace(chr(92), "/").split("/")      # chr(92) = backslash
+    if len(parts) < 2:
+        return False
+    return parts[-2].startswith("msds_") and re.match(r"[0-9a-f]{8}_", parts[-1]) is not None
+
+
+def _user_documents_present():
+    """True if the shared Word holds a document that is not one of ours."""
+    if _word is None:
+        return False
+    for doc in _word.Documents:
+        if not _is_our_document(doc.FullName):
+            return True
+    return False
+
+
+def _hand_word_to_user():
+    """Make the shared Word a normal Word for the user and let go of it.
+    Only OUR idle template copies are closed; the next render starts a new hidden Word."""
+    global _word, _engine_warm, _no_background_until
+    w = _word
+    for sp in list(_spares.values()):
+        _discard_spare(sp)
+    _spares.clear()
+    _word = None
+    _engine_warm = False
+    _no_background_until = time.time() + HANDOVER_COOLDOWN
+    for attr, value in (("ScreenUpdating", True), ("DisplayAlerts", WD_ALERTS_ALL),
+                        ("Visible", True), ("UserControl", True)):
+        try:
+            setattr(w, attr, value)
+        except Exception:
+            pass
+    try:
+        w.Activate()
+    except Exception:
+        pass
+    if TIMING:
+        print("[msds] a document of the user was opened in the hidden Word: Word handed over to the user",
+              flush=True)
+
+
+def _guard():
+    """(worker thread, while idle)"""
+    if _word is None:
+        return
+    try:
+        if _user_documents_present():
+            _hand_word_to_user()
+    except Exception:
+        pass
+
+
+def _background_allowed():
+    return time.time() >= _no_background_until
 
 
 def _discard_spare(sp):
@@ -427,6 +501,8 @@ def _make_spare(template, warm_engine=False):
 
 
 def _schedule_spare(template, warm_engine=False, priority=PRIO_SPARE):
+    if not _background_allowed():
+        return
     with _lock:
         if template in _spares or template in _spare_pending:
             return
@@ -546,6 +622,8 @@ def _render_job(row, section9_rows, section2_rows, source="preview"):
 
 
 def _prefetch_job(key, row, section9_rows, section2_rows):
+    if not _background_allowed():
+        return
     try:
         _render_job(row, section9_rows, section2_rows, source="prefetch")
     except Exception:
@@ -593,6 +671,8 @@ def warm_up():
     """Call once at app start (safe to repeat).
     Starts Word, then in the background pre-opens one idle copy of every
     template and warms up the PDF engine."""
+    if not _background_allowed():
+        return None
     fut = _worker.submit(_get_word, priority=PRIO_START)
     for i, template in enumerate(ALL_TEMPLATES):
         _schedule_spare(template, warm_engine=(i == 0), priority=PRIO_WARM)
@@ -603,6 +683,8 @@ def prefetch_async(row, section9_rows, section2_rows=None):
     """Render this record's PDF in the background so Preview opens instantly.
     Call it when a record is SELECTED in the list. Does nothing if the record
     is already cached or already queued. Returns a Future or None."""
+    if not _background_allowed():
+        return None
     key = _cache_key(row, section9_rows, section2_rows)
     with _lock:
         if key in _cache or key in _pending:
