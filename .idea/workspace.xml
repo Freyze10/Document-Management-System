@@ -55,37 +55,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "Python.Login.executor": "Run",
-    "Python.Main.executor": "Run",
-    "Python.coa_data_entry.executor": "Run",
-    "Python.db_con.executor": "Run",
-    "Python.db_dr.executor": "Run",
-    "Python.db_rrf.executor": "Run",
-    "Python.msds_data_entry.executor": "Debug",
-    "Python.multiple_dates.executor": "Run",
-    "Python.prac.executor": "Run",
-    "Python.print_coa.executor": "Run",
-    "Python.print_msds.executor": "Run",
-    "Python.table.executor": "Run",
-    "Python.table_func.executor": "Run",
-    "Python.test.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/Brant/PycharmProjects/Pellet-Size-Measuring",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;Python.Login.executor&quot;: &quot;Run&quot;,
+    &quot;Python.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.coa_data_entry.executor&quot;: &quot;Run&quot;,
+    &quot;Python.db_con.executor&quot;: &quot;Run&quot;,
+    &quot;Python.db_dr.executor&quot;: &quot;Run&quot;,
+    &quot;Python.db_rrf.executor&quot;: &quot;Run&quot;,
+    &quot;Python.msds_data_entry.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.multiple_dates.executor&quot;: &quot;Run&quot;,
+    &quot;Python.prac.executor&quot;: &quot;Run&quot;,
+    &quot;Python.print_coa.executor&quot;: &quot;Run&quot;,
+    &quot;Python.print_msds.executor&quot;: &quot;Run&quot;,
+    &quot;Python.table.executor&quot;: &quot;Run&quot;,
+    &quot;Python.table_func.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Brant/PycharmProjects/Pellet-Size-Measuring&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   },
-  "keyToStringList": {
-    "GitStage.ChangesTree.GroupingKeys": [
-      "directory",
-      "module",
-      "repository"
+  &quot;keyToStringList&quot;: {
+    &quot;GitStage.ChangesTree.GroupingKeys&quot;: [
+      &quot;directory&quot;,
+      &quot;module&quot;,
+      &quot;repository&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Brant\PycharmProjects\File" />
@@ -241,22 +241,6 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
-    </task>
-    <task id="LOCAL-00121" summary="changed the records header font size">
-      <option name="closed" value="true" />
-      <created>1765251645489</created>
-      <option name="number" value="00121" />
-      <option name="presentableId" value="LOCAL-00121" />
-      <option name="project" value="LOCAL" />
-      <updated>1765251645489</updated>
-    </task>
-    <task id="LOCAL-00122" summary="used 16px font in horizontal header records">
-      <option name="closed" value="true" />
-      <created>1765251694049</created>
-      <option name="number" value="00122" />
-      <option name="presentableId" value="LOCAL-00122" />
-      <option name="project" value="LOCAL" />
-      <updated>1765251694049</updated>
     </task>
     <task id="LOCAL-00123" summary="added a row count on audit trail">
       <option name="closed" value="true" />
@@ -634,7 +618,23 @@
       <option name="project" value="LOCAL" />
       <updated>1794638232213</updated>
     </task>
-    <option name="localTasksCounter" value="170" />
+    <task id="LOCAL-00170" summary="updated the executable and created installer">
+      <option name="closed" value="true" />
+      <created>1794638659274</created>
+      <option name="number" value="00170" />
+      <option name="presentableId" value="LOCAL-00170" />
+      <option name="project" value="LOCAL" />
+      <updated>1794638659274</updated>
+    </task>
+    <task id="LOCAL-00171" summary="updated the gitignore">
+      <option name="closed" value="true" />
+      <created>1795140952149</created>
+      <option name="number" value="00171" />
+      <option name="presentableId" value="LOCAL-00171" />
+      <option name="project" value="LOCAL" />
+      <updated>1795140952149</updated>
+    </task>
+    <option name="localTasksCounter" value="172" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -662,8 +662,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="updated search function for COA" />
-    <MESSAGE value="updated coa exe" />
     <MESSAGE value="updated coa exe to reflect the updated address of the Timog" />
     <MESSAGE value="addedd new python requirements" />
     <MESSAGE value="fixing the new print function using template" />
@@ -687,7 +685,9 @@
     <MESSAGE value="updated the template and changed the download name" />
     <MESSAGE value="updatedthe template for better output" />
     <MESSAGE value="updated the usage of the template to be isolated so it doesnt affect other word files" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated the usage of the template to be isolated so it doesnt affect other word files" />
+    <MESSAGE value="updated the executable and created installer" />
+    <MESSAGE value="updated the gitignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="updated the gitignore" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
