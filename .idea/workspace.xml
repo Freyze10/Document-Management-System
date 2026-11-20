@@ -242,54 +242,6 @@
       <option name="presentableId" value="Default" />
       <updated>1756945298278</updated>
     </task>
-    <task id="LOCAL-00123" summary="added a row count on audit trail">
-      <option name="closed" value="true" />
-      <created>1776388934777</created>
-      <option name="number" value="00123" />
-      <option name="presentableId" value="LOCAL-00123" />
-      <option name="project" value="LOCAL" />
-      <updated>1776388934777</updated>
-    </task>
-    <task id="LOCAL-00124" summary="modify">
-      <option name="closed" value="true" />
-      <created>1776750471822</created>
-      <option name="number" value="00124" />
-      <option name="presentableId" value="LOCAL-00124" />
-      <option name="project" value="LOCAL" />
-      <updated>1776750471822</updated>
-    </task>
-    <task id="LOCAL-00125" summary="addeed table model for table view">
-      <option name="closed" value="true" />
-      <created>1776750499399</created>
-      <option name="number" value="00125" />
-      <option name="presentableId" value="LOCAL-00125" />
-      <option name="project" value="LOCAL" />
-      <updated>1776750499399</updated>
-    </task>
-    <task id="LOCAL-00126" summary="updated table model">
-      <option name="closed" value="true" />
-      <created>1776750843459</created>
-      <option name="number" value="00126" />
-      <option name="presentableId" value="LOCAL-00126" />
-      <option name="project" value="LOCAL" />
-      <updated>1776750843459</updated>
-    </task>
-    <task id="LOCAL-00127" summary="changed  the table to table view with a model">
-      <option name="closed" value="true" />
-      <created>1776752656231</created>
-      <option name="number" value="00127" />
-      <option name="presentableId" value="LOCAL-00127" />
-      <option name="project" value="LOCAL" />
-      <updated>1776752656232</updated>
-    </task>
-    <task id="LOCAL-00128" summary="added bold italic and underline option in the last part of coa entry field">
-      <option name="closed" value="true" />
-      <created>1776754045269</created>
-      <option name="number" value="00128" />
-      <option name="presentableId" value="LOCAL-00128" />
-      <option name="project" value="LOCAL" />
-      <updated>1776754045269</updated>
-    </task>
     <task id="LOCAL-00129" summary="updated the print output to be able to take the text format">
       <option name="closed" value="true" />
       <created>1776757883890</created>
@@ -634,7 +586,55 @@
       <option name="project" value="LOCAL" />
       <updated>1795140952149</updated>
     </task>
-    <option name="localTasksCounter" value="172" />
+    <task id="LOCAL-00172" summary="git add .gitignore&#10;git commit -m &quot;Stop tracking .env and update .gitignore&quot;">
+      <option name="closed" value="true" />
+      <created>1795141271095</created>
+      <option name="number" value="00172" />
+      <option name="presentableId" value="LOCAL-00172" />
+      <option name="project" value="LOCAL" />
+      <updated>1795141271095</updated>
+    </task>
+    <task id="LOCAL-00173" summary="git add .gitignore&#10;git commit -m &quot;Stop tracking .env and update .gitignore&quot;">
+      <option name="closed" value="true" />
+      <created>1795141452051</created>
+      <option name="number" value="00173" />
+      <option name="presentableId" value="LOCAL-00173" />
+      <option name="project" value="LOCAL" />
+      <updated>1795141452051</updated>
+    </task>
+    <task id="LOCAL-00174" summary="updated git ignore">
+      <option name="closed" value="true" />
+      <created>1795142356494</created>
+      <option name="number" value="00174" />
+      <option name="presentableId" value="LOCAL-00174" />
+      <option name="project" value="LOCAL" />
+      <updated>1795142356494</updated>
+    </task>
+    <task id="LOCAL-00175" summary="removed git ignor">
+      <option name="closed" value="true" />
+      <created>1795142531206</created>
+      <option name="number" value="00175" />
+      <option name="presentableId" value="LOCAL-00175" />
+      <option name="project" value="LOCAL" />
+      <updated>1795142531206</updated>
+    </task>
+    <task id="LOCAL-00176" summary="create new git ignore">
+      <option name="closed" value="true" />
+      <created>1795142556546</created>
+      <option name="number" value="00176" />
+      <option name="presentableId" value="LOCAL-00176" />
+      <option name="project" value="LOCAL" />
+      <updated>1795142556546</updated>
+    </task>
+    <task id="LOCAL-00177" summary="create new git ignore">
+      <option name="closed" value="true" />
+      <created>1795142573287</created>
+      <option name="number" value="00177" />
+      <option name="presentableId" value="LOCAL-00177" />
+      <option name="project" value="LOCAL" />
+      <updated>1795142573287</updated>
+    </task>
+    <option name="localTasksCounter" value="178" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -648,7 +648,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="new-print" />
+                        <option value="main" />
                       </list>
                     </value>
                   </entry>
@@ -662,10 +662,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
-    <MESSAGE value="updated coa exe to reflect the updated address of the Timog" />
-    <MESSAGE value="addedd new python requirements" />
-    <MESSAGE value="fixing the new print function using template" />
-    <MESSAGE value="updated the contact details in the default value" />
     <MESSAGE value="adjusted the normal print function and is working" />
     <MESSAGE value="addeding new details in the entry of msds to have the breakdown of composition" />
     <MESSAGE value="added the new template for the additional print output" />
@@ -687,7 +683,11 @@
     <MESSAGE value="updated the usage of the template to be isolated so it doesnt affect other word files" />
     <MESSAGE value="updated the executable and created installer" />
     <MESSAGE value="updated the gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated the gitignore" />
+    <MESSAGE value="git add .gitignore&#10;git commit -m &quot;Stop tracking .env and update .gitignore&quot;" />
+    <MESSAGE value="updated git ignore" />
+    <MESSAGE value="removed git ignor" />
+    <MESSAGE value="create new git ignore" />
+    <option name="LAST_COMMIT_MESSAGE" value="create new git ignore" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
