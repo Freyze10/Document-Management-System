@@ -1,4 +1,12 @@
 /.env
+.env
+.env.*
+
+# --- Build Output & Installer ---
+output/
+installer_output/
+installer.iss
+
 # --- Python ---
 __pycache__/
 *.py[cod]
@@ -32,8 +40,6 @@ ENV/
 env.bak/
 venv.bak/
 
-.env
-.env.*
 media/
 
 # --- Editor/IDE ---
